@@ -20,7 +20,7 @@ export default function Footer() {
                     {/* Description Left */}
                     <div className="flex-1 max-w-[450px]">
                         <p className="text-[#0072BC] text-[9px] font-semibold leading-relaxed tracking-wide opacity-90">
-                            TT Wonders offer wide range of highest quality gaming products to our players. Our Customer Support Team is available to assist you 24 hours a day. All personal information will be treated and stored at the strictest and most confidential way.
+                            Riocity9 offer wide range of highest quality gaming products to our players. Our Customer Support Team is available to assist you 24 hours a day. All personal information will be treated and stored at the strictest and most confidential way.
                         </p>
                     </div>
                     {/* Navigation Right */}
@@ -72,7 +72,7 @@ export default function Footer() {
                 {/* Copyright */}
                 <div className="w-full text-center relative z-10 pb-4">
                     <p className="text-[9px] font-semibold text-[#00AEEF] tracking-wide">
-                        Copyright TT Wonders © 2026. All rights reserved.
+                        Copyright Riocity9 © 2026. All rights reserved.
                     </p>
                 </div>
 

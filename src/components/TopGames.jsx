@@ -4,12 +4,12 @@ import { Crown } from 'lucide-react';
 
 export default function TopGames() {
     const games = [
-        { name: 'Aztec Gold Treasure', imgUrl: 'https://images.unsplash.com/photo-1518081461904-9d8f136351c2?ixlib=rb-4.0.3&w=300&q=80', provider: 'X' },
-        { name: 'Roma', imgUrl: 'https://images.unsplash.com/photo-1563298723-dcfebaa392e3?ixlib=rb-4.0.3&w=300&q=80', provider: 'PG' },
-        { name: 'Treasures of Aztec', imgUrl: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?ixlib=rb-4.0.3&w=300&q=80', provider: 'PG' },
-        { name: 'Lucky Neko', imgUrl: 'https://images.unsplash.com/photo-1541364983171-a8ba01e95cfc?ixlib=rb-4.0.3&w=300&q=80', provider: 'PG' },
-        { name: 'Long Long Long', imgUrl: 'https://images.unsplash.com/photo-1577907572620-1aee3c582845?ixlib=rb-4.0.3&w=300&q=80', provider: 'X' },
-        { name: 'Lucky Streak', imgUrl: 'https://images.unsplash.com/photo-1628155930542-3c7a64e2c833?ixlib=rb-4.0.3&w=300&q=80', provider: 'JOKER' }
+        { name: 'Gates of Olympus', imgUrl: 'https://pksoftcdn.azureedge.net/games/PragmaticPlayT/vs20olympgate.png', provider: 'X' },
+        { name: 'WCasino', imgUrl: 'https://pksoftcdn.azureedge.net/media/200x200_providerbanner_wcasino-202408150920123718.png', provider: 'PG' },
+        { name: 'Dream Gaming', imgUrl: 'https://pksoftcdn.azureedge.net/media/dream gaming_casino-202603051120541084.png', provider: 'PG' },
+        { name: "Dragon's Luck", imgUrl: 'https://pksoftcdn.azureedge.net/games/PragmaticPlayT/vs20olympgate.png', provider: 'PG' },
+        { name: 'Nomikai Fever', imgUrl: 'https://gamifystaging.blob.core.windows.net/staging/common/8eb11693-ad04-40f3-b2f1-cd7989c7fcc6.png', provider: 'X' },
+        { name: 'Lucky Sports', imgUrl: 'https://pksoftcdn.azureedge.net/media/200x200_providerbanner_luckysport-202407260917076261-202408060821509512-202410241125136236.png', provider: 'JOKER' }
     ];
 
     return (
@@ -32,7 +32,7 @@ export default function TopGames() {
 
                                 <div
                                     className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                                    style={{ backgroundImage: `url(${game.imgUrl})` }}
+                                    style={{ backgroundImage: `url("${game.imgUrl}")` }}
                                 ></div>
 
                                 {/* Provider Badge Tag */}

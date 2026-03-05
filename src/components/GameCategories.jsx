@@ -1,15 +1,21 @@
 import React from 'react';
 import SectionHeader from './SectionHeader';
 import { Crown } from 'lucide-react';
+import slotsImage from '../assets/slots.jpg';
+import casinoImage from '../assets/casino.jpg';
+import sportsImage from '../assets/sports.jpg';
+import fishingImage from '../assets/fishing.png';
+import eSportsImage from '../assets/e-sports.png';
+import cockfightImage from '../assets/cockfight.jpg';
 
 export default function GameCategories() {
     const categories = [
-        { name: 'Slots', icon: '🎰', bgUrl: 'https://images.unsplash.com/photo-1596838132731-3301c3fd4317?ixlib=rb-4.0.3&w=300&q=80' },
-        { name: 'Casino', icon: '🃏', bgUrl: 'https://images.unsplash.com/photo-1606167668584-78701c57f13d?ixlib=rb-4.0.3&w=300&q=80' },
-        { name: 'Sports', icon: '⚽', bgUrl: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-4.0.3&w=300&q=80' },
-        { name: 'Fishing', icon: '🐟', bgUrl: 'https://images.unsplash.com/photo-1560920452-aa9ecfb3c3b4?ixlib=rb-4.0.3&w=300&q=80' },
-        { name: 'E-Sports', icon: '🎮', bgUrl: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-4.0.3&w=300&q=80' },
-        { name: 'Cockfight', icon: '🐓', bgUrl: 'https://images.unsplash.com/photo-1548675402-23f26038ceab?ixlib=rb-4.0.3&w=300&q=80' }
+        { name: 'Slots', icon: '🎰', bgUrl: slotsImage },
+        { name: 'Casino', icon: '🃏', bgUrl: casinoImage },
+        { name: 'Sports', icon: '⚽', bgUrl: sportsImage },
+        { name: 'Fishing', icon: '🐟', bgUrl: fishingImage },
+        { name: 'E-Sports', icon: '🎮', bgUrl: eSportsImage },
+        { name: 'Cockfight', icon: '🐓', bgUrl: cockfightImage }
     ];
 
     return (
@@ -26,12 +32,17 @@ export default function GameCategories() {
                         className="flex flex-col relative rounded-[15px] bg-[#E5F6FF] p-1.5 shadow-[0_5px_15px_rgba(0,174,239,0.1)] group hover:-translate-y-1 transition-transform border border-white"
                     >
                         {/* Title Ribbon - overlaps top edge */}
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 right-4 z-20 w-[80%] flex items-center justify-center">
-                            <div className="bg-[#00AEEF] w-full text-center py-0.5 rounded-sm shadow-[0_3px_5px_rgba(0,0,0,0.2)]">
-                                <span className="text-white text-[10px] uppercase font-bold tracking-wider">{cat.name}</span>
+                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 w-[86%]">
+                            <div className="relative w-full">
+                                <div className="absolute inset-x-2 -bottom-1.5 h-2 rounded-full bg-[#0072BC]/35 blur-sm"></div>
+                                <div className="relative overflow-hidden rounded-[10px] border border-[#8ce6ff] bg-gradient-to-r from-[#008ed6] via-[#00aef0] to-[#00bdf9] px-2 py-1.5 shadow-[0_8px_14px_rgba(0,114,188,0.35)]">
+                                    <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(120deg,rgba(255,255,255,0.4),rgba(255,255,255,0)_45%)]"></div>
+                                    <span className="relative block text-center text-white text-[10px] uppercase font-extrabold tracking-[0.14em] drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)]">
+                                        {cat.name}
+                                    </span>
+                                </div>
+                                <div className="absolute top-1/2 -right-2 -translate-y-1/2 w-0 h-0 border-y-[11px] border-y-transparent border-l-[12px] border-l-[#46d1ff] drop-shadow-[0_2px_3px_rgba(0,95,158,0.35)]"></div>
                             </div>
-                            {/* Arrow decoration */}
-                            <div className="w-[10px] h-[18px] bg-[#34c4f9] translate-x-[-1px] rounded-r-md skew-x-[20deg]"></div>
                         </div>
 
                         {/* Image Container */}
@@ -42,7 +53,7 @@ export default function GameCategories() {
                             ></div>
 
                             {/* Bottom inner glow/overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                            {/* <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div> */}
 
                             {/* Center Icon */}
                             <div className="absolute bottom-4 left-4 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-xl shadow-[0_0_15px_rgba(255,255,255,0.4)] border border-white/40">
