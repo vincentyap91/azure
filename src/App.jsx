@@ -9,41 +9,63 @@ import VipTier from './components/VipTier';
 import AppDownload from './components/AppDownload';
 import Promos from './components/Promos';
 import LiveCasinoPage from './components/LiveCasinoPage';
+import RegisterPage from './components/RegisterPage';
 import Footer from './components/Footer';
 import FloatingSocials from './components/FloatingSocials';
+import LoginModal from './components/LoginModal';
 import './index.css';
 
-function resolvePageFromHash() {
-  const hash = window.location.hash.toLowerCase();
-  return hash === '#casino' || hash === '#live-casino' ? 'live-casino' : 'home';
+function resolvePageFromPath() {
+  const pathname = window.location.pathname.toLowerCase();
+  if (pathname === '/casino' || pathname === '/live-casino') {
+    return 'live-casino';
+  }
+  if (pathname === '/register') {
+    return 'register';
+  }
+  return 'home';
 }
 
 function App() {
-  const [page, setPage] = useState(resolvePageFromHash);
+  const [page, setPage] = useState(resolvePageFromPath);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [authUser, setAuthUser] = useState(null);
 
   useEffect(() => {
-    const onHashChange = () => setPage(resolvePageFromHash());
-    window.addEventListener('hashchange', onHashChange);
-    return () => window.removeEventListener('hashchange', onHashChange);
+    const onPopState = () => setPage(resolvePageFromPath());
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
   const handleNavigate = (targetPage) => {
-    const nextHash = targetPage === 'live-casino' ? '#casino' : '#home';
+    const pathByPage = {
+      home: '/',
+      'live-casino': '/casino',
+      register: '/register',
+    };
+    const nextPath = pathByPage[targetPage] ?? '/';
     setPage(targetPage);
 
-    if (window.location.hash !== nextHash) {
-      window.location.hash = nextHash;
+    if (window.location.pathname !== nextPath) {
+      window.history.pushState({}, '', nextPath);
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <div className={`w-full min-h-screen font-sans overflow-x-hidden relative ${page === 'home' ? 'bg-[#e6f4fd]' : 'bg-[#f2f4f8]'}`}>
+    <div className={`w-full min-h-screen font-sans overflow-x-hidden relative ${page === 'home' ? 'bg-[#e6f4fd]' : page === 'register' ? 'bg-[#edf4ff]' : 'bg-[#f2f4f8]'}`}>
       {page === 'home' && <FloatingSocials />}
 
       {/* Navbar sits at the standard document flow but controls its own absolute positioning if needed */}
-      <Navbar onNavigate={handleNavigate} activePage={page} />
+      <Navbar
+        onNavigate={handleNavigate}
+        activePage={page}
+        onLoginClick={() => setLoginModalOpen(true)}
+        onRegisterClick={() => handleNavigate('register')}
+        authUser={authUser}
+        onLogout={() => setAuthUser(null)}
+      />
 
       {page === 'home' ? (
         <>
@@ -61,11 +83,31 @@ function App() {
             <Promos />
           </div>
         </>
-      ) : (
+      ) : page === 'live-casino' ? (
         <LiveCasinoPage />
+      ) : (
+        <RegisterPage onLoginClick={() => setLoginModalOpen(true)} />
       )}
 
       <Footer />
+
+      <LoginModal
+        open={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+        logoText="LOGO"
+        onLogin={(username) => {
+          setAuthUser({
+            name: username || 'vincentzo',
+            balance: 'MYR 0.00',
+            notifications: 1,
+          });
+          setLoginModalOpen(false);
+        }}
+        onRegisterClick={() => {
+          setLoginModalOpen(false);
+          handleNavigate('register');
+        }}
+      />
     </div>
   );
 }

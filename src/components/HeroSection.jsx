@@ -1,6 +1,6 @@
 import React from 'react';
 import { Volume2 } from 'lucide-react';
-import homeBanner from '../assets/homebanner.png';
+import homeBanner from '../assets/homebanner.jpg';
 
 export default function HeroSection() {
     return (
@@ -28,7 +28,7 @@ export default function HeroSection() {
                         <Volume2 size={16} fill="currentColor" strokeWidth={1} />
                     </div>
                     <div className="flex-1 overflow-hidden h-full flex items-center relative">
-                        <div className="whitespace-nowrap animate-[marquee_20s_linear_infinite] text-[11px] text-white/90">
+                        <div className="whitespace-nowrap animate-[marquee_20s_linear_infinite] text-xs text-white/90">
                             Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
                         </div>
                     </div>

@@ -21,7 +21,7 @@ export default function VipTier() {
                 rightLink="More Details"
             />
 
-            <p className="text-[#004C80] text-[11px] mb-8 leading-relaxed max-w-[1000px] font-semibold mt-4">
+            <p className="text-[#004C80] text-xs mb-8 leading-relaxed max-w-[1000px] font-semibold mt-4">
                 Join the Riocity9 VIP member group, you will receive many special privileges such as promotion bonus, monthly red envelope bonus, birthday bonus. All of these are special privileges for Riocity9 VIP customers only.
             </p>
 
@@ -53,10 +53,10 @@ export default function VipTier() {
 
                             {/* Rules text */}
                             <div className="text-center w-full border-t border-[#CCEEFF]/50 pt-2 relative">
-                                <p className="text-[9px] text-[#00AEEF] font-bold">
+                                <p className="text-xs text-[#00AEEF] font-bold">
                                     Valid Bet Point &gt; {vp.btn}
                                 </p>
-                                <p className="text-[9px] text-[#00AEEF] font-bold">
+                                <p className="text-xs text-[#00AEEF] font-bold">
                                     Deposit Point = {vp.dep}
                                 </p>
                             </div>

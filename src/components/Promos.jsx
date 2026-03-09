@@ -33,7 +33,7 @@ export default function Promos() {
                     </h3>
                 </div>
                 <div className="absolute right-[-20px] bottom-0 w-[150px] h-[140px] bg-[#00AEEF]/20 blur-xl rounded-full"></div>
-                <div className="absolute right-4 bottom-0 h-[150px] md:h-[150px] text-6xl drop-shadow-[0_10px_10px_rgba(0,0,0,0.2)] group-hover:scale-105 transition-transform origin-bottom">
+                <div className="absolute right-4 bottom-0 h-[150px] md:h-[150px] text-2xl drop-shadow-[0_10px_10px_rgba(0,0,0,0.2)] group-hover:scale-105 transition-transform origin-bottom">
                 <img
                         src={penguin}
                         alt="Earn referral bonus"

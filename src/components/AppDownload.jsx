@@ -72,7 +72,7 @@ const PhoneBack = () => (
     <div className="w-full h-full bg-gradient-to-b from-[#48C8F0] to-[#006EB5] rounded-[20px] p-2 pt-8 flex flex-col gap-2 overflow-hidden">
         {/* Logo row */}
         <div className="flex items-center justify-between px-1">
-            <div className="bg-white/20 rounded px-2 py-0.5 text-white font-black text-[8px]">LOGO</div>
+            <div className="bg-white/20 rounded px-2 py-0.5 text-white font-black text-xs">LOGO</div>
             <div className="flex gap-1">
                 <div className="w-3 h-3 bg-white/30 rounded-full" />
                 <div className="w-3 h-3 bg-white/30 rounded-full" />
@@ -97,7 +97,7 @@ const PhoneFront = () => (
         <div className="flex items-center justify-between px-1 py-0.5 bg-white/10 rounded-md">
             <div className="w-12 h-2.5 bg-white/60 rounded-sm" />
             <div className="flex gap-0.5">
-                <div className="w-5 h-3 bg-[#FFB800] rounded-sm flex items-center justify-center text-[4px] font-black text-white">EN</div>
+                <div className="w-5 h-3 bg-[#FFB800] rounded-sm flex items-center justify-center text-xs font-black text-white">EN</div>
                 <div className="w-3 h-3 bg-white/30 rounded-sm" />
             </div>
         </div>
@@ -111,7 +111,7 @@ const PhoneFront = () => (
         <div className="flex gap-1">
             {['ALL', 'HOT', 'NEW'].map(t => (
                 <div key={t} className="flex-1 h-3.5 bg-white/20 rounded-full flex items-center justify-center">
-                    <span className="text-[4px] font-bold text-white">{t}</span>
+                    <span className="text-xs font-bold text-white">{t}</span>
                 </div>
             ))}
         </div>
@@ -137,10 +137,10 @@ export default function AppDownload() {
 
             {/* ── Left: Text ────────────────────────────── */}
             <div className="flex-1 z-10 w-full max-w-sm">
-                <h2 className="text-3xl font-bold text-[#004C80] mb-4 tracking-tight leading-tight">
+                <h2 className="text-2xl font-bold text-[#004C80] mb-4 tracking-tight leading-tight">
                     Download the <span className="text-[#00AEEF]">Riocity9 APP</span>
                 </h2>
-                <p className="text-[10px] text-[#0072BC] font-semibold leading-relaxed opacity-80">
+                <p className="text-xs text-[#0072BC] font-semibold leading-relaxed opacity-80">
                     Playing through the application is more convenient than playing through the website.
                     You can definitely feel the difference. Register to receive free credit and many bonuses through this channel.
                 </p>
@@ -205,7 +205,7 @@ export default function AppDownload() {
                     <div key={label} className="flex flex-col gap-3 items-center">
                         <div className="w-[90px] h-[90px] bg-white p-1 rounded-lg border border-gray-200 shadow-sm relative group overflow-hidden">
                             <div className="w-full h-full border border-dashed border-gray-300 rounded flex items-center justify-center">
-                                <span className="text-[8px] font-bold text-gray-300">QR CODE</span>
+                                <span className="text-xs font-bold text-gray-300">QR CODE</span>
                             </div>
                             {/* Scan-line hover effect */}
                             <div className="absolute top-0 left-0 w-full h-[1px] bg-[#00AEEF] -translate-y-full group-hover:animate-[scan_1.5s_linear_infinite] shadow-[0_0_8px_#00a8e8]" />

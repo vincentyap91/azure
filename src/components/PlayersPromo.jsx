@@ -8,11 +8,11 @@ export default function PlayersPromo() {
             <div className="w-full md:w-1/2 bg-gradient-to-br from-[#eff8fd] to-[#d6effd] rounded-[30px] p-6 shadow-sm border border-white relative flex flex-col justify-end min-h-[250px]">
                 {/* Logo and Trophy */}
                 <div className="absolute top-6 left-6 z-10">
-                    <h2 className="text-[#00AEEF] text-4xl font-black italic mb-2 tracking-wider drop-shadow-sm">LOGO</h2>
+                    <h2 className="text-[#00AEEF] text-2xl font-black italic mb-2 tracking-wider drop-shadow-sm">LOGO</h2>
                     <div className="bg-gradient-to-r from-yellow-300 to-yellow-500 rounded-full p-2 w-10 h-10 flex items-center justify-center shadow-md mb-2">
                         <span className="text-lg leading-none">🏆</span>
                     </div>
-                    <div className="text-[11px] text-[#0072BC] leading-snug max-w-[180px]">
+                    <div className="text-xs text-[#0072BC] leading-snug max-w-[180px]">
                         <p className="mb-2"><span className="font-bold">Lionel Messi</span> : Won the<br />FIFA World Cup in 2022</p>
                         <p><span className="font-bold">Erling Haaland</span> : Won the treble<br />with Manchester City</p>
                     </div>

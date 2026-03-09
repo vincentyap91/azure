@@ -44,7 +44,7 @@ export default function TopGames() {
 
                         {/* Bottom Title Bar (already has border-bottom set on parent) */}
                         <div className="bg-[#00AEEF] w-full py-1.5 text-center px-1 absolute bottom-0 z-30">
-                            <span className="text-white text-[10px] font-bold block truncate">{game.name}</span>
+                            <span className="text-white text-xs font-bold block truncate">{game.name}</span>
                         </div>
                     </div>
                 ))}
