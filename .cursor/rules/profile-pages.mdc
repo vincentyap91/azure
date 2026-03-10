@@ -1,0 +1,38 @@
+---
+description: Header conventions and shared config for profile section (Favourites, My Bets, Verification, Support)
+globs: src/components/*Page.jsx, src/components/Navbar.jsx, src/components/ProfilePage.jsx
+alwaysApply: false
+---
+
+# Profile Section Conventions
+
+## Account Layout (Reusable)
+
+All inner pages under the profile section (Profile, Verification, Favourites, My Bets) use `AccountLayout` with `AccountSidebar`. The sidebar shows on the left with active state based on `activePage` prop. Use `AccountLayout` with `activePage`, `authUser`, `onNavigate`, `onLogout` for any new inner page.
+
+## Support Options (Keep in Sync)
+
+Support options (Live Chat, Contact Us, Help Center, Share Feedback) are defined in `src/constants/supportOptions.js`. This config is used by:
+- **Navbar** profile dropdown
+- **ProfilePage** sidebar
+
+When adding or changing support options, update `supportOptions.js` so both stay in sync.
+
+## Page Header
+
+When creating or editing pages that live under the Profile section (e.g. Favourites, My Bets, Verification, Bet Slip), use this header pattern:
+
+1. **Back button**: `ChevronLeft` icon + "Back to Profile" text, with `mb-6`
+2. **Title**: Page name (e.g. "Favourites", "My Bets", "Verification") as `h1` on the next line
+
+```jsx
+<button
+    type="button"
+    onClick={onBack}
+    className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-slate-700 transition hover:text-blue-600"
+>
+    <ChevronLeft size={18} />
+    Back to Profile
+</button>
+<h1 className="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">Page Title</h1>
+```
