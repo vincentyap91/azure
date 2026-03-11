@@ -6,7 +6,6 @@ import {
     Headset,
     Heart,
     LogOut,
-    ReceiptText,
     ScrollText,
     Settings,
     ShieldCheck,
@@ -16,7 +15,7 @@ import {
 import LiveCasinoMenu from './LiveCasinoMenu';
 import { supportOptions } from '../constants/supportOptions';
 
-export default function Navbar({ onNavigate, activePage = 'home', onLoginClick, onRegisterClick, authUser, onLogout, onAccountDetailsClick, onBetSlipClick }) {
+export default function Navbar({ onNavigate, activePage = 'home', onLoginClick, onRegisterClick, authUser, onLogout, onAccountDetailsClick, onLiveChatClick, onCasinoProviderSelect }) {
     const [casinoMenuOpen, setCasinoMenuOpen] = useState(false);
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
     const [openProfileSection, setOpenProfileSection] = useState('account');
@@ -27,13 +26,12 @@ export default function Navbar({ onNavigate, activePage = 'home', onLoginClick, 
         'Fishing', 'Poker', '3D Games', 'Cockfight', '4D', 'Fast Games',
         'Promotion', 'VIP', 'More'
     ];
-    const navTargets = { Home: 'home', Casino: 'live-casino', Slots: 'slots' };
-    const navHrefs = { Home: '/', Casino: '/casino', Slots: '/slots' };
+    const navTargets = { Home: 'home', Casino: 'live-casino', Slots: 'slots', Sports: 'sports' };
+    const navHrefs = { Home: '/', Casino: '/casino', Slots: '/slots', Sports: '/sports' };
     const accountCards = [
         { label: 'Account Details', icon: UserRound },
         { label: 'Verification', icon: ShieldCheck },
         { label: 'Favourites', icon: Heart },
-        { label: 'Bet Slip', icon: ReceiptText },
         { label: 'My Bets', icon: ScrollText }
     ];
 
@@ -194,10 +192,6 @@ export default function Navbar({ onNavigate, activePage = 'home', onLoginClick, 
                                                             if (label === 'Account Details') {
                                                                 onAccountDetailsClick?.();
                                                             }
-
-                                                            if (label === 'Bet Slip') {
-                                                                onBetSlipClick?.();
-                                                            }
                                                         }}
                                                         className="dark-nav-tile group flex min-h-[72px] flex-col items-center justify-center rounded-[14px] px-2 text-center transition hover:-translate-y-0.5 hover:border-[var(--color-nav-tile-border-hover)] hover:shadow-[var(--shadow-nav-tile-hover)]"
                                                     >
@@ -227,32 +221,24 @@ export default function Navbar({ onNavigate, activePage = 'home', onLoginClick, 
                                             />
                                         </button>
                                         {openProfileSection === 'support' && (
-                                            <>
-                                                <div className="mt-3 grid grid-cols-3 gap-2">
-                                                    {supportOptions.filter((o) => !o.fullWidth).map(({ label, icon: Icon }) => (
-                                                        <button
-                                                            key={label}
-                                                            type="button"
-                                                            className="dark-nav-tile group flex min-h-[64px] flex-col items-center justify-center rounded-[14px] px-2 text-center transition hover:-translate-y-0.5 hover:border-[var(--color-nav-tile-border-hover)] hover:shadow-[var(--shadow-nav-tile-hover)]"
-                                                        >
-                                                            <Icon size={18} className="mb-1.5 text-[var(--color-nav-blue-icon)] group-hover:text-[var(--color-nav-blue-icon-hover)]" />
-                                                            <span className="text-xs font-bold leading-tight text-white">{label}</span>
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                                {supportOptions
-                                                    .filter((o) => o.fullWidth)
-                                                    .map(({ label, icon: Icon }) => (
-                                                        <button
-                                                            key={label}
-                                                            type="button"
-                                                            className="dark-nav-tile mt-2 flex w-full flex-col items-center justify-center gap-1.5 rounded-[14px] py-3 text-center transition hover:-translate-y-0.5 hover:border-[var(--color-nav-tile-border-hover)] hover:shadow-[var(--shadow-nav-tile-hover)]"
-                                                        >
-                                                            <Icon size={18} className="text-[var(--color-nav-blue-icon)]" />
-                                                            <span className="text-xs font-bold leading-tight text-white">{label}</span>
-                                                        </button>
-                                                    ))}
-                                            </>
+                                            <div className="mt-3 grid grid-cols-3 gap-2">
+                                                {supportOptions.map(({ label, icon: Icon }) => (
+                                                    <button
+                                                        key={label}
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setProfileMenuOpen(false);
+                                                            if (label === 'Live Chat') onLiveChatClick?.();
+                                                            if (label === 'Share Feedback') onNavigate?.('feedback');
+                                                            if (label === 'Help Center') onNavigate?.('help-center');
+                                                        }}
+                                                        className="dark-nav-tile group flex min-h-[64px] flex-col items-center justify-center rounded-[14px] px-2 text-center transition hover:-translate-y-0.5 hover:border-[var(--color-nav-tile-border-hover)] hover:shadow-[var(--shadow-nav-tile-hover)]"
+                                                    >
+                                                        <Icon size={18} className="mb-1.5 text-[var(--color-nav-blue-icon)] group-hover:text-[var(--color-nav-blue-icon-hover)]" />
+                                                        <span className="text-xs font-bold leading-tight text-white">{label}</span>
+                                                    </button>
+                                                ))}
+                                            </div>
                                         )}
                                     </div>
 
@@ -356,7 +342,8 @@ export default function Navbar({ onNavigate, activePage = 'home', onLoginClick, 
                     ${link === 'More' ? 'flex items-center group' : ''}
                     ${activePage === 'home' && link === 'Home' ? 'text-yellow-300' : ''}
                     ${activePage === 'live-casino' && link === 'Casino' ? 'text-yellow-300' : ''}
-                    ${activePage === 'slots' && link === 'Slots' ? 'text-yellow-300' : ''}`}
+                    ${activePage === 'slots' && link === 'Slots' ? 'text-yellow-300' : ''}
+                    ${activePage === 'sports' && link === 'Sports' ? 'text-yellow-300' : ''}`}
                             >
                                 {link}
                                 {link === 'More' && <ChevronDown size={14} className="ml-0.5 group-hover:rotate-180 transition-transform" strokeWidth={3} />}
@@ -368,7 +355,10 @@ export default function Navbar({ onNavigate, activePage = 'home', onLoginClick, 
 
             <LiveCasinoMenu
                 open={casinoMenuOpen}
-                onProviderClick={() => setCasinoMenuOpen(false)}
+                onProviderClick={(provider) => {
+                    onCasinoProviderSelect?.(provider);
+                    setCasinoMenuOpen(false);
+                }}
             />
 
             {casinoMenuOpen && (

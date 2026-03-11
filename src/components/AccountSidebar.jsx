@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     ChevronDown,
     ChevronLeft,
@@ -7,7 +7,6 @@ import {
     Heart,
     LogOut,
     PencilLine,
-    ReceiptText,
     ScrollText,
     Settings,
     ShieldCheck,
@@ -20,7 +19,6 @@ const accountLinks = [
     { id: 'profile', label: 'Account Details', icon: UserRound },
     { id: 'verification', label: 'Verification', icon: ShieldCheck },
     { id: 'favourites', label: 'Favourites', icon: Heart },
-    { id: 'bet-slip', label: 'Bet Slip', icon: ReceiptText },
     { id: 'my-bets', label: 'My Bets', icon: ScrollText },
 ];
 
@@ -29,6 +27,7 @@ export default function AccountSidebar({
     authUser,
     onNavigate,
     onLogout,
+    onLiveChatClick,
     sidebarCollapsed: controlledCollapsed,
     onSidebarCollapsedChange,
 }) {
@@ -41,6 +40,12 @@ export default function AccountSidebar({
 
     const sidebarCollapsed = controlledCollapsed ?? internalCollapsed;
     const setSidebarCollapsed = onSidebarCollapsedChange ?? setInternalCollapsed;
+
+    useEffect(() => {
+        if (activePage === 'feedback' || activePage === 'help-center') {
+            setOpenMenus((m) => ({ ...m, support: true }));
+        }
+    }, [activePage]);
 
     const toggleMenu = (menuKey) => {
         setOpenMenus((current) => {
@@ -56,7 +61,7 @@ export default function AccountSidebar({
     };
 
     const handleNavClick = (pageId) => {
-        const pageMap = { profile: 'profile', verification: 'verification', favourites: 'favourites', 'bet-slip': 'bet-slip', 'my-bets': 'my-bets' };
+        const pageMap = { profile: 'profile', verification: 'verification', favourites: 'favourites', 'my-bets': 'my-bets' };
         onNavigate?.(pageMap[pageId] ?? pageId);
     };
 
@@ -166,16 +171,30 @@ export default function AccountSidebar({
                         </button>
                         {openMenus.support && !sidebarCollapsed && (
                             <div className="mt-4 space-y-1 overflow-hidden rounded-xl bg-[var(--color-surface-base)] p-1">
-                                {supportOptions.map(({ label, icon: Icon }) => (
-                                    <button
-                                        key={label}
-                                        type="button"
-                                        className="group flex min-h-[48px] w-full items-center gap-3 rounded-xl border-l-4 border-l-transparent bg-[var(--color-surface-base)] px-4 py-3.5 text-left text-[var(--color-text-muted)] transition-all hover:scale-[1.02] hover:border-l-[var(--color-accent-500)] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-700)]"
-                                    >
-                                        <Icon size={18} className="text-[var(--color-text-soft)] group-hover:text-[var(--color-accent-500)]" />
-                                        <span className="text-base font-normal">{label}</span>
-                                    </button>
-                                ))}
+                                {supportOptions.map(({ label, icon: Icon }) => {
+                                    const isActive =
+                                        (activePage === 'feedback' && label === 'Share Feedback') ||
+                                        (activePage === 'help-center' && label === 'Help Center');
+                                    return (
+                                        <button
+                                            key={label}
+                                            type="button"
+                                            onClick={() => {
+                                                if (label === 'Live Chat') onLiveChatClick?.();
+                                                if (label === 'Share Feedback') onNavigate?.('feedback');
+                                                if (label === 'Help Center') onNavigate?.('help-center');
+                                            }}
+                                            className={`group flex min-h-[48px] w-full items-center gap-3 rounded-xl border-l-4 px-4 py-3.5 text-left transition-all hover:scale-[1.02] ${
+                                                isActive
+                                                    ? 'border-l-[var(--color-accent-500)] bg-[var(--color-accent-50)] text-[var(--color-accent-700)]'
+                                                    : 'border-l-transparent bg-[var(--color-surface-base)] text-[var(--color-text-muted)] hover:border-l-[var(--color-accent-500)] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-700)]'
+                                            }`}
+                                        >
+                                            <Icon size={18} className={`${isActive ? 'text-[var(--color-accent-600)]' : 'text-[var(--color-text-soft)] group-hover:text-[var(--color-accent-500)]'}`} />
+                                            <span className="text-base font-normal">{label}</span>
+                                        </button>
+                                    );
+                                })}
                             </div>
                         )}
                     </div>

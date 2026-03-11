@@ -23,7 +23,7 @@ export default function MyBetsPage() {
         <div className="page-container">
                 <h1 className="page-title">My Bets</h1>
 
-                <div className="mb-6 flex flex-wrap gap-2">
+                <div className="mb-6 mt-8 flex flex-wrap gap-3">
                     {betStatusTabs.map(({ id, label }) => (
                         <button
                             key={id}

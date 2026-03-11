@@ -1,55 +1,45 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Search } from 'lucide-react';
-import liveCasinoBanner from '../assets/live-casino.jpg';
-import wcasinoLogo from '../assets/wcasino-2x-min-202505280008599013-202506250016539240.png';
-import sagamingLogo from '../assets/sagaming2025_wh-202510270604321830.png';
-import playtechLogo from '../assets/playtech-202505140443475046-202506242335087315.svg';
-import sexygamingLogo from '../assets/sexygaming-202505140447445395-202506240659312869.svg';
-import dreamgamingLogo from '../assets/dreamgaming-min-202506201545375005-202506250034043371.png';
-import evolutionLogo from '../assets/evolution-202505140444284259-202506242322200281.svg';
-import pragmaticLiveLogo from '../assets/pp-live-casino-202505140447187176-202506240700358930.svg';
-import wmcasinoLogo from '../assets/wmcasino-202505140442522647-202506242346230340.svg';
-import biggamingLogo from '../assets/biggaming-min-202506201446479379-202506250032270399.png';
-import allbetLogo from '../assets/allbet-1-202505132310053829-202506250015492361.svg';
-import yeebetLogo from '../assets/yeebet-min-202506201536311077-202506250033163315.png';
-import wecasinoLogo from '../assets/worldent-min-202507141449569526-202507170806057662.png';
-import mtLogo from '../assets/download-202506250034489694.png';
+import sportsBanner from '../assets/sports-banner.jpg';
+
+const CDN = 'https://cdn.i8global.com/lb9/master';
 
 const providerLogos = [
-    { id: 'casino', name: 'W Casino', src: wcasinoLogo, categories: ['Baccarat', 'Game Shows'], featured: true },
-    { id: 'sagaming', name: 'SA Gaming', src: sagamingLogo, categories: ['Baccarat', 'Dragon Tiger'], featured: true },
-    { id: 'playtech', name: 'Playtech LiveCasino', src: playtechLogo, categories: ['Roulette', 'Blackjack'], featured: true },
-    { id: 'sexy-gaming', name: 'Sexy Gaming', src: sexygamingLogo, categories: ['Baccarat', 'Blackjack'], featured: true },
-    { id: 'dream-gaming', name: 'DreamGaming', src: dreamgamingLogo, categories: ['Baccarat', 'Roulette'], featured: true },
-    { id: 'evolution', name: 'Evolution Gaming', src: evolutionLogo, categories: ['Roulette', 'Game Shows'], featured: true },
-    { id: 'pragmatic-play', name: 'Pragmatic Play Live Casino', src: pragmaticLiveLogo, categories: ['Game Shows', 'Roulette'], featured: true },
-    { id: 'wm-casino', name: 'WM Casino', src: wmcasinoLogo, categories: ['Baccarat'], featured: false },
-    { id: 'big-gaming', name: 'Big Gaming', src: biggamingLogo, categories: ['Game Shows'], featured: false },
-    { id: 'allbet', name: 'AllBet', src: allbetLogo, categories: ['Blackjack', 'Baccarat'], featured: false },
-    { id: 'yeebet-live', name: 'YeeBet', src: yeebetLogo, categories: ['Baccarat'], featured: false },
-    { id: 'world-entertainment', name: 'WECasino', src: wecasinoLogo, categories: ['Game Shows'], featured: false },
-    { id: 'mt-live', name: 'MT', src: mtLogo, categories: ['Dragon Tiger'], featured: false }
+    {
+        id: 'saba-sports',
+        name: 'SABA Sports',
+        src: `${CDN}/sabasports/sabasports_wh-202507150659307576-202507172158490800.png`,
+        categories: ['Sportsbook'],
+        featured: true,
+    },
+    {
+        id: 'sbo-sports',
+        name: 'SBO Sports',
+        src: `${CDN}/sbosports/sbobet-202505140446487117-202506242314511303.svg`,
+        categories: ['Sportsbook'],
+        featured: true,
+    },
+    {
+        id: 'pragmatic-virtual-sports',
+        name: 'Pragmatic Play Virtual Sports',
+        src: `${CDN}/pragmaticplayvirtualsports/pragmaticvs_wh-202507101340022927-202507101413412524.png`,
+        categories: ['Virtual Sports'],
+        featured: false,
+    },
+    {
+        id: 'sbo-virtual-sports',
+        name: 'SBO Virtual Sports',
+        src: `${CDN}/sbovirtualsports/sbobet_vsport-202505140510055251-202506242315525359.svg`,
+        categories: ['Virtual Sports'],
+        featured: false,
+    },
 ];
 
-const providerTags = ['All', 'Trending', 'Baccarat', 'Roulette', 'Dragon Tiger', 'Blackjack', 'Game Shows'];
-
-export default function LiveCasinoPage({ selectedProviderIdFromMenu }) {
-    const [activeTag, setActiveTag] = useState('All');
+export default function SportsPage() {
     const [query, setQuery] = useState('');
     const [bannerProvider, setBannerProvider] = useState(
-        () => providerLogos.find((provider) => provider.name === 'SA Gaming') ?? providerLogos[0]
+        () => providerLogos.find((provider) => provider.id === 'pragmatic-virtual-sports') ?? providerLogos[0]
     );
-
-    useEffect(() => {
-        if (selectedProviderIdFromMenu) {
-            const match = providerLogos.find((p) => p.id === selectedProviderIdFromMenu);
-            if (match) {
-                setActiveTag('All');
-                setQuery('');
-                setBannerProvider(match);
-            }
-        }
-    }, [selectedProviderIdFromMenu]);
     const [showStickyPlayBar, setShowStickyPlayBar] = useState(false);
     const playButtonAreaRef = useRef(null);
 
@@ -57,24 +47,20 @@ export default function LiveCasinoPage({ selectedProviderIdFromMenu }) {
         const text = query.trim().toLowerCase();
 
         return providerLogos.filter((provider) => {
-            const tagMatch =
-                activeTag === 'All'
-                    ? true
-                    : activeTag === 'Trending'
-                        ? provider.featured
-                        : provider.categories.includes(activeTag);
             const textMatch = text ? provider.name.toLowerCase().includes(text) : true;
-            return tagMatch && textMatch;
+            return textMatch;
         });
-    }, [activeTag, query]);
+    }, [query]);
 
-    const handleSelectProvider = (provider) => {
-        setBannerProvider(provider);
-    };
+    useEffect(() => {
+        if (!filteredProviders.some((provider) => provider.id === bannerProvider.id)) {
+            setBannerProvider(filteredProviders[0] ?? providerLogos[0]);
+        }
+    }, [filteredProviders, bannerProvider.id]);
 
     useEffect(() => {
         const el = playButtonAreaRef.current;
-        if (!el) return;
+        if (!el) return undefined;
 
         const observer = new IntersectionObserver(
             ([entry]) => setShowStickyPlayBar(!entry.isIntersecting),
@@ -91,7 +77,7 @@ export default function LiveCasinoPage({ selectedProviderIdFromMenu }) {
             className={`btn-theme-cta inline-flex h-10 min-w-[140px] items-center justify-center rounded-[10px] px-5 text-sm font-black tracking-[0.06em] transition hover:-translate-y-0.5 hover:brightness-105 active:translate-y-0 active:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta-focus)] focus-visible:ring-offset-2 md:h-12 md:min-w-[180px] md:px-8 md:text-base ${className}`}
             aria-label={`Play ${bannerProvider.name}`}
         >
-            PLAY LIVE
+            PLAY SPORTS
         </a>
     );
 
@@ -107,15 +93,15 @@ export default function LiveCasinoPage({ selectedProviderIdFromMenu }) {
                     aria-label="Quick play bar"
                 >
                     <div className="flex items-center justify-center gap-4 px-4 py-3">
-                    <img
-                        src={bannerProvider.src}
-                        alt={bannerProvider.name}
-                        className="h-8 md:h-10 object-contain"
-                    />
-                    <span className="hidden text-sm font-bold text-[rgb(42_53_72)] sm:inline md:text-base">
-                        {bannerProvider.name}
-                    </span>
-                    <PlayButton />
+                        <img
+                            src={bannerProvider.src}
+                            alt={bannerProvider.name}
+                            className="h-8 md:h-10 object-contain"
+                        />
+                        <span className="hidden text-sm font-bold text-[rgb(42_53_72)] sm:inline md:text-base">
+                            {bannerProvider.name}
+                        </span>
+                        <PlayButton />
                     </div>
                 </div>
             )}
@@ -123,12 +109,12 @@ export default function LiveCasinoPage({ selectedProviderIdFromMenu }) {
             <section className="w-full border-y border-[rgb(219_226_240)] bg-[var(--color-surface-base-85)] backdrop-blur">
                 <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 h-12 flex items-center justify-between">
                     <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[rgb(102_112_134)]">
-                        Premium Live Casino Lounge
+                        Premium Sportsbook Arena
                     </div>
                     <div className="hidden items-center gap-3 text-xs font-semibold text-[rgb(83_96_122)] sm:flex">
-                        <span>High Definition Stream</span>
+                        <span>Competitive Odds</span>
                         <span className="h-1 w-1 rounded-full bg-[rgb(153_166_190)]"></span>
-                        <span>Fast Payout</span>
+                        <span>Fast Settlement</span>
                     </div>
                 </div>
             </section>
@@ -137,29 +123,30 @@ export default function LiveCasinoPage({ selectedProviderIdFromMenu }) {
                 <div className="w-full mx-auto">
                     <div className="relative overflow-hidden border border-[var(--color-border-live)] shadow-[var(--shadow-live-banner)]">
                         <img
-                            src={liveCasinoBanner}
-                            alt="Live Casino Banner"
-                            className="block h-auto w-full bg-[rgb(221_232_248)]"
+                            src={sportsBanner}
+                            alt="Sports Banner"
+                            className="block h-full w-full bg-[rgb(221_232_248)] object-cover object-center"
                         />
-                        <div ref={playButtonAreaRef} className="absolute inset-y-0 right-0 w-full md:w-[50%] flex items-center justify-start">
-                            <div className="w-full max-w-[500px] px-4 py-4 md:px-8 md:py-7 text-center">
-                                <div className="mt-4 md:mt-5 flex justify-center">
-                                        <img
-                                            src={bannerProvider.src}
-                                            alt={bannerProvider.name}
-                                            className="h-20 object-contain"
-                                        />
+                        <div className="absolute inset-y-0 left-0 w-[50%] bg-[linear-gradient(90deg,rgb(234_244_255_/_0.96)_0%,rgb(234_244_255_/_0.86)_45%,transparent_100%)]" />
+                        <div ref={playButtonAreaRef} className="absolute inset-0 flex items-center">
+                            <div className="w-[50%] pl-[15%] text-left sm:pl-[17%] md:pl-[18%]">
+                                <div className="flex justify-start">
+                                    <img
+                                        src={bannerProvider.src}
+                                        alt={bannerProvider.name}
+                                        className="h-20 object-contain"
+                                    />
                                 </div>
 
-                                <p className="mx-auto mt-2 max-w-[420px] text-sm font-semibold leading-[1.35] text-[rgb(42_53_72)] md:mt-4 md:text-xl md:leading-[1.32]">
-                                    Experience premium real-time casino games with top live dealers.
+                                <p className="mt-2 max-w-[420px] text-sm font-semibold leading-[1.35] text-[rgb(42_53_72)] md:mt-4 md:text-xl md:leading-[1.32]">
+                                    Enjoy premium sportsbook action and virtual sports with trusted providers and fast-paced markets.
                                 </p>
                                 <a
                                     href="#"
                                     className="btn-theme-cta mt-4 inline-flex h-10 min-w-[170px] items-center justify-center rounded-[10px] px-7 text-sm font-black tracking-[0.06em] transition hover:-translate-y-0.5 hover:brightness-105 active:translate-y-0 active:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(29_51_84)] md:mt-6 md:h-14 md:min-w-[260px] md:px-12 md:text-xl"
                                     aria-label={`Play ${bannerProvider.name}`}
                                 >
-                                    PLAY LIVE
+                                    PLAY SPORTS
                                 </a>
                             </div>
                         </div>
@@ -167,13 +154,13 @@ export default function LiveCasinoPage({ selectedProviderIdFromMenu }) {
                 </div>
             </section>
 
-            <section id="live-casino-providers" className="w-full max-w-[1400px] mx-auto px-4 md:px-8 mt-4 md:mt-6">
+            <section className="w-full max-w-[1400px] mx-auto px-4 md:px-8 mt-4 md:mt-6">
                 <div className="rounded-2xl border border-[rgb(219_228_243)] bg-[var(--color-surface-base-80)] p-4 shadow-[0_6px_18px_rgba(20,43,87,0.09)] backdrop-blur-sm md:p-5">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                         <div>
-                            <p className="text-xl font-extrabold tracking-[0.02em] text-[rgb(28_40_65)] md:text-2xl">Live Casino Providers</p>
+                            <p className="text-xl font-extrabold tracking-[0.02em] text-[rgb(28_40_65)] md:text-2xl">Sports Providers</p>
                             <p className="mt-1 text-xs text-[rgb(93_103_128)] md:text-sm">
-                                Choose from top brands with real-time action and studio-grade stream quality.
+                                Pick your preferred sportsbook or virtual sports provider with a consistent premium experience.
                             </p>
                         </div>
                         <label className="flex h-11 w-full items-center gap-2 rounded-xl border border-[var(--color-border-live)] bg-[var(--color-surface-base)] px-3 shadow-[inset_0_1px_2px_rgba(9,30,66,0.06)] lg:w-[330px]">
@@ -187,27 +174,7 @@ export default function LiveCasinoPage({ selectedProviderIdFromMenu }) {
                         </label>
                     </div>
 
-                    <div className="flex flex-wrap gap-2 mt-4">
-                        {providerTags.map((tag) => {
-                            const selected = activeTag === tag;
-                            return (
-                                <button
-                                    key={tag}
-                                    type="button"
-                                    onClick={() => setActiveTag(tag)}
-                                    className={`px-3 py-1.5 rounded-full text-xs md:text-xs font-bold tracking-wide border transition ${
-                                        selected
-                                            ? 'bg-[linear-gradient(180deg,#ffd86f_0%,#ffb038_100%)] text-[rgb(45_26_0)] border-[rgb(255_191_83)] shadow-[0_5px_10px_rgba(255,176,56,0.2)]'
-                                            : 'bg-[var(--color-surface-base)] text-[rgb(64_81_114)] border-[rgb(215_224_239)] hover:border-[rgb(184_198_226)] hover:text-[rgb(34_51_90)]'
-                                    }`}
-                                >
-                                    {tag}
-                                </button>
-                            );
-                        })}
-                    </div>
-
-                    <p className="mt-3 text-xs font-bold uppercase tracking-[0.08em] text-[rgb(106_117_144)] md:text-xs">
+                    <p className="mt-4 text-xs font-bold uppercase tracking-[0.08em] text-[rgb(106_117_144)] md:text-xs">
                         {filteredProviders.length} provider{filteredProviders.length === 1 ? '' : 's'} found
                     </p>
                 </div>
@@ -219,7 +186,7 @@ export default function LiveCasinoPage({ selectedProviderIdFromMenu }) {
                         <button
                             key={provider.name}
                             type="button"
-                            onClick={() => handleSelectProvider(provider)}
+                            onClick={() => setBannerProvider(provider)}
                             className={`group relative flex h-[86px] items-center justify-center rounded-3xl border bg-[var(--color-page-default)] px-3 shadow-[var(--shadow-live-provider)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-live-provider-hover)] md:h-[104px] ${
                                 bannerProvider.name === provider.name
                                     ? 'border-[var(--color-brand-deep)] ring-2 ring-[rgb(31_93_168_/_0.25)]'

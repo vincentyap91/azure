@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { UserRound } from 'lucide-react';
 import AccountSidebar from './AccountSidebar';
 
-export default function AccountLayout({ activePage, authUser, onNavigate, onLogout, children }) {
+export default function AccountLayout({ activePage, authUser, onNavigate, onLogout, onLiveChatClick, children }) {
     const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
     return (
@@ -37,6 +37,7 @@ export default function AccountLayout({ activePage, authUser, onNavigate, onLogo
                                 setMobileSidebarOpen(false);
                             }}
                             onLogout={onLogout}
+                            onLiveChatClick={onLiveChatClick}
                         />
                     </div>
 

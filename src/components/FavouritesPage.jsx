@@ -27,7 +27,7 @@ export default function FavouritesPage() {
         <div className="page-container">
                 <h1 className="page-title">Favourites</h1>
 
-                <div className="mb-8 flex justify-center">
+                <div className="mb-8 mt-8 flex justify-center">
                     <div className="inline-flex rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-base)] p-1 shadow-[0_4px_12px_rgba(15,23,42,0.04)]">
                         <button
                             type="button"

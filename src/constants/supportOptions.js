@@ -1,9 +1,8 @@
-import { FileText, HelpCircle, MessageCircle, Star } from 'lucide-react';
+import { HelpCircle, MessageCircle, Star } from 'lucide-react';
 
 /** Shared support options - used in Navbar profile dropdown and ProfilePage sidebar. Keep in sync. */
 export const supportOptions = [
     { label: 'Live Chat', icon: MessageCircle },
-    { label: 'Contact Us', icon: FileText },
     { label: 'Help Center', icon: HelpCircle },
-    { label: 'Share Feedback', icon: Star, fullWidth: true },
+    { label: 'Share Feedback', icon: Star },
 ];

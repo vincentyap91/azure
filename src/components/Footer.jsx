@@ -2,7 +2,7 @@ import React from 'react';
 import { DollarSign, ShieldAlert, MonitorSmartphone } from 'lucide-react';
 
 export default function Footer() {
-    const links = ['About Us', 'Live Chat', 'Contact Us', 'Affiliate', 'Terms & Conditions', 'Follow Us'];
+    const links = ['About Us', 'Live Chat', 'Affiliate', 'Terms & Conditions', 'Follow Us'];
     const paymentIcons = ['T', 'B', 'P', 'V', 'F', 'E', 'H'];
     const certs = ['Curacao', 'bmm', 'iTechLabs', 'Godaddy', 'GLI', 'Verify'];
 

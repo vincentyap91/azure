@@ -10,13 +10,15 @@ import AppDownload from './components/AppDownload';
 import Promos from './components/Promos';
 import LiveCasinoPage from './components/LiveCasinoPage';
 import SlotsPage from './components/SlotsPage';
+import SportsPage from './components/SportsPage';
 import ProfilePage from './components/ProfilePage';
 import AccountLayout from './components/AccountLayout';
 import RegisterPage from './components/RegisterPage';
 import VerificationPage from './components/VerificationPage';
 import FavouritesPage from './components/FavouritesPage';
 import MyBetsPage from './components/MyBetsPage';
-import BetSlipPage from './components/BetSlipPage';
+import FeedbackPage from './components/FeedbackPage';
+import HelpCenterPage from './components/HelpCenterPage';
 import Footer from './components/Footer';
 import FloatingSocials from './components/FloatingSocials';
 import LoginModal from './components/LoginModal';
@@ -30,6 +32,9 @@ function resolvePageFromPath() {
   }
   if (pathname === '/slots') {
     return 'slots';
+  }
+  if (pathname === '/sports') {
+    return 'sports';
   }
   if (pathname === '/register') {
     return 'register';
@@ -46,8 +51,14 @@ function resolvePageFromPath() {
   if (pathname === '/my-bets') {
     return 'my-bets';
   }
+  if (pathname === '/feedback') {
+    return 'feedback';
+  }
+  if (pathname === '/help' || pathname === '/help-center') {
+    return 'help-center';
+  }
   if (pathname === '/bet-slip') {
-    return 'bet-slip';
+    return 'my-bets';
   }
   return 'home';
 }
@@ -57,6 +68,7 @@ function App() {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [liveChatOpen, setLiveChatOpen] = useState(false);
   const [authUser, setAuthUser] = useState(null);
+  const [selectedCasinoProviderIdFromMenu, setSelectedCasinoProviderIdFromMenu] = useState(null);
   useEffect(() => {
     const onPopState = () => setPage(resolvePageFromPath());
     window.addEventListener('popstate', onPopState);
@@ -68,12 +80,14 @@ function App() {
       home: '/',
       'live-casino': '/casino',
       slots: '/slots',
+      sports: '/sports',
       register: '/register',
       profile: '/profile',
       verification: '/verification',
       favourites: '/favourites',
       'my-bets': '/my-bets',
-      'bet-slip': '/bet-slip',
+      feedback: '/feedback',
+      'help-center': '/help',
     };
     const nextPath = pathByPage[targetPage] ?? '/';
     setPage(targetPage);
@@ -93,11 +107,13 @@ function App() {
           ? 'bg-[var(--color-page-register)]'
           : page === 'slots'
             ? 'bg-[var(--color-page-default)]'
-            : page === 'profile' || page === 'verification' || page === 'favourites' || page === 'my-bets' || page === 'bet-slip'
+            : page === 'sports'
+              ? 'bg-[var(--color-page-default)]'
+            : page === 'profile' || page === 'verification' || page === 'favourites' || page === 'my-bets' || page === 'feedback' || page === 'help-center'
               ? 'bg-[var(--color-page-account)]'
               : 'bg-[var(--color-page-default)]'
     }`}>
-      {(page === 'home' || page === 'slots') && <FloatingSocials onLiveChatClick={() => setLiveChatOpen((open) => !open)} />}
+      <FloatingSocials onLiveChatClick={() => setLiveChatOpen((open) => !open)} />
 
       <Navbar
         onNavigate={handleNavigate}
@@ -107,7 +123,11 @@ function App() {
         authUser={authUser}
         onLogout={() => setAuthUser(null)}
         onAccountDetailsClick={() => handleNavigate('profile')}
-        onBetSlipClick={() => handleNavigate('bet-slip')}
+        onLiveChatClick={() => setLiveChatOpen(true)}
+        onCasinoProviderSelect={(menuProvider) => {
+          setSelectedCasinoProviderIdFromMenu(menuProvider?.id ?? null);
+          handleNavigate('live-casino');
+        }}
       />
 
       <div className="pt-[88px]">
@@ -128,26 +148,32 @@ function App() {
           </div>
         </>
       ) : page === 'live-casino' ? (
-        <LiveCasinoPage />
+        <LiveCasinoPage selectedProviderIdFromMenu={selectedCasinoProviderIdFromMenu} />
       ) : page === 'slots' ? (
         <SlotsPage />
+      ) : page === 'sports' ? (
+        <SportsPage />
       ) : page === 'profile' ? (
-        <ProfilePage authUser={authUser} onLogout={() => setAuthUser(null)} onNavigate={handleNavigate} />
+        <ProfilePage authUser={authUser} onLogout={() => setAuthUser(null)} onNavigate={handleNavigate} onLiveChatClick={() => setLiveChatOpen(true)} />
       ) : page === 'verification' ? (
-        <AccountLayout activePage="verification" authUser={authUser} onNavigate={handleNavigate} onLogout={() => setAuthUser(null)}>
+        <AccountLayout activePage="verification" authUser={authUser} onNavigate={handleNavigate} onLogout={() => setAuthUser(null)} onLiveChatClick={() => setLiveChatOpen(true)}>
           <VerificationPage />
         </AccountLayout>
       ) : page === 'favourites' ? (
-        <AccountLayout activePage="favourites" authUser={authUser} onNavigate={handleNavigate} onLogout={() => setAuthUser(null)}>
+        <AccountLayout activePage="favourites" authUser={authUser} onNavigate={handleNavigate} onLogout={() => setAuthUser(null)} onLiveChatClick={() => setLiveChatOpen(true)}>
           <FavouritesPage />
         </AccountLayout>
       ) : page === 'my-bets' ? (
-        <AccountLayout activePage="my-bets" authUser={authUser} onNavigate={handleNavigate} onLogout={() => setAuthUser(null)}>
+        <AccountLayout activePage="my-bets" authUser={authUser} onNavigate={handleNavigate} onLogout={() => setAuthUser(null)} onLiveChatClick={() => setLiveChatOpen(true)}>
           <MyBetsPage />
         </AccountLayout>
-      ) : page === 'bet-slip' ? (
-        <AccountLayout activePage="bet-slip" authUser={authUser} onNavigate={handleNavigate} onLogout={() => setAuthUser(null)}>
-          <BetSlipPage />
+      ) : page === 'feedback' ? (
+        <AccountLayout activePage="feedback" authUser={authUser} onNavigate={handleNavigate} onLogout={() => setAuthUser(null)} onLiveChatClick={() => setLiveChatOpen(true)}>
+          <FeedbackPage />
+        </AccountLayout>
+      ) : page === 'help-center' ? (
+        <AccountLayout activePage="help-center" authUser={authUser} onNavigate={handleNavigate} onLogout={() => setAuthUser(null)} onLiveChatClick={() => setLiveChatOpen(true)}>
+          <HelpCenterPage />
         </AccountLayout>
       ) : (
         <RegisterPage onLoginClick={() => setLoginModalOpen(true)} />
