@@ -26,8 +26,8 @@ export default function Navbar({ onNavigate, activePage = 'home', onLoginClick, 
         'Fishing', 'Poker', '3D Games', 'Cockfight', '4D', 'Fast Games',
         'Promotion', 'VIP', 'More'
     ];
-    const navTargets = { Home: 'home', Casino: 'live-casino', Slots: 'slots', Sports: 'sports' };
-    const navHrefs = { Home: '/', Casino: '/casino', Slots: '/slots', Sports: '/sports' };
+    const navTargets = { Home: 'home', Casino: 'live-casino', Slots: 'slots', Sports: 'sports', 'E-Sports': 'e-sports', Lottery: 'lottery' };
+    const navHrefs = { Home: '/', Casino: '/casino', Slots: '/slots', Sports: '/sports', 'E-Sports': '/e-sports', Lottery: '/lottery' };
     const accountCards = [
         { label: 'Account Details', icon: UserRound },
         { label: 'Verification', icon: ShieldCheck },
@@ -343,7 +343,9 @@ export default function Navbar({ onNavigate, activePage = 'home', onLoginClick, 
                     ${activePage === 'home' && link === 'Home' ? 'text-yellow-300' : ''}
                     ${activePage === 'live-casino' && link === 'Casino' ? 'text-yellow-300' : ''}
                     ${activePage === 'slots' && link === 'Slots' ? 'text-yellow-300' : ''}
-                    ${activePage === 'sports' && link === 'Sports' ? 'text-yellow-300' : ''}`}
+                    ${activePage === 'sports' && link === 'Sports' ? 'text-yellow-300' : ''}
+                    ${activePage === 'e-sports' && link === 'E-Sports' ? 'text-yellow-300' : ''}
+                    ${activePage === 'lottery' && link === 'Lottery' ? 'text-yellow-300' : ''}`}
                             >
                                 {link}
                                 {link === 'More' && <ChevronDown size={14} className="ml-0.5 group-hover:rotate-180 transition-transform" strokeWidth={3} />}

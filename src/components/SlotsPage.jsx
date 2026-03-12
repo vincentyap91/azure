@@ -146,7 +146,7 @@ export default function SlotsPage() {
 
             <section className="w-full">
                 <div className="w-full mx-auto">
-                    <div className="relative aspect-[67/15] overflow-hidden border border-[var(--color-border-live)] shadow-[var(--shadow-live-banner)]">
+                    <div className="relative aspect-[67/15] overflow-hidden shadow-[var(--shadow-live-banner)]">
                         <img
                             src={slotsBanner}
                             alt="Slots Banner - Instant Rebate"
@@ -155,11 +155,11 @@ export default function SlotsPage() {
                         <div className="absolute inset-y-0 left-0 w-[50%] bg-[linear-gradient(90deg,rgb(234_244_255_/_0.96)_0%,rgb(234_244_255_/_0.86)_45%,transparent_100%)]" />
                         <div className="absolute inset-0 flex items-center">
                             <div className="w-[50%] pl-[15%] text-left sm:pl-[17%] md:pl-[18%]">
-                                <h1 className="text-lg font-black uppercase tracking-tight text-[var(--color-text-brand-soft)] sm:text-2xl md:text-[3.35rem] md:leading-none">
-                                    Jackpot Slots
+                                <h1 className="text-base font-black uppercase tracking-[0.03em] text-[rgb(25_41_71)] md:text-2xl">
+                                    Slots
                                 </h1>
-                                <p className="mt-2 max-w-[420px] text-sm font-semibold leading-[1.35] text-[rgb(42_53_72)] md:mt-4 md:text-xl md:leading-[1.32]">
-                                    Spin to Win Big! Massive Jackpots Await.
+                                <p className="mt-3 max-w-[420px] text-sm font-semibold leading-[1.35] text-[rgb(42_53_72)] md:mt-4 md:text-xl md:leading-[1.32]">
+                                    Spin fast, hit hard, chase jackpots.
                                 </p>
                             </div>
                         </div>

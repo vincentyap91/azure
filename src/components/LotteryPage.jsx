@@ -1,51 +1,43 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Search } from 'lucide-react';
-import sportsBanner from '../assets/sports-banner.jpg';
+import lotteryBanner from '../assets/lottery-banner.jpg';
 
 const CDN = 'https://cdn.i8global.com/lb9/master';
 
 const providerLogos = [
     {
-        id: 'saba-sports',
-        name: 'SABA Sports',
-        src: `${CDN}/sabasports/sabasports_wh-202507150659307576-202507172158490800.png`,
-        categories: ['Sportsbook'],
-        featured: true,
-    },
-    {
-        id: 'sbo-sports',
-        name: 'SBO Sports',
-        src: `${CDN}/sbosports/sbobet-202505140446487117-202506242314511303.svg`,
-        categories: ['Sportsbook'],
-        featured: true,
-    },
-    {
-        id: 'pragmatic-virtual-sports',
-        name: 'Pragmatic Play Virtual Sports',
+        id: 'pragmatic-lottery',
+        name: 'Pragmatic Play Lottery',
         src: `${CDN}/pragmaticplayvirtualsports/pragmaticvs_wh-202507101340022927-202507101413412524.png`,
-        categories: ['Virtual Sports'],
-        featured: false,
+        categories: ['Lottery'],
+        featured: true,
     },
     {
-        id: 'sbo-virtual-sports',
-        name: 'SBO Virtual Sports',
-        src: `${CDN}/sbovirtualsports/sbobet_vsport-202505140510055251-202506242315525359.svg`,
-        categories: ['Virtual Sports'],
+        id: 'saba-lottery',
+        name: 'SABA Lottery',
+        src: `${CDN}/sabasports/sabasports_wh-202507150659307576-202507172158490800.png`,
+        categories: ['Lottery'],
+        featured: true,
+    },
+    {
+        id: 'sbo-lottery',
+        name: 'SBO Lottery',
+        src: `${CDN}/sbosports/sbobet-202505140446487117-202506242314511303.svg`,
+        categories: ['Lottery'],
         featured: false,
     },
 ];
 
-export default function SportsPage() {
+export default function LotteryPage() {
     const [query, setQuery] = useState('');
     const [bannerProvider, setBannerProvider] = useState(
-        () => providerLogos.find((provider) => provider.id === 'pragmatic-virtual-sports') ?? providerLogos[0]
+        () => providerLogos[0]
     );
     const [showStickyPlayBar, setShowStickyPlayBar] = useState(false);
     const playButtonAreaRef = useRef(null);
 
     const filteredProviders = useMemo(() => {
         const text = query.trim().toLowerCase();
-
         return providerLogos.filter((provider) => {
             const textMatch = text ? provider.name.toLowerCase().includes(text) : true;
             return textMatch;
@@ -61,12 +53,10 @@ export default function SportsPage() {
     useEffect(() => {
         const el = playButtonAreaRef.current;
         if (!el) return undefined;
-
         const observer = new IntersectionObserver(
             ([entry]) => setShowStickyPlayBar(!entry.isIntersecting),
             { threshold: 0, rootMargin: '-80px 0px 0px 0px', root: null }
         );
-
         observer.observe(el);
         return () => observer.disconnect();
     }, []);
@@ -77,7 +67,7 @@ export default function SportsPage() {
             className={`btn-theme-cta inline-flex h-10 min-w-[140px] items-center justify-center rounded-[10px] px-5 text-sm font-black tracking-[0.06em] transition hover:-translate-y-0.5 hover:brightness-105 active:translate-y-0 active:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta-focus)] focus-visible:ring-offset-2 md:h-12 md:min-w-[180px] md:px-8 md:text-base ${className}`}
             aria-label={`Play ${bannerProvider.name}`}
         >
-            PLAY SPORTS
+            PLAY LOTTERY
         </a>
     );
 
@@ -109,22 +99,22 @@ export default function SportsPage() {
             <section className="w-full border-y border-[rgb(219_226_240)] bg-[var(--color-surface-base-85)] backdrop-blur">
                 <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 h-12 flex items-center justify-between">
                     <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[rgb(102_112_134)]">
-                        Premium Sportsbook Arena
+                        Premium Lottery Hub
                     </div>
                     <div className="hidden items-center gap-3 text-xs font-semibold text-[rgb(83_96_122)] sm:flex">
-                        <span>Competitive Odds</span>
+                        <span>Big Jackpots</span>
                         <span className="h-1 w-1 rounded-full bg-[rgb(153_166_190)]"></span>
-                        <span>Fast Settlement</span>
+                        <span>Daily Draws</span>
                     </div>
                 </div>
             </section>
 
             <section className="w-full">
                 <div className="w-full mx-auto">
-                    <div className="relative overflow-hidden border border-[var(--color-border-live)] shadow-[var(--shadow-live-banner)]">
+                    <div className="relative overflow-hidden shadow-[var(--shadow-live-banner)]">
                         <img
-                            src={sportsBanner}
-                            alt="Sports Banner"
+                            src={lotteryBanner}
+                            alt="Lottery Banner"
                             className="block h-full w-full bg-[rgb(221_232_248)] object-cover object-center"
                         />
                         <div className="absolute inset-y-0 left-0 w-[50%] bg-[linear-gradient(90deg,rgb(234_244_255_/_0.96)_0%,rgb(234_244_255_/_0.86)_45%,transparent_100%)]" />
@@ -137,18 +127,18 @@ export default function SportsPage() {
                                         className="h-20 object-contain"
                                     />
                                 </div>
-                                <h1 className="mt-3 text-base font-black uppercase tracking-[0.03em] text-[rgb(25_41_71)] md:text-2xl">
-                                    Sportsbook
+                                <h1 className="mt-3 text-base font-black uppercase tracking-[0.03em] text-[rgb(42_53_72)] md:text-2xl">
+                                    Lottery
                                 </h1>
                                 <p className="mt-3 max-w-[420px] text-sm font-semibold leading-[1.35] text-[rgb(42_53_72)] md:mt-4 md:text-xl md:leading-[1.32]">
-                                    Big matches, sharp odds, instant action.
+                                    Pick your numbers, chase the jackpot.
                                 </p>
                                 <a
                                     href="#"
                                     className="btn-theme-cta mt-4 inline-flex h-10 min-w-[170px] items-center justify-center rounded-[10px] px-7 text-sm font-black tracking-[0.06em] transition hover:-translate-y-0.5 hover:brightness-105 active:translate-y-0 active:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(29_51_84)] md:mt-6 md:h-14 md:min-w-[260px] md:px-12 md:text-xl"
                                     aria-label={`Play ${bannerProvider.name}`}
                                 >
-                                    PLAY SPORTS
+                                    PLAY LOTTERY
                                 </a>
                             </div>
                         </div>
@@ -160,9 +150,9 @@ export default function SportsPage() {
                 <div className="rounded-2xl border border-[rgb(219_228_243)] bg-[var(--color-surface-base-80)] p-4 shadow-[0_6px_18px_rgba(20,43,87,0.09)] backdrop-blur-sm md:p-5">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                         <div>
-                            <p className="text-xl font-extrabold tracking-[0.02em] text-[rgb(28_40_65)] md:text-2xl">Sports Providers</p>
+                            <p className="text-xl font-extrabold tracking-[0.02em] text-[rgb(28_40_65)] md:text-2xl">Lottery Providers</p>
                             <p className="mt-1 text-xs text-[rgb(93_103_128)] md:text-sm">
-                                Pick your preferred sportsbook or virtual sports provider with a consistent premium experience.
+                                Choose your preferred lottery provider and play local and international draws.
                             </p>
                         </div>
                         <label className="flex h-11 w-full items-center gap-2 rounded-xl border border-[var(--color-border-live)] bg-[var(--color-surface-base)] px-3 shadow-[inset_0_1px_2px_rgba(9,30,66,0.06)] lg:w-[330px]">
@@ -175,7 +165,6 @@ export default function SportsPage() {
                             />
                         </label>
                     </div>
-
                     <p className="mt-4 text-xs font-bold uppercase tracking-[0.08em] text-[rgb(106_117_144)] md:text-xs">
                         {filteredProviders.length} provider{filteredProviders.length === 1 ? '' : 's'} found
                     </p>

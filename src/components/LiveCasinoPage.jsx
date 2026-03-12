@@ -135,7 +135,7 @@ export default function LiveCasinoPage({ selectedProviderIdFromMenu }) {
 
             <section className="w-full">
                 <div className="w-full mx-auto">
-                    <div className="relative overflow-hidden border border-[var(--color-border-live)] shadow-[var(--shadow-live-banner)]">
+                    <div className="relative overflow-hidden shadow-[var(--shadow-live-banner)]">
                         <img
                             src={liveCasinoBanner}
                             alt="Live Casino Banner"
@@ -150,9 +150,11 @@ export default function LiveCasinoPage({ selectedProviderIdFromMenu }) {
                                             className="h-20 object-contain"
                                         />
                                 </div>
-
-                                <p className="mx-auto mt-2 max-w-[420px] text-sm font-semibold leading-[1.35] text-[rgb(42_53_72)] md:mt-4 md:text-xl md:leading-[1.32]">
-                                    Experience premium real-time casino games with top live dealers.
+                                <h1 className="mt-3 text-base font-black uppercase tracking-[0.03em] text-[rgb(25_41_71)] md:text-2xl">
+                                    Live Casino
+                                </h1>
+                                <p className="mx-auto mt-3 max-w-[420px] text-sm font-semibold leading-[1.35] text-[rgb(42_53_72)] md:mt-4 md:text-xl md:leading-[1.32]">
+                                    Live dealers, real thrills, instant payouts.
                                 </p>
                                 <a
                                     href="#"

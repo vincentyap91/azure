@@ -11,6 +11,8 @@ import Promos from './components/Promos';
 import LiveCasinoPage from './components/LiveCasinoPage';
 import SlotsPage from './components/SlotsPage';
 import SportsPage from './components/SportsPage';
+import EsportsPage from './components/EsportsPage';
+import LotteryPage from './components/LotteryPage';
 import ProfilePage from './components/ProfilePage';
 import AccountLayout from './components/AccountLayout';
 import RegisterPage from './components/RegisterPage';
@@ -35,6 +37,12 @@ function resolvePageFromPath() {
   }
   if (pathname === '/sports') {
     return 'sports';
+  }
+  if (pathname === '/e-sports' || pathname === '/esports') {
+    return 'e-sports';
+  }
+  if (pathname === '/lottery') {
+    return 'lottery';
   }
   if (pathname === '/register') {
     return 'register';
@@ -81,6 +89,8 @@ function App() {
       'live-casino': '/casino',
       slots: '/slots',
       sports: '/sports',
+      'e-sports': '/e-sports',
+      lottery: '/lottery',
       register: '/register',
       profile: '/profile',
       verification: '/verification',
@@ -108,6 +118,10 @@ function App() {
           : page === 'slots'
             ? 'bg-[var(--color-page-default)]'
             : page === 'sports'
+              ? 'bg-[var(--color-page-default)]'
+              : page === 'e-sports'
+                ? 'bg-[var(--color-page-default)]'
+            : page === 'lottery'
               ? 'bg-[var(--color-page-default)]'
             : page === 'profile' || page === 'verification' || page === 'favourites' || page === 'my-bets' || page === 'feedback' || page === 'help-center'
               ? 'bg-[var(--color-page-account)]'
@@ -153,6 +167,10 @@ function App() {
         <SlotsPage />
       ) : page === 'sports' ? (
         <SportsPage />
+      ) : page === 'e-sports' ? (
+        <EsportsPage />
+      ) : page === 'lottery' ? (
+        <LotteryPage />
       ) : page === 'profile' ? (
         <ProfilePage authUser={authUser} onLogout={() => setAuthUser(null)} onNavigate={handleNavigate} onLiveChatClick={() => setLiveChatOpen(true)} />
       ) : page === 'verification' ? (

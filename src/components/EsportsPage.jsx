@@ -1,62 +1,21 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Search } from 'lucide-react';
-import sportsBanner from '../assets/sports-banner.jpg';
-
-const CDN = 'https://cdn.i8global.com/lb9/master';
+import esportsBanner from '../assets/esports.jpg';
+import tfGamingLogo from '../assets/tf-gaming.webp';
 
 const providerLogos = [
-    {
-        id: 'saba-sports',
-        name: 'SABA Sports',
-        src: `${CDN}/sabasports/sabasports_wh-202507150659307576-202507172158490800.png`,
-        categories: ['Sportsbook'],
-        featured: true,
-    },
-    {
-        id: 'sbo-sports',
-        name: 'SBO Sports',
-        src: `${CDN}/sbosports/sbobet-202505140446487117-202506242314511303.svg`,
-        categories: ['Sportsbook'],
-        featured: true,
-    },
-    {
-        id: 'pragmatic-virtual-sports',
-        name: 'Pragmatic Play Virtual Sports',
-        src: `${CDN}/pragmaticplayvirtualsports/pragmaticvs_wh-202507101340022927-202507101413412524.png`,
-        categories: ['Virtual Sports'],
-        featured: false,
-    },
-    {
-        id: 'sbo-virtual-sports',
-        name: 'SBO Virtual Sports',
-        src: `${CDN}/sbovirtualsports/sbobet_vsport-202505140510055251-202506242315525359.svg`,
-        categories: ['Virtual Sports'],
-        featured: false,
-    },
+    { id: 'tf-gaming', name: 'TF Gaming', src: tfGamingLogo },
 ];
 
-export default function SportsPage() {
+export default function EsportsPage() {
     const [query, setQuery] = useState('');
-    const [bannerProvider, setBannerProvider] = useState(
-        () => providerLogos.find((provider) => provider.id === 'pragmatic-virtual-sports') ?? providerLogos[0]
-    );
+    const [bannerProvider, setBannerProvider] = useState(providerLogos[0]);
     const [showStickyPlayBar, setShowStickyPlayBar] = useState(false);
     const playButtonAreaRef = useRef(null);
 
-    const filteredProviders = useMemo(() => {
-        const text = query.trim().toLowerCase();
-
-        return providerLogos.filter((provider) => {
-            const textMatch = text ? provider.name.toLowerCase().includes(text) : true;
-            return textMatch;
-        });
-    }, [query]);
-
-    useEffect(() => {
-        if (!filteredProviders.some((provider) => provider.id === bannerProvider.id)) {
-            setBannerProvider(filteredProviders[0] ?? providerLogos[0]);
-        }
-    }, [filteredProviders, bannerProvider.id]);
+    const filteredProviders = providerLogos.filter((p) =>
+        query.trim() ? p.name.toLowerCase().includes(query.trim().toLowerCase()) : true
+    );
 
     useEffect(() => {
         const el = playButtonAreaRef.current;
@@ -77,7 +36,7 @@ export default function SportsPage() {
             className={`btn-theme-cta inline-flex h-10 min-w-[140px] items-center justify-center rounded-[10px] px-5 text-sm font-black tracking-[0.06em] transition hover:-translate-y-0.5 hover:brightness-105 active:translate-y-0 active:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta-focus)] focus-visible:ring-offset-2 md:h-12 md:min-w-[180px] md:px-8 md:text-base ${className}`}
             aria-label={`Play ${bannerProvider.name}`}
         >
-            PLAY SPORTS
+            PLAY E-SPORTS
         </a>
     );
 
@@ -96,7 +55,7 @@ export default function SportsPage() {
                         <img
                             src={bannerProvider.src}
                             alt={bannerProvider.name}
-                            className="h-8 md:h-10 object-contain"
+                            className="h-8 object-contain md:h-10"
                         />
                         <span className="hidden text-sm font-bold text-[rgb(42_53_72)] sm:inline md:text-base">
                             {bannerProvider.name}
@@ -107,12 +66,12 @@ export default function SportsPage() {
             )}
 
             <section className="w-full border-y border-[rgb(219_226_240)] bg-[var(--color-surface-base-85)] backdrop-blur">
-                <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 h-12 flex items-center justify-between">
+                <div className="mx-auto flex h-12 w-full max-w-[1400px] items-center justify-between px-4 md:px-8">
                     <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[rgb(102_112_134)]">
-                        Premium Sportsbook Arena
+                        Competitive E-Sports Arena
                     </div>
                     <div className="hidden items-center gap-3 text-xs font-semibold text-[rgb(83_96_122)] sm:flex">
-                        <span>Competitive Odds</span>
+                        <span>Live Match Markets</span>
                         <span className="h-1 w-1 rounded-full bg-[rgb(153_166_190)]"></span>
                         <span>Fast Settlement</span>
                     </div>
@@ -120,17 +79,16 @@ export default function SportsPage() {
             </section>
 
             <section className="w-full">
-                <div className="w-full mx-auto">
-                    <div className="relative overflow-hidden border border-[var(--color-border-live)] shadow-[var(--shadow-live-banner)]">
+                <div className="mx-auto w-full">
+                    <div className="relative overflow-hidden shadow-[var(--shadow-live-banner)]">
                         <img
-                            src={sportsBanner}
-                            alt="Sports Banner"
+                            src={esportsBanner}
+                            alt="E-Sports Banner"
                             className="block h-full w-full bg-[rgb(221_232_248)] object-cover object-center"
                         />
-                        <div className="absolute inset-y-0 left-0 w-[50%] bg-[linear-gradient(90deg,rgb(234_244_255_/_0.96)_0%,rgb(234_244_255_/_0.86)_45%,transparent_100%)]" />
-                        <div ref={playButtonAreaRef} className="absolute inset-0 flex items-center">
-                            <div className="w-[50%] pl-[15%] text-left sm:pl-[17%] md:pl-[18%]">
-                                <div className="flex justify-start">
+                        <div ref={playButtonAreaRef} className="absolute inset-y-0 right-0 flex w-full items-center justify-start md:w-[50%]">
+                            <div className="w-full max-w-[500px] px-4 py-4 text-center md:px-8 md:py-7">
+                                <div className="mt-4 flex justify-center md:mt-5">
                                     <img
                                         src={bannerProvider.src}
                                         alt={bannerProvider.name}
@@ -138,17 +96,17 @@ export default function SportsPage() {
                                     />
                                 </div>
                                 <h1 className="mt-3 text-base font-black uppercase tracking-[0.03em] text-[rgb(25_41_71)] md:text-2xl">
-                                    Sportsbook
+                                    E-Sports
                                 </h1>
-                                <p className="mt-3 max-w-[420px] text-sm font-semibold leading-[1.35] text-[rgb(42_53_72)] md:mt-4 md:text-xl md:leading-[1.32]">
-                                    Big matches, sharp odds, instant action.
+                                <p className="mx-auto mt-3 max-w-[420px] text-sm font-semibold leading-[1.35] text-[rgb(42_53_72)] md:mt-4 md:text-xl md:leading-[1.32]">
+                                    Top tournaments, live odds, nonstop hype.
                                 </p>
                                 <a
                                     href="#"
                                     className="btn-theme-cta mt-4 inline-flex h-10 min-w-[170px] items-center justify-center rounded-[10px] px-7 text-sm font-black tracking-[0.06em] transition hover:-translate-y-0.5 hover:brightness-105 active:translate-y-0 active:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(29_51_84)] md:mt-6 md:h-14 md:min-w-[260px] md:px-12 md:text-xl"
                                     aria-label={`Play ${bannerProvider.name}`}
                                 >
-                                    PLAY SPORTS
+                                    PLAY E-SPORTS
                                 </a>
                             </div>
                         </div>
@@ -156,13 +114,13 @@ export default function SportsPage() {
                 </div>
             </section>
 
-            <section className="w-full max-w-[1400px] mx-auto px-4 md:px-8 mt-4 md:mt-6">
+            <section className="mx-auto mt-4 w-full max-w-[1400px] px-4 md:mt-6 md:px-8">
                 <div className="rounded-2xl border border-[rgb(219_228_243)] bg-[var(--color-surface-base-80)] p-4 shadow-[0_6px_18px_rgba(20,43,87,0.09)] backdrop-blur-sm md:p-5">
-                    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                    <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div>
-                            <p className="text-xl font-extrabold tracking-[0.02em] text-[rgb(28_40_65)] md:text-2xl">Sports Providers</p>
+                            <p className="text-xl font-extrabold tracking-[0.02em] text-[rgb(28_40_65)] md:text-2xl">E-Sports Providers</p>
                             <p className="mt-1 text-xs text-[rgb(93_103_128)] md:text-sm">
-                                Pick your preferred sportsbook or virtual sports provider with a consistent premium experience.
+                                Choose your preferred E-sports and virtual competition provider with the same premium sportsbook experience.
                             </p>
                         </div>
                         <label className="flex h-11 w-full items-center gap-2 rounded-xl border border-[var(--color-border-live)] bg-[var(--color-surface-base)] px-3 shadow-[inset_0_1px_2px_rgba(9,30,66,0.06)] lg:w-[330px]">
@@ -182,31 +140,26 @@ export default function SportsPage() {
                 </div>
             </section>
 
-            <section className="w-full max-w-[1400px] mx-auto px-4 md:px-8 mt-5 md:mt-6">
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
-                    {filteredProviders.map((provider, index) => (
+            <section className="mx-auto mt-5 w-full max-w-[1400px] px-4 md:mt-6 md:px-8">
+                <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-6 sm:grid-cols-3">
+                    {filteredProviders.map((p, index) => (
                         <button
-                            key={provider.name}
+                            key={p.name}
                             type="button"
-                            onClick={() => setBannerProvider(provider)}
+                            onClick={() => setBannerProvider(p)}
                             className={`group relative flex h-[86px] items-center justify-center rounded-3xl border bg-[var(--color-page-default)] px-3 shadow-[var(--shadow-live-provider)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-live-provider-hover)] md:h-[104px] ${
-                                bannerProvider.name === provider.name
+                                bannerProvider.name === p.name
                                     ? 'border-[var(--color-brand-deep)] ring-2 ring-[rgb(31_93_168_/_0.25)]'
                                     : 'border-[rgb(209_216_229)] hover:border-[rgb(183_194_215)]'
                             }`}
-                            aria-label={`Show ${provider.name} in banner`}
+                            aria-label={`Show ${p.name} in banner`}
                         >
-                            {provider.featured && (
-                                <span className="absolute right-2 top-2 rounded-full bg-[var(--color-hot-main)] px-2.5 py-0.5 text-xs font-black tracking-wide text-white shadow-[var(--shadow-hot)] md:text-xs">
-                                    HOT
-                                </span>
-                            )}
-                            <div className="w-full h-full flex items-center justify-center pt-1">
+                            <div className="flex h-full w-full items-center justify-center pt-1">
                                 <img
-                                    src={provider.src}
-                                    alt={provider.name}
+                                    src={p.src}
+                                    alt={p.name}
                                     loading={index < 12 ? 'eager' : 'lazy'}
-                                    className="max-w-full max-h-[34px] md:max-h-[50px] object-contain saturate-110 contrast-110 group-hover:scale-105 transition duration-300"
+                                    className="max-h-[34px] max-w-full object-contain saturate-110 contrast-110 transition duration-300 group-hover:scale-105 md:max-h-[50px]"
                                 />
                             </div>
                         </button>
@@ -219,6 +172,7 @@ export default function SportsPage() {
                     </div>
                 )}
             </section>
+
         </main>
     );
 }
