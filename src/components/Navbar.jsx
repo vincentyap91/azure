@@ -23,11 +23,11 @@ export default function Navbar({ onNavigate, activePage = 'home', onLoginClick, 
 
     const mainLinks = [
         'Home', 'Casino', 'Slots', 'Sports', 'E-Sports', 'Lottery',
-        'Fishing', 'Poker', '3D Games', 'Cockfight', '4D', 'Fast Games',
+        'Fishing', 'Poker', 'Cockfight',
         'Promotion', 'VIP', 'More'
     ];
-    const navTargets = { Home: 'home', Casino: 'live-casino', Slots: 'slots', Sports: 'sports', 'E-Sports': 'e-sports', Lottery: 'lottery' };
-    const navHrefs = { Home: '/', Casino: '/casino', Slots: '/slots', Sports: '/sports', 'E-Sports': '/e-sports', Lottery: '/lottery' };
+    const navTargets = { Home: 'home', Casino: 'live-casino', Slots: 'slots', Sports: 'sports', 'E-Sports': 'e-sports', Lottery: 'lottery', Fishing: 'fishing', Poker: 'poker' };
+    const navHrefs = { Home: '/', Casino: '/casino', Slots: '/slots', Sports: '/sports', 'E-Sports': '/e-sports', Lottery: '/lottery', Fishing: '/fishing', Poker: '/poker' };
     const accountCards = [
         { label: 'Account Details', icon: UserRound },
         { label: 'Verification', icon: ShieldCheck },
@@ -305,7 +305,7 @@ export default function Navbar({ onNavigate, activePage = 'home', onLoginClick, 
             </div>
 
             <div className="flex h-14 w-full items-center bg-[var(--color-nav-main)] px-4 md:px-10">
-                <div className="w-full max-w-[1400px] mx-auto flex items-center justify-between">
+                <div className="w-full max-w-screen-2xl mx-auto flex items-center justify-between">
                     <button
                         type="button"
                         onClick={() => onNavigate?.('home')}
@@ -345,7 +345,9 @@ export default function Navbar({ onNavigate, activePage = 'home', onLoginClick, 
                     ${activePage === 'slots' && link === 'Slots' ? 'text-yellow-300' : ''}
                     ${activePage === 'sports' && link === 'Sports' ? 'text-yellow-300' : ''}
                     ${activePage === 'e-sports' && link === 'E-Sports' ? 'text-yellow-300' : ''}
-                    ${activePage === 'lottery' && link === 'Lottery' ? 'text-yellow-300' : ''}`}
+                    ${activePage === 'lottery' && link === 'Lottery' ? 'text-yellow-300' : ''}
+                    ${activePage === 'fishing' && link === 'Fishing' ? 'text-yellow-300' : ''}
+                    ${activePage === 'poker' && link === 'Poker' ? 'text-yellow-300' : ''}`}
                             >
                                 {link}
                                 {link === 'More' && <ChevronDown size={14} className="ml-0.5 group-hover:rotate-180 transition-transform" strokeWidth={3} />}

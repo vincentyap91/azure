@@ -66,7 +66,7 @@ export default function EsportsPage() {
             )}
 
             <section className="w-full border-y border-[rgb(219_226_240)] bg-[var(--color-surface-base-85)] backdrop-blur">
-                <div className="mx-auto flex h-12 w-full max-w-[1400px] items-center justify-between px-4 md:px-8">
+                <div className="mx-auto flex h-12 w-full max-w-screen-2xl items-center justify-between px-4 md:px-8">
                     <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[rgb(102_112_134)]">
                         Competitive E-Sports Arena
                     </div>
@@ -114,7 +114,7 @@ export default function EsportsPage() {
                 </div>
             </section>
 
-            <section className="mx-auto mt-4 w-full max-w-[1400px] px-4 md:mt-6 md:px-8">
+            <section className="mx-auto mt-4 w-full max-w-screen-2xl px-4 md:mt-6 md:px-8">
                 <div className="rounded-2xl border border-[rgb(219_228_243)] bg-[var(--color-surface-base-80)] p-4 shadow-[0_6px_18px_rgba(20,43,87,0.09)] backdrop-blur-sm md:p-5">
                     <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                         <div>
@@ -140,7 +140,7 @@ export default function EsportsPage() {
                 </div>
             </section>
 
-            <section className="mx-auto mt-5 w-full max-w-[1400px] px-4 md:mt-6 md:px-8">
+            <section className="mx-auto mt-5 w-full max-w-screen-2xl px-4 md:mt-6 md:px-8">
                 <div className="grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-6 sm:grid-cols-3">
                     {filteredProviders.map((p, index) => (
                         <button

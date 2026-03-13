@@ -13,6 +13,8 @@ import SlotsPage from './components/SlotsPage';
 import SportsPage from './components/SportsPage';
 import EsportsPage from './components/EsportsPage';
 import LotteryPage from './components/LotteryPage';
+import FishingPage from './components/FishingPage';
+import PokerPage from './components/PokerPage';
 import ProfilePage from './components/ProfilePage';
 import AccountLayout from './components/AccountLayout';
 import RegisterPage from './components/RegisterPage';
@@ -43,6 +45,12 @@ function resolvePageFromPath() {
   }
   if (pathname === '/lottery') {
     return 'lottery';
+  }
+  if (pathname === '/fishing') {
+    return 'fishing';
+  }
+  if (pathname === '/poker') {
+    return 'poker';
   }
   if (pathname === '/register') {
     return 'register';
@@ -91,6 +99,8 @@ function App() {
       sports: '/sports',
       'e-sports': '/e-sports',
       lottery: '/lottery',
+      fishing: '/fishing',
+      poker: '/poker',
       register: '/register',
       profile: '/profile',
       verification: '/verification',
@@ -122,6 +132,10 @@ function App() {
               : page === 'e-sports'
                 ? 'bg-[var(--color-page-default)]'
             : page === 'lottery'
+              ? 'bg-[var(--color-page-default)]'
+            : page === 'fishing'
+              ? 'bg-[var(--color-page-default)]'
+            : page === 'poker'
               ? 'bg-[var(--color-page-default)]'
             : page === 'profile' || page === 'verification' || page === 'favourites' || page === 'my-bets' || page === 'feedback' || page === 'help-center'
               ? 'bg-[var(--color-page-account)]'
@@ -171,6 +185,10 @@ function App() {
         <EsportsPage />
       ) : page === 'lottery' ? (
         <LotteryPage />
+      ) : page === 'fishing' ? (
+        <FishingPage />
+      ) : page === 'poker' ? (
+        <PokerPage />
       ) : page === 'profile' ? (
         <ProfilePage authUser={authUser} onLogout={() => setAuthUser(null)} onNavigate={handleNavigate} onLiveChatClick={() => setLiveChatOpen(true)} />
       ) : page === 'verification' ? (

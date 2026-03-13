@@ -121,7 +121,7 @@ export default function LiveCasinoPage({ selectedProviderIdFromMenu }) {
             )}
 
             <section className="w-full border-y border-[rgb(219_226_240)] bg-[var(--color-surface-base-85)] backdrop-blur">
-                <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 h-12 flex items-center justify-between">
+                <div className="w-full max-w-screen-2xl mx-auto px-4 md:px-8 h-12 flex items-center justify-between">
                     <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[rgb(102_112_134)]">
                         Premium Live Casino Lounge
                     </div>
@@ -169,7 +169,7 @@ export default function LiveCasinoPage({ selectedProviderIdFromMenu }) {
                 </div>
             </section>
 
-            <section id="live-casino-providers" className="w-full max-w-[1400px] mx-auto px-4 md:px-8 mt-4 md:mt-6">
+            <section id="live-casino-providers" className="w-full max-w-screen-2xl mx-auto px-4 md:px-8 mt-4 md:mt-6">
                 <div className="rounded-2xl border border-[rgb(219_228_243)] bg-[var(--color-surface-base-80)] p-4 shadow-[0_6px_18px_rgba(20,43,87,0.09)] backdrop-blur-sm md:p-5">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                         <div>
@@ -215,7 +215,7 @@ export default function LiveCasinoPage({ selectedProviderIdFromMenu }) {
                 </div>
             </section>
 
-            <section className="w-full max-w-[1400px] mx-auto px-4 md:px-8 mt-5 md:mt-6">
+            <section className="w-full max-w-screen-2xl mx-auto px-4 md:px-8 mt-5 md:mt-6">
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
                     {filteredProviders.map((provider, index) => (
                         <button

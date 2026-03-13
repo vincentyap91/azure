@@ -107,7 +107,7 @@ export default function SportsPage() {
             )}
 
             <section className="w-full border-y border-[rgb(219_226_240)] bg-[var(--color-surface-base-85)] backdrop-blur">
-                <div className="w-full max-w-[1400px] mx-auto px-4 md:px-8 h-12 flex items-center justify-between">
+                <div className="w-full max-w-screen-2xl mx-auto px-4 md:px-8 h-12 flex items-center justify-between">
                     <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[rgb(102_112_134)]">
                         Premium Sportsbook Arena
                     </div>
@@ -129,34 +129,36 @@ export default function SportsPage() {
                         />
                         <div className="absolute inset-y-0 left-0 w-[50%] bg-[linear-gradient(90deg,rgb(234_244_255_/_0.96)_0%,rgb(234_244_255_/_0.86)_45%,transparent_100%)]" />
                         <div ref={playButtonAreaRef} className="absolute inset-0 flex items-center">
-                            <div className="w-[50%] pl-[15%] text-left sm:pl-[17%] md:pl-[18%]">
-                                <div className="flex justify-start">
-                                    <img
-                                        src={bannerProvider.src}
-                                        alt={bannerProvider.name}
-                                        className="h-20 object-contain"
-                                    />
+                            <div className="w-[50%] pl-[15%] sm:pl-[17%] md:pl-[18%]">
+                                <div className="w-full max-w-[420px] text-center">
+                                    <div className="flex justify-center">
+                                        <img
+                                            src={bannerProvider.src}
+                                            alt={bannerProvider.name}
+                                            className="h-20 object-contain"
+                                        />
+                                    </div>
+                                    <h1 className="mt-3 text-base font-black uppercase tracking-[0.03em] text-[rgb(25_41_71)] md:text-2xl">
+                                        Sportsbook
+                                    </h1>
+                                    <p className="mx-auto mt-3 max-w-[420px] text-sm font-semibold leading-[1.35] text-[rgb(42_53_72)] md:mt-4 md:text-xl md:leading-[1.32]">
+                                        Big matches, sharp odds, instant action.
+                                    </p>
+                                    <a
+                                        href="#"
+                                        className="btn-theme-cta mt-4 inline-flex h-10 min-w-[170px] items-center justify-center rounded-[10px] px-7 text-sm font-black tracking-[0.06em] transition hover:-translate-y-0.5 hover:brightness-105 active:translate-y-0 active:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(29_51_84)] md:mt-6 md:h-14 md:min-w-[260px] md:px-12 md:text-xl"
+                                        aria-label={`Play ${bannerProvider.name}`}
+                                    >
+                                        PLAY SPORTS
+                                    </a>
                                 </div>
-                                <h1 className="mt-3 text-base font-black uppercase tracking-[0.03em] text-[rgb(25_41_71)] md:text-2xl">
-                                    Sportsbook
-                                </h1>
-                                <p className="mt-3 max-w-[420px] text-sm font-semibold leading-[1.35] text-[rgb(42_53_72)] md:mt-4 md:text-xl md:leading-[1.32]">
-                                    Big matches, sharp odds, instant action.
-                                </p>
-                                <a
-                                    href="#"
-                                    className="btn-theme-cta mt-4 inline-flex h-10 min-w-[170px] items-center justify-center rounded-[10px] px-7 text-sm font-black tracking-[0.06em] transition hover:-translate-y-0.5 hover:brightness-105 active:translate-y-0 active:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta-focus)] focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(29_51_84)] md:mt-6 md:h-14 md:min-w-[260px] md:px-12 md:text-xl"
-                                    aria-label={`Play ${bannerProvider.name}`}
-                                >
-                                    PLAY SPORTS
-                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <section className="w-full max-w-[1400px] mx-auto px-4 md:px-8 mt-4 md:mt-6">
+            <section className="w-full max-w-screen-2xl mx-auto px-4 md:px-8 mt-4 md:mt-6">
                 <div className="rounded-2xl border border-[rgb(219_228_243)] bg-[var(--color-surface-base-80)] p-4 shadow-[0_6px_18px_rgba(20,43,87,0.09)] backdrop-blur-sm md:p-5">
                     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                         <div>
@@ -182,7 +184,7 @@ export default function SportsPage() {
                 </div>
             </section>
 
-            <section className="w-full max-w-[1400px] mx-auto px-4 md:px-8 mt-5 md:mt-6">
+            <section className="w-full max-w-screen-2xl mx-auto px-4 md:px-8 mt-5 md:mt-6">
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
                     {filteredProviders.map((provider, index) => (
                         <button

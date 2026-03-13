@@ -154,13 +154,15 @@ export default function SlotsPage() {
                         />
                         <div className="absolute inset-y-0 left-0 w-[50%] bg-[linear-gradient(90deg,rgb(234_244_255_/_0.96)_0%,rgb(234_244_255_/_0.86)_45%,transparent_100%)]" />
                         <div className="absolute inset-0 flex items-center">
-                            <div className="w-[50%] pl-[15%] text-left sm:pl-[17%] md:pl-[18%]">
-                                <h1 className="text-base font-black uppercase tracking-[0.03em] text-[rgb(25_41_71)] md:text-2xl">
-                                    Slots
-                                </h1>
-                                <p className="mt-3 max-w-[420px] text-sm font-semibold leading-[1.35] text-[rgb(42_53_72)] md:mt-4 md:text-xl md:leading-[1.32]">
-                                    Spin fast, hit hard, chase jackpots.
-                                </p>
+                            <div className="w-[50%] pl-[15%] sm:pl-[17%] md:pl-[18%]">
+                                <div className="w-full max-w-[420px] text-center">
+                                    <h1 className="text-base font-black uppercase tracking-[0.03em] text-[rgb(25_41_71)] md:text-2xl">
+                                        Slots
+                                    </h1>
+                                    <p className="mx-auto mt-3 max-w-[420px] text-sm font-semibold leading-[1.35] text-[rgb(42_53_72)] md:mt-4 md:text-xl md:leading-[1.32]">
+                                        Spin fast, hit hard, chase jackpots.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
