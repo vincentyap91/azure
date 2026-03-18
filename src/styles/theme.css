@@ -306,3 +306,18 @@
     }
   }
 }
+
+/* Single custom calendar icon for date inputs (hide native picker icon) */
+.date-input-single-icon::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 0;
+  width: 2.5rem;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.date-input-single-icon::-webkit-date-and-time-value {
+  text-align: left;
+}

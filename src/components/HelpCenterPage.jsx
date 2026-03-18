@@ -85,13 +85,13 @@ export default function HelpCenterPage() {
                     <Search size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-soft)]" />
                 </label>
 
-                <div className="flex flex-wrap gap-2 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-base)] p-1 shadow-[var(--shadow-subtle)]">
+                <div className="flex gap-1 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-base)] p-1 shadow-[var(--shadow-subtle)]">
                     {mainTabs.map(({ id, label }) => (
                         <button
                             key={id}
                             type="button"
                             onClick={() => setMainTab(id)}
-                            className={`rounded-lg px-4 py-2.5 text-sm font-semibold transition ${
+                            className={`min-w-0 flex-1 rounded-lg px-2 py-2.5 text-sm font-semibold transition sm:px-4 ${
                                 mainTab === id
                                     ? 'btn-theme-primary shadow-sm'
                                     : 'bg-[var(--color-surface-muted)] text-[var(--color-text-muted)] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-600)]'

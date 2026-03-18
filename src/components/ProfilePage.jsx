@@ -2,14 +2,17 @@ import React, { useState } from 'react';
 import {
     Banknote,
     CalendarDays,
+    ChevronDown,
     Landmark,
     Mail,
     PencilLine,
     Phone,
+    Trash2,
     UserCircle2,
 } from 'lucide-react';
 import AccountLayout from './AccountLayout';
 import VipStatusPill from './VipStatusPill';
+import { BANKS } from '../constants/banks';
 
 const personalFields = [
     { key: 'username', label: 'Username' },
@@ -26,12 +29,6 @@ const contactFields = [
     { key: 'phone', label: 'Phone Number', type: 'tel' }
 ];
 
-const bankingFields = [
-    { key: 'bankName', label: 'Bank Name' },
-    { key: 'accountHolder', label: 'Account Holder' },
-    { key: 'accountNumber', label: 'Account Number' },
-    { key: 'branchName', label: 'Branch Name' }
-];
 
 function Field({ label, value, placeholder, type = 'text', editable, onChange, icon: Icon }) {
     return (
@@ -103,6 +100,14 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
         banking: false
     });
     const [showBankForm, setShowBankForm] = useState(false);
+    const [bankDropdownOpen, setBankDropdownOpen] = useState(false);
+    const [bankAccounts, setBankAccounts] = useState([]);
+    const [bankForm, setBankForm] = useState({
+        bankId: '',
+        accountHolder: '',
+        accountNumber: '',
+        branchName: ''
+    });
     const [formValues, setFormValues] = useState({
         username: authUser?.name || 'vincentzo',
         fullName: 'Vincentzo',
@@ -113,10 +118,6 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
         gender: 'Male',
         email: 'vincentzo@gmail.com',
         phone: '60 123456701',
-        bankName: 'Maybank',
-        accountHolder: 'Vincentzo',
-        accountNumber: '1122 3344 5566',
-        branchName: 'Kuala Lumpur Main Branch'
     });
 
     const toggleEdit = (sectionKey) => {
@@ -132,6 +133,35 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
             ...current,
             [field]: value
         }));
+    };
+
+    const updateBankForm = (field) => (event) => {
+        const value = event.target.value;
+        setBankForm((current) => ({ ...current, [field]: value }));
+    };
+
+    const handleSaveBankAccount = () => {
+        const bank = BANKS.find((b) => b.id === bankForm.bankId);
+        if (!bankForm.bankId || !bankForm.accountHolder?.trim() || !bankForm.accountNumber?.trim()) return;
+        setBankAccounts((prev) => [
+            ...prev,
+            {
+                id: crypto.randomUUID?.() ?? Date.now().toString(),
+                bankId: bankForm.bankId,
+                bankName: bank?.label ?? bankForm.bankId,
+                bankImage: bank?.image,
+                accountHolder: bankForm.accountHolder.trim(),
+                accountNumber: bankForm.accountNumber.trim(),
+                branchName: bankForm.branchName?.trim() || ''
+            }
+        ]);
+        setBankForm({ bankId: '', accountHolder: '', accountNumber: '', branchName: '' });
+        setShowBankForm(false);
+        setEditing((c) => ({ ...c, banking: false }));
+    };
+
+    const handleRemoveBankAccount = (id) => {
+        setBankAccounts((prev) => prev.filter((a) => a.id !== id));
     };
 
     return (
@@ -226,43 +256,103 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
                             title="Banking Details"
                             description="Manage payout-ready banking information in a secure format."
                             editing={editing.banking}
-                            onToggleEdit={() => {
-                                if (!showBankForm) {
-                                    setShowBankForm(true);
-                                }
-                                toggleEdit('banking');
-                            }}
+                            onToggleEdit={showBankForm ? handleSaveBankAccount : () => { setShowBankForm(true); setEditing((c) => ({ ...c, banking: true })); }}
                             actions={
-                                !showBankForm ? (
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            setShowBankForm(true);
-                                            setEditing((current) => ({
-                                                ...current,
-                                                banking: true
-                                            }));
-                                        }}
-                                        className="btn-theme-primary inline-flex min-h-[44px] items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold shadow-sm transition-all hover:scale-[1.02] hover:shadow-md"
-                                    >
-                                        <Banknote size={16} />
-                                        Add Bank Account
-                                    </button>
-                                ) : null
+                                <>
+                                    {!showBankForm && (
+                                        <button
+                                            type="button"
+                                            onClick={() => { setShowBankForm(true); setEditing((c) => ({ ...c, banking: true })); }}
+                                            className="btn-theme-primary inline-flex min-h-[44px] items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold shadow-sm transition-all hover:scale-[1.02] hover:shadow-md"
+                                        >
+                                            <Banknote size={16} />
+                                            Add Bank Account
+                                        </button>
+                                    )}
+                                    {showBankForm && (
+                                        <button
+                                            type="button"
+                                            onClick={() => { setShowBankForm(false); setEditing((c) => ({ ...c, banking: false })); setBankForm({ bankId: '', accountHolder: '', accountNumber: '', branchName: '' }); }}
+                                            className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-muted)] px-4 py-2.5 text-sm font-semibold text-[var(--color-text-strong)] transition hover:bg-[var(--color-surface-subtle)]"
+                                        >
+                                            Cancel
+                                        </button>
+                                    )}
+                                </>
                             }
                         >
                             {showBankForm ? (
                                 <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-                                    {bankingFields.map(({ key, label }) => (
-                                        <Field
-                                            key={key}
-                                            label={label}
-                                            value={formValues[key]}
-                                            editable={editing.banking}
-                                            onChange={updateField(key)}
-                                            icon={Landmark}
-                                        />
-                                    ))}
+                                    <div>
+                                        <span className="mb-2 block text-sm font-medium text-[var(--color-text-muted)]">Bank <span className="text-[var(--color-danger-main)]">*</span></span>
+                                        <div className="relative">
+                                            <button
+                                                type="button"
+                                                onClick={() => setBankDropdownOpen((o) => !o)}
+                                                className="flex h-12 w-full items-center justify-between gap-2 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-muted)] px-4 text-left text-sm shadow-[var(--shadow-subtle)]"
+                                            >
+                                                {bankForm.bankId && BANKS.find((b) => b.id === bankForm.bankId)?.image ? (
+                                                    <span className="flex items-center gap-2.5">
+                                                        <img src={BANKS.find((b) => b.id === bankForm.bankId)?.image} alt="" className="h-6 w-6 shrink-0 object-contain" />
+                                                        <span className="font-medium text-[var(--color-text-strong)]">{BANKS.find((b) => b.id === bankForm.bankId)?.label}</span>
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-[var(--color-text-soft)]">Select Bank</span>
+                                                )}
+                                                <ChevronDown size={18} className={`shrink-0 text-[var(--color-text-muted)] transition ${bankDropdownOpen ? 'rotate-180' : ''}`} />
+                                            </button>
+                                            {bankDropdownOpen && (
+                                                <>
+                                                    <div className="absolute inset-0 z-10" onClick={() => setBankDropdownOpen(false)} aria-hidden />
+                                                    <div className="absolute top-full left-0 right-0 z-20 mt-1.5 max-h-[300px] overflow-y-auto rounded-lg border border-[var(--color-border-default)] bg-[var(--color-surface-base)] py-1 shadow-lg">
+                                                        {BANKS.map((b) => (
+                                                            <button
+                                                                key={b.id}
+                                                                type="button"
+                                                                onClick={() => { setBankForm((f) => ({ ...f, bankId: b.id })); setBankDropdownOpen(false); }}
+                                                                className="flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left text-sm hover:bg-[var(--color-surface-muted)]"
+                                                            >
+                                                                {b.image ? <img src={b.image} alt="" className="h-6 w-6 shrink-0 object-contain" /> : null}
+                                                                <span className="font-normal text-[var(--color-text-strong)]">{b.label}</span>
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <Field label="Account Holder" value={bankForm.accountHolder} onChange={updateBankForm('accountHolder')} editable={true} icon={UserCircle2} />
+                                    <Field label="Account Number" value={bankForm.accountNumber} onChange={updateBankForm('accountNumber')} editable={true} icon={Landmark} />
+                                    <Field label="Branch Name" value={bankForm.branchName} onChange={updateBankForm('branchName')} editable={true} placeholder="Optional" />
+                                </div>
+                            ) : bankAccounts.length > 0 ? (
+                                <div className="space-y-4">
+                                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                                        {bankAccounts.map((acc) => (
+                                            <div
+                                                key={acc.id}
+                                                className="flex items-start gap-4 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-muted)] p-4 transition hover:border-[var(--color-accent-200)]"
+                                            >
+                                                <div className="flex min-w-0 flex-1 flex-col gap-1">
+                                                    <div className="flex items-center gap-2">
+                                                        {acc.bankImage ? <img src={acc.bankImage} alt="" className="h-8 w-8 shrink-0 object-contain" /> : <Landmark size={24} className="text-[var(--color-text-muted)]" />}
+                                                        <span className="truncate font-semibold text-[var(--color-text-strong)]">{acc.bankName}</span>
+                                                    </div>
+                                                    <p className="text-sm text-[var(--color-text-muted)]">{acc.accountHolder}</p>
+                                                    <p className="font-mono text-sm font-medium text-[var(--color-text-strong)]">{acc.accountNumber}</p>
+                                                    {acc.branchName && <p className="text-xs text-[var(--color-text-soft)]">{acc.branchName}</p>}
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleRemoveBankAccount(acc.id)}
+                                                    aria-label="Remove bank account"
+                                                    className="shrink-0 rounded-lg p-2 text-[var(--color-text-muted)] transition hover:bg-[var(--color-danger-main)]/10 hover:text-[var(--color-danger-main)]"
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
                             ) : (
                                 <div className="flex min-h-[240px] flex-col items-center justify-center rounded-2xl border border-dashed border-[var(--color-accent-200)] bg-[var(--color-accent-50)] p-6 text-center">
@@ -275,13 +365,7 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
                                     </p>
                                     <button
                                         type="button"
-                                        onClick={() => {
-                                            setShowBankForm(true);
-                                            setEditing((current) => ({
-                                                ...current,
-                                                banking: true
-                                            }));
-                                        }}
+                                        onClick={() => { setShowBankForm(true); setEditing((c) => ({ ...c, banking: true })); }}
                                         className="btn-theme-primary mt-6 inline-flex min-h-[44px] items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold shadow-sm transition-all hover:scale-[1.02] hover:shadow-md"
                                     >
                                         <Banknote size={16} />

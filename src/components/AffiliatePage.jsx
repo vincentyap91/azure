@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Copy, Check, Share2, Info, ChevronDown, ChevronRight, Gamepad2, Dices, Fish, Trophy, Ticket, Swords, CircleDollarSign, TrendingUp, Gift, Users, Zap } from 'lucide-react';
 import affiliateBanner from '../assets/affiliate-banner.jpg';
+import { useReferralData } from '../context/ReferralDataContext';
 
 const affiliateTabs = ['Invite friends', 'My referrals', 'How it works'];
 
@@ -39,6 +40,7 @@ const tabButtonClasses = (selected) =>
 function InviteFriendsContent({ onSwitchTab }) {
     const [copiedCode, setCopiedCode] = useState(false);
     const [copiedLink, setCopiedLink] = useState(false);
+    const { totalCommissionBonus, totalDepositBonus } = useReferralData();
 
     const handleCopyCode = async () => {
         try {
@@ -111,7 +113,7 @@ function InviteFriendsContent({ onSwitchTab }) {
                                 <Info size={12} />
                             </span>
                         </div>
-                        <p className="mt-1 text-xl font-bold text-[var(--color-cta-text)] md:text-2xl">PKR 0.000</p>
+                        <p className="mt-1 text-xl font-bold text-[var(--color-cta-text)] md:text-2xl">{totalCommissionBonus}</p>
                     </div>
                     <div>
                         <div className="flex items-center gap-1.5">
@@ -120,7 +122,7 @@ function InviteFriendsContent({ onSwitchTab }) {
                                 <Info size={12} />
                             </span>
                         </div>
-                        <p className="mt-1 text-xl font-bold text-[var(--color-cta-text)] md:text-2xl">PKR 0.000</p>
+                        <p className="mt-1 text-xl font-bold text-[var(--color-cta-text)] md:text-2xl">{totalDepositBonus}</p>
                     </div>
                     <button
                         type="button"

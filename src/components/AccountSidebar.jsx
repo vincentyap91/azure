@@ -12,6 +12,11 @@ import {
     ShieldCheck,
     UserCircle2,
     UserRound,
+    Wallet,
+    ArrowDownToLine,
+    ArrowUpFromLine,
+    Users,
+    Percent,
 } from 'lucide-react';
 import { supportOptions } from '../constants/supportOptions';
 import { settingsOptions } from '../constants/settingsOptions';
@@ -22,6 +27,13 @@ const accountLinks = [
     { id: 'verification', label: 'Verification', icon: ShieldCheck },
     { id: 'favourites', label: 'Favourites', icon: Heart },
     { id: 'my-bets', label: 'My Bets', icon: ScrollText },
+];
+
+const cashierLinks = [
+    { id: 'deposit', label: 'Deposit', icon: ArrowDownToLine },
+    { id: 'withdrawal', label: 'Withdrawal', icon: ArrowUpFromLine },
+    { id: 'referral-commission', label: 'Referral Commission', icon: Users },
+    { id: 'rebate', label: 'Rebate', icon: Percent },
 ];
 
 export default function AccountSidebar({
@@ -36,7 +48,8 @@ export default function AccountSidebar({
     const vipLevel = authUser?.vipLevel || 'Diamond';
     const [internalCollapsed, setInternalCollapsed] = useState(false);
     const [openMenus, setOpenMenus] = useState({
-        account: true,
+        cashier: true,
+        account: false,
         support: false,
         settings: false,
     });
@@ -45,6 +58,9 @@ export default function AccountSidebar({
     const setSidebarCollapsed = onSidebarCollapsedChange ?? setInternalCollapsed;
 
     useEffect(() => {
+        if (activePage === 'rebate' || activePage === 'referral-commission' || activePage === 'deposit' || activePage === 'withdrawal') {
+            setOpenMenus((m) => ({ ...m, cashier: true }));
+        }
         if (activePage === 'feedback' || activePage === 'help-center') {
             setOpenMenus((m) => ({ ...m, support: true }));
         }
@@ -58,6 +74,7 @@ export default function AccountSidebar({
             const nextIsOpen = !current[menuKey];
 
             return {
+                cashier: false,
                 account: false,
                 support: false,
                 settings: false,
@@ -69,6 +86,13 @@ export default function AccountSidebar({
     const handleNavClick = (pageId) => {
         const pageMap = { profile: 'profile', verification: 'verification', favourites: 'favourites', 'my-bets': 'my-bets' };
         onNavigate?.(pageMap[pageId] ?? pageId);
+    };
+
+    const handleCashierClick = (pageId) => {
+        if (pageId === 'rebate') onNavigate?.('rebate');
+        if (pageId === 'referral-commission') onNavigate?.('referral-commission');
+        if (pageId === 'deposit') onNavigate?.('deposit');
+        if (pageId === 'withdrawal') onNavigate?.('withdrawal');
     };
 
     const username = authUser?.name || 'vincentzo';
@@ -117,6 +141,46 @@ export default function AccountSidebar({
                 </div>
 
                 <div className="mt-8 space-y-5">
+                    <div className="rounded-[20px] border border-[var(--color-border-default)] bg-[var(--color-surface-muted-soft)] p-4">
+                        <button
+                            type="button"
+                            onClick={() => toggleMenu('cashier')}
+                            className={`flex w-full items-center ${sidebarCollapsed ? 'justify-center' : 'justify-between'} gap-3 text-left`}
+                        >
+                            <span className="flex items-center gap-3">
+                                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-accent-100)] text-[var(--color-accent-600)]">
+                                    <Wallet size={18} />
+                                </span>
+                                {!sidebarCollapsed && <span className="text-lg font-bold text-[var(--color-text-strong)]">Cashier</span>}
+                            </span>
+                            {!sidebarCollapsed && (
+                                <ChevronDown size={18} className={`text-[var(--color-text-soft)] transition-transform ${openMenus.cashier ? 'rotate-180' : ''}`} />
+                            )}
+                        </button>
+                        {openMenus.cashier && !sidebarCollapsed && (
+                            <div className="mt-4 space-y-1 overflow-hidden rounded-xl bg-[var(--color-surface-base)] p-1">
+                                {cashierLinks.map(({ id, label, icon: Icon }) => {
+                                    const isActive = activePage === id;
+                                    return (
+                                        <button
+                                            key={id}
+                                            type="button"
+                                            onClick={() => handleCashierClick(id)}
+                                            className={`group flex min-h-[48px] w-full items-center gap-3 rounded-xl border-l-4 px-4 py-3.5 text-left transition-all ${
+                                                isActive
+                                                    ? 'border-l-[var(--color-accent-500)] bg-[var(--color-accent-50)] text-[var(--color-accent-700)] shadow-sm'
+                                                    : 'border-l-transparent bg-[var(--color-surface-base)] text-[var(--color-text-muted)] hover:scale-[1.02] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-700)]'
+                                            }`}
+                                        >
+                                            <Icon size={18} className={`${isActive ? 'text-[var(--color-accent-600)]' : 'text-[var(--color-text-soft)] group-hover:text-[var(--color-accent-500)]'}`} />
+                                            <span className="text-base font-normal">{label}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+
                     <div className="rounded-[20px] border border-[var(--color-border-default)] bg-[var(--color-surface-muted-soft)] p-4">
                         <button
                             type="button"

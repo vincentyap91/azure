@@ -1,16 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
+    ArrowDownToLine,
+    ArrowUpFromLine,
     ChevronDown,
     CircleDollarSign,
     EllipsisVertical,
     Headset,
     Heart,
     LogOut,
+    Percent,
     ScrollText,
     Settings,
     ShieldCheck,
     UserCircle2,
-    UserRound
+    UserRound,
+    Users,
+    Wallet
 } from 'lucide-react';
 import LiveCasinoMenu from './LiveCasinoMenu';
 import { supportOptions } from '../constants/supportOptions';
@@ -36,6 +41,12 @@ export default function Navbar({ onNavigate, activePage = 'home', onLoginClick, 
         { label: 'Verification', icon: ShieldCheck },
         { label: 'Favourites', icon: Heart },
         { label: 'My Bets', icon: ScrollText }
+    ];
+    const cashierItems = [
+        { id: 'deposit', label: 'Deposit', icon: ArrowDownToLine },
+        { id: 'withdrawal', label: 'Withdrawal', icon: ArrowUpFromLine },
+        { id: 'referral-commission', label: 'Referral Commission', icon: Users },
+        { id: 'rebate', label: 'Rebate', icon: Percent },
     ];
 
     useEffect(() => {
@@ -69,7 +80,7 @@ export default function Navbar({ onNavigate, activePage = 'home', onLoginClick, 
                     </a>
                     <button
                         type="button"
-                        onClick={() => onNavigate?.('affiliate')}
+                        onClick={() => onNavigate?.('referral')}
                         className="flex h-full items-center gap-1 px-2 text-left hover:text-white/80"
                     >
                         <span className="text-sm">Referral</span>
@@ -169,6 +180,46 @@ export default function Navbar({ onNavigate, activePage = 'home', onLoginClick, 
                                     </div>
 
                                     <div className="dark-nav-panel relative mt-4 rounded-[18px] p-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => toggleProfileSection('cashier')}
+                                            className="flex w-full items-center justify-between"
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <div className="inline-flex h-7 w-7 items-center justify-center rounded-[8px] bg-[linear-gradient(180deg,#2a87d6_0%,#1b58ae_100%)] text-[var(--color-nav-gold)] shadow-[var(--shadow-nav-pill)]">
+                                                    <Wallet size={14} />
+                                                </div>
+                                                <span className="text-lg font-bold text-white">Cashier</span>
+                                            </div>
+                                            <ChevronDown
+                                                size={16}
+                                                className={`text-white/80 transition-transform ${openProfileSection === 'cashier' ? 'rotate-180' : ''}`}
+                                            />
+                                        </button>
+                                        {openProfileSection === 'cashier' && (
+                                            <div className="mt-3 grid grid-cols-3 gap-3">
+                                                {cashierItems.map(({ id, label, icon: Icon }) => (
+                                                    <button
+                                                        key={id}
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setProfileMenuOpen(false);
+                                                            if (id === 'rebate') onNavigate?.('rebate');
+                                                            if (id === 'referral-commission') onNavigate?.('referral');
+                                                                if (id === 'deposit') onNavigate?.('deposit');
+                                                            if (id === 'withdrawal') onNavigate?.('withdrawal');
+                                                        }}
+                                                        className="dark-nav-tile group flex min-h-[72px] flex-col items-center justify-center rounded-[14px] px-2 text-center transition hover:-translate-y-0.5 hover:border-[var(--color-nav-tile-border-hover)] hover:shadow-[var(--shadow-nav-tile-hover)]"
+                                                    >
+                                                        <Icon size={18} className="mb-1.5 text-[var(--color-nav-blue-icon)] group-hover:text-[var(--color-nav-blue-icon-hover)]" />
+                                                        <span className="text-xs font-bold leading-tight text-white">{label}</span>
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="dark-nav-panel relative mt-3 rounded-[18px] p-3">
                                         <button
                                             type="button"
                                             onClick={() => toggleProfileSection('account')}

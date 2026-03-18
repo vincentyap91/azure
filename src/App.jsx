@@ -28,11 +28,16 @@ import FeedbackPage from './components/FeedbackPage';
 import HelpCenterPage from './components/HelpCenterPage';
 import SecurityPage from './components/SecurityPage';
 import NotificationsPage from './components/NotificationsPage';
+import RebatePage from './components/RebatePage';
+import ReferralCommissionPage from './components/ReferralCommissionPage';
+import DepositPage from './components/DepositPage';
+import WithdrawalPage from './components/WithdrawalPage';
 import Footer from './components/Footer';
 import FloatingSocials from './components/FloatingSocials';
 import LoginModal from './components/LoginModal';
 import './index.css';
 import LiveChatModal from './components/LiveChatModal';
+import { ReferralDataProvider } from './context/ReferralDataContext';
 
 function resolvePageFromPath() {
   const pathname = window.location.pathname.toLowerCase();
@@ -63,8 +68,8 @@ function resolvePageFromPath() {
   if (pathname === '/vip') {
     return 'vip';
   }
-  if (pathname === '/affiliate') {
-    return 'affiliate';
+  if (pathname === '/referral') {
+    return 'referral';
   }
   if (pathname === '/register') {
     return 'register';
@@ -92,6 +97,18 @@ function resolvePageFromPath() {
   }
   if (pathname === '/notifications') {
     return 'notifications';
+  }
+  if (pathname === '/rebate') {
+    return 'rebate';
+  }
+  if (pathname === '/referral-commission') {
+    return 'referral-commission';
+  }
+  if (pathname === '/deposit') {
+    return 'deposit';
+  }
+  if (pathname === '/withdrawal') {
+    return 'withdrawal';
   }
   if (pathname === '/bet-slip') {
     return 'my-bets';
@@ -125,7 +142,7 @@ function App() {
       poker: '/poker',
       promotion: '/promotion',
       vip: '/vip',
-      affiliate: '/affiliate',
+      referral: '/referral',
       register: '/register',
       profile: '/profile',
       verification: '/verification',
@@ -135,6 +152,10 @@ function App() {
       'help-center': '/help',
       security: '/security',
       notifications: '/notifications',
+      rebate: '/rebate',
+      'referral-commission': '/referral-commission',
+      deposit: '/deposit',
+      withdrawal: '/withdrawal',
     };
     const nextPath = pathByPage[resolvedPage] ?? pathByPage[targetPage] ?? '/';
     setPage(resolvedPage);
@@ -147,6 +168,7 @@ function App() {
   };
 
   return (
+    <ReferralDataProvider>
     <div className={`relative min-h-screen w-full overflow-x-hidden font-sans ${
       page === 'home'
         ? 'bg-[var(--color-page-home)]'
@@ -168,9 +190,9 @@ function App() {
               ? 'bg-[var(--color-page-default)]'
             : page === 'vip'
               ? 'bg-[var(--color-page-default)]'
-            : page === 'affiliate'
+            : page === 'referral'
               ? 'bg-[var(--color-page-default)]'
-            : page === 'profile' || page === 'verification' || page === 'favourites' || page === 'my-bets' || page === 'feedback' || page === 'help-center' || page === 'security' || page === 'notifications'
+            : page === 'profile' || page === 'verification' || page === 'favourites' || page === 'my-bets' || page === 'feedback' || page === 'help-center' || page === 'security' || page === 'notifications' || page === 'rebate' || page === 'referral-commission' || page === 'deposit' || page === 'withdrawal'
               ? 'bg-[var(--color-page-account)]'
               : 'bg-[var(--color-page-default)]'
     }`}>
@@ -226,7 +248,7 @@ function App() {
         <PromotionPage />
       ) : page === 'vip' ? (
         <VipPage />
-      ) : page === 'affiliate' ? (
+      ) : page === 'referral' ? (
         <AffiliatePage />
       ) : page === 'profile' ? (
         <ProfilePage authUser={authUser} onLogout={() => setAuthUser(null)} onNavigate={handleNavigate} onLiveChatClick={() => setLiveChatOpen(true)} />
@@ -258,6 +280,22 @@ function App() {
         <AccountLayout activePage="notifications" authUser={authUser} onNavigate={handleNavigate} onLogout={() => setAuthUser(null)} onLiveChatClick={() => setLiveChatOpen(true)}>
           <NotificationsPage />
         </AccountLayout>
+      ) : page === 'rebate' ? (
+        <AccountLayout activePage="rebate" authUser={authUser} onNavigate={handleNavigate} onLogout={() => setAuthUser(null)} onLiveChatClick={() => setLiveChatOpen(true)}>
+          <RebatePage onNavigate={handleNavigate} />
+        </AccountLayout>
+      ) : page === 'referral-commission' ? (
+        <AccountLayout activePage="referral-commission" authUser={authUser} onNavigate={handleNavigate} onLogout={() => setAuthUser(null)} onLiveChatClick={() => setLiveChatOpen(true)}>
+          <ReferralCommissionPage onNavigate={handleNavigate} />
+        </AccountLayout>
+      ) : page === 'deposit' ? (
+        <AccountLayout activePage="deposit" authUser={authUser} onNavigate={handleNavigate} onLogout={() => setAuthUser(null)} onLiveChatClick={() => setLiveChatOpen(true)}>
+          <DepositPage onNavigate={handleNavigate} />
+        </AccountLayout>
+      ) : page === 'withdrawal' ? (
+        <AccountLayout activePage="withdrawal" authUser={authUser} onNavigate={handleNavigate} onLogout={() => setAuthUser(null)} onLiveChatClick={() => setLiveChatOpen(true)}>
+          <WithdrawalPage onNavigate={handleNavigate} />
+        </AccountLayout>
       ) : (
         <RegisterPage onLoginClick={() => setLoginModalOpen(true)} />
       )}
@@ -288,6 +326,7 @@ function App() {
         authUser={authUser}
       />
     </div>
+    </ReferralDataProvider>
   );
 }
 
