@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
 import FeaturesRow from './components/FeaturesRow';
@@ -8,16 +8,17 @@ import TopGames from './components/TopGames';
 import VipTier from './components/VipTier';
 import AppDownload from './components/AppDownload';
 import Promos from './components/Promos';
-import LiveCasinoPage from './components/LiveCasinoPage';
-import SlotsPage from './components/SlotsPage';
-import SportsPage from './components/SportsPage';
-import EsportsPage from './components/EsportsPage';
-import LotteryPage from './components/LotteryPage';
-import FishingPage from './components/FishingPage';
-import PokerPage from './components/PokerPage';
-import PromotionPage from './components/PromotionPage';
-import VipPage from './components/VipPage';
-import AffiliatePage from './components/AffiliatePage';
+import LoadingPage from './components/LoadingPage';
+const LiveCasinoPage = React.lazy(() => import('./components/LiveCasinoPage'));
+const SlotsPage = React.lazy(() => import('./components/SlotsPage'));
+const SportsPage = React.lazy(() => import('./components/SportsPage'));
+const EsportsPage = React.lazy(() => import('./components/EsportsPage'));
+const LotteryPage = React.lazy(() => import('./components/LotteryPage'));
+const FishingPage = React.lazy(() => import('./components/FishingPage'));
+const PokerPage = React.lazy(() => import('./components/PokerPage'));
+const PromotionPage = React.lazy(() => import('./components/PromotionPage'));
+const VipPage = React.lazy(() => import('./components/VipPage'));
+const AffiliatePage = React.lazy(() => import('./components/AffiliatePage'));
 import ProfilePage from './components/ProfilePage';
 import AccountLayout from './components/AccountLayout';
 import RegisterPage from './components/RegisterPage';
@@ -163,8 +164,6 @@ function App() {
     if (window.location.pathname !== nextPath) {
       window.history.pushState({}, '', nextPath);
     }
-
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -214,6 +213,7 @@ function App() {
       />
 
       <div className="pt-[88px]">
+      <Suspense fallback={<LoadingPage fullPage="overlay" minDelay={300} />}>
       {page === 'home' ? (
         <>
           {/* Hero sits just underneath */}
@@ -223,8 +223,8 @@ function App() {
           <div className="mx-auto flex w-full max-w-screen-2xl flex-col gap-8 px-4 pb-10 md:px-8">
             <FeaturesRow />
             <PlayersPromo />
-            <GameCategories />
-            <TopGames />
+            <GameCategories onNavigate={handleNavigate} />
+            <TopGames onNavigate={handleNavigate} />
             <VipTier />
             <AppDownload />
             <Promos />
@@ -299,6 +299,7 @@ function App() {
       ) : (
         <RegisterPage onLoginClick={() => setLoginModalOpen(true)} />
       )}
+      </Suspense>
 
       <Footer />
       </div>

@@ -1,6 +1,10 @@
 import React from 'react';
 
-export default function SectionHeader({ title, icon, rightLink }) {
+export default function SectionHeader({ title, icon, rightLink, rightLinkTo, onNavigate }) {
+    const handleRightClick = () => {
+        if (rightLinkTo && onNavigate) onNavigate(rightLinkTo);
+    };
+
     return (
         <div className="section-header-theme mb-4 flex w-full items-end justify-between pb-1">
             <div className="flex items-center gap-2">
@@ -15,9 +19,19 @@ export default function SectionHeader({ title, icon, rightLink }) {
                 </div>
             </div>
             {rightLink && (
-                <a href="#" className="mb-1 text-xs text-[var(--color-brand-primary)] hover:underline">
-                    {rightLink}
-                </a>
+                rightLinkTo && onNavigate ? (
+                    <button
+                        type="button"
+                        onClick={handleRightClick}
+                        className="mb-1 text-xs font-medium text-[var(--color-brand-primary)] hover:underline"
+                    >
+                        {rightLink}
+                    </button>
+                ) : (
+                    <a href="#" className="mb-1 text-xs text-[var(--color-brand-primary)] hover:underline">
+                        {rightLink}
+                    </a>
+                )
             )}
         </div>
     );

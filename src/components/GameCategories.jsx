@@ -8,7 +8,16 @@ import fishingImage from '../assets/fishing.png';
 import eSportsImage from '../assets/e-sports.png';
 import cockfightImage from '../assets/cockfight.jpg';
 
-export default function GameCategories() {
+const CATEGORY_PAGES = {
+    Slots: 'slots',
+    Casino: 'live-casino',
+    Sports: 'sports',
+    Fishing: 'fishing',
+    'E-Sports': 'e-sports',
+    Cockfight: 'sports', // no dedicated page, link to sports
+};
+
+export default function GameCategories({ onNavigate }) {
     const categories = [
         { name: 'Slots', icon: '🎰', bgUrl: slotsImage },
         { name: 'Casino', icon: '🃏', bgUrl: casinoImage },
@@ -26,10 +35,14 @@ export default function GameCategories() {
             />
 
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 pt-6">
-                {categories.map((cat, idx) => (
-                    <div
+                {categories.map((cat, idx) => {
+                    const page = CATEGORY_PAGES[cat.name];
+                    return (
+                    <button
                         key={idx}
-                        className="group relative flex flex-col rounded-[15px] border border-white bg-[var(--color-brand-soft)] p-1.5 shadow-[0_5px_15px_rgba(0,174,239,0.1)] transition-transform hover:-translate-y-1"
+                        type="button"
+                        onClick={() => page && onNavigate?.(page)}
+                        className="group relative flex flex-col rounded-[15px] border border-white bg-[var(--color-brand-soft)] p-1.5 shadow-[0_5px_15px_rgba(0,174,239,0.1)] transition-transform hover:-translate-y-1 text-left w-full"
                     >
                         {/* Title Ribbon - overlaps top edge */}
                         <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20 w-[86%]">
@@ -57,8 +70,9 @@ export default function GameCategories() {
                                 {cat.icon}
                             </div>
                         </div>
-                    </div>
-                ))}
+                    </button>
+                    );
+                })}
             </div>
         </section>
     );
