@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import CalendarDateInput from './CalendarDateInput';
+import HorizontalScrollTabRow, { scrollTabIntoViewSmooth } from './HorizontalScrollTabRow';
 
 function formatDateForInput(d) {
     const y = d.getFullYear();
@@ -22,10 +23,11 @@ const HISTORY_QUICK_RANGES = [
  * @param {string} props.endDateLabel
  * @param {{ key: string, label: string, align?: 'left'|'right' }[]} props.columns
  * @param {import('react').ReactNode} [props.filterSlot] — optional block above the date range (e.g. type filters).
- * @param {boolean} [props.pillQuickRanges] — use pill-shaped quick range buttons (e.g. Rewards Record modal).
+ * @param {boolean} [props.pillQuickRanges] — fully rounded pills vs `rounded-xl` tabs; scroll/snap behavior is the same.
  * @param {string} [props.emptyMessage] — centered table empty state (default “No data found”).
  */
 export default function AccountHistoryRecordPanel({ startDateLabel, endDateLabel, columns, filterSlot = null, pillQuickRanges = false, emptyMessage = null }) {
+    const quickTabRefs = useRef({});
     const today = new Date();
     const [historyStart, setHistoryStart] = useState(formatDateForInput(today));
     const [historyEnd, setHistoryEnd] = useState(formatDateForInput(new Date(today.getTime() + 86400000)));
@@ -50,6 +52,17 @@ export default function AccountHistoryRecordPanel({ startDateLabel, endDateLabel
 
     const colCount = columns.length;
 
+    const quickRangeButtonClass = (selected) => {
+        const shape = pillQuickRanges ? 'rounded-full' : 'rounded-xl';
+        return [
+            'max-sm:snap-start shrink-0 whitespace-nowrap border px-3 py-2.5 text-xs font-semibold transition sm:min-w-[96px] sm:px-4 sm:text-sm',
+            shape,
+            selected
+                ? 'border-[var(--color-accent-500)] bg-[var(--color-accent-50)] text-[var(--color-accent-600)]'
+                : 'border-[var(--color-border-default)] bg-[var(--color-surface-muted)] text-[var(--color-text-muted)] hover:border-[var(--color-accent-200)] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-600)]',
+        ].join(' ');
+    };
+
     return (
         <div className="space-y-6">
             <div className="surface-card rounded-2xl p-5 shadow-[var(--shadow-card-soft)] md:p-6">
@@ -66,24 +79,25 @@ export default function AccountHistoryRecordPanel({ startDateLabel, endDateLabel
                         onChange={(e) => setHistoryEnd(e.target.value)}
                     />
                 </div>
-                <div className={`mt-4 flex gap-2 ${pillQuickRanges ? 'flex-wrap sm:flex-nowrap' : ''}`}>
+                <HorizontalScrollTabRow className="mt-4">
                     {HISTORY_QUICK_RANGES.map(({ id, label }) => (
                         <button
                             key={id}
+                            ref={(el) => {
+                                if (el) quickTabRefs.current[id] = el;
+                                else delete quickTabRefs.current[id];
+                            }}
                             type="button"
-                            onClick={() => setHistoryRangeFromQuick(id)}
-                            className={`min-w-0 flex-1 border px-3 py-2.5 text-xs font-semibold transition sm:px-4 sm:text-sm ${
-                                pillQuickRanges ? 'rounded-full' : 'rounded-xl'
-                            } ${
-                                historyQuickRange === id
-                                    ? 'border-[var(--color-accent-500)] bg-[var(--color-accent-50)] text-[var(--color-accent-600)]'
-                                    : 'border-[var(--color-border-default)] bg-[var(--color-surface-muted)] text-[var(--color-text-muted)] hover:border-[var(--color-accent-200)] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-600)]'
-                            }`}
+                            onClick={() => {
+                                setHistoryRangeFromQuick(id);
+                                scrollTabIntoViewSmooth(quickTabRefs.current[id]);
+                            }}
+                            className={quickRangeButtonClass(historyQuickRange === id)}
                         >
                             {label}
                         </button>
                     ))}
-                </div>
+                </HorizontalScrollTabRow>
                 <div className="mt-4">
                     <button
                         type="button"

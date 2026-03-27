@@ -27,7 +27,7 @@ export function GameCardPlayBar({
     const playHref = resolvedSlug ? buildGameDetailPath(resolvedSlug) : href;
 
     const layerCls = showOnHover
-        ? 'md:opacity-0 md:transition-opacity md:duration-200 md:ease-out md:group-hover:opacity-100 md:group-focus-within:opacity-100'
+        ? 'md:opacity-0 md:transition-opacity md:duration-300 md:ease-out md:group-hover:opacity-100 md:group-focus-within:opacity-100'
         : 'opacity-100';
 
     const linkPointer = showOnHover
@@ -77,7 +77,7 @@ export function GameCardPlayBar({
 
     return (
         <div
-            className={`pointer-events-none absolute inset-0 z-[15] ${showOnHover ? 'hidden md:block' : ''} ${layerCls} ${className}`}
+            className={`pointer-events-none absolute inset-0 z-[15] overflow-hidden ${showOnHover ? 'hidden md:block' : ''} ${layerCls} ${className}`}
         >
             <div className="absolute inset-0 bg-[var(--color-brand-secondary)]/60" aria-hidden />
             <a

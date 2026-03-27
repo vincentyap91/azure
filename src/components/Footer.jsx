@@ -6,7 +6,7 @@ export default function Footer() {
     const certs = ['Curacao', 'bmm', 'iTechLabs', 'Godaddy', 'GLI', 'Verify'];
 
     return (
-        <footer className="relative mt-10 flex w-full flex-col border-t border-[rgb(168_226_251)] bg-[linear-gradient(180deg,var(--gradient-footer-start)_0%,var(--gradient-footer-end)_100%)] pb-6 pt-12">
+        <footer className="relative flex w-full flex-col border-t border-[rgb(168_226_251)] bg-[linear-gradient(180deg,var(--gradient-footer-start)_0%,var(--gradient-footer-end)_100%)] pb-6 pt-12">
             <div className="page-container relative z-10 flex flex-col gap-8">
 
                 {/* Huge opaque LOGO in center background of footer content */}

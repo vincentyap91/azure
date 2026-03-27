@@ -65,7 +65,7 @@ export default function TopGames({ onNavigate }) {
                 {games.map((game, idx) => (
                     <div
                         key={`${game.name}-${idx}`}
-                        className="group relative flex flex-col overflow-hidden rounded-xl border-b-4 border-[var(--color-brand-primary)] bg-[var(--color-surface-base)] shadow-[var(--shadow-brand-card)] transition-transform md:hover:-translate-y-1"
+                        className="group relative flex flex-col overflow-hidden rounded-xl border-b-4 border-[var(--color-brand-primary)] bg-[var(--color-surface-base)] shadow-[var(--shadow-brand-card)] transition-[transform,box-shadow] duration-300 ease-out will-change-transform md:hover:-translate-y-0.5 md:hover:shadow-[0_12px_28px_rgba(15,23,42,0.12)]"
                     >
                         <button
                             type="button"
@@ -73,14 +73,19 @@ export default function TopGames({ onNavigate }) {
                             className="absolute inset-0 z-[5] md:hidden"
                             aria-label={`Open ${game.name}`}
                         />
-                        <div className="relative w-full aspect-square overflow-hidden">
+                        {/*
+                          Isolate + overflow-hidden + matching top radius: clips scaled image & overlay
+                          so hover never squares off corners. translateZ(0) / backface-hidden reduce flicker.
+                        */}
+                        <div className="relative isolate aspect-square w-full overflow-hidden rounded-t-xl bg-[var(--color-surface-muted)]">
                             <div
-                                className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 md:group-hover:scale-110"
+                                className="pointer-events-none absolute inset-0 origin-center bg-cover bg-center bg-no-repeat transition-transform duration-500 ease-out [transform:translateZ(0)] backface-hidden will-change-transform md:group-hover:scale-[1.05]"
                                 style={{ backgroundImage: `url("${game.imgUrl}")` }}
                             />
 
                             <GameCardPlayBar
                                 showOnHover
+                                className="overflow-hidden rounded-t-xl"
                                 gameName={game.name}
                                 gameProvider={game.provider}
                                 onNavigate={onNavigate}
@@ -100,7 +105,7 @@ export default function TopGames({ onNavigate }) {
                             />
                         </div>
 
-                        <div className="flex min-h-[40px] items-center justify-center bg-[var(--color-brand-primary)] px-2 py-2">
+                        <div className="flex min-h-[40px] w-full shrink-0 items-center justify-center bg-[var(--color-brand-primary)] px-2 py-2">
                             <span className="block truncate text-center text-xs font-bold text-white">{game.name}</span>
                         </div>
                     </div>

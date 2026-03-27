@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     ChevronDown,
     Clock,
@@ -9,6 +9,7 @@ import {
     Wallet,
 } from 'lucide-react';
 import RewardsActivityRecordModal from './RewardsActivityRecordModal';
+import HorizontalScrollTabRow, { scrollTabIntoViewSmooth } from './HorizontalScrollTabRow';
 import { REWARDS_ACTIVITY_RECORD_TYPES, REWARDS_PROGRAM_IDS, REWARDS_PROGRAMS } from '../constants/rewardsPrograms';
 
 /** Demo main wallet balance (Spin / Voucher / Prize rewards area — hidden on Daily Bonus) */
@@ -373,6 +374,7 @@ function PrizeBoxPanel() {
 }
 
 export default function RewardsSection({ embedInPage = false }) {
+    const programTabRefs = useRef({});
     const activeProgram = useRewardsProgramFromHash();
     const [recordModalOpen, setRecordModalOpen] = useState(false);
     const [recordActivityType, setRecordActivityType] = useState('spin-wheel');
@@ -454,31 +456,68 @@ export default function RewardsSection({ embedInPage = false }) {
             )}
 
             {embedInPage && (
-                <div
-                    className="mb-6 flex flex-wrap gap-2 lg:hidden"
-                    role="tablist"
-                    aria-label="Rewards programmes"
-                >
-                    {REWARDS_PROGRAMS.map(({ id, label }) => {
-                        const selected = activeProgram === id;
-                        return (
-                            <button
-                                key={id}
-                                type="button"
-                                role="tab"
-                                aria-selected={selected}
-                                onClick={() => setProgramHash(id)}
-                                className={`min-h-[44px] rounded-full border px-4 py-2.5 text-sm font-semibold transition ${
-                                    selected
-                                        ? 'border-[var(--color-accent-300)] bg-[var(--color-accent-50)] text-[var(--color-accent-800)] shadow-sm ring-1 ring-[var(--color-accent-100)]'
-                                        : 'border-[var(--color-border-default)] bg-[var(--color-surface-muted)] text-[var(--color-text-muted)] hover:border-[var(--color-accent-200)] hover:text-[var(--color-text-strong)]'
-                                }`}
-                            >
-                                {label}
-                            </button>
-                        );
-                    })}
-                </div>
+                <>
+                    <div className="mb-6 md:hidden">
+                        <label htmlFor="rewards-program-select" className="block">
+                            <span className="mb-2 block text-sm font-semibold text-[var(--color-text-strong)]">
+                                Program
+                            </span>
+                            <div className="relative">
+                                <select
+                                    id="rewards-program-select"
+                                    value={activeProgram}
+                                    onChange={(e) => setProgramHash(e.target.value)}
+                                    aria-label="Rewards programme"
+                                    className="h-11 w-full cursor-pointer appearance-none rounded-full border border-[var(--color-border-default)] bg-[var(--color-surface-muted)] pl-4 pr-10 text-sm font-semibold text-[var(--color-text-strong)] shadow-[var(--shadow-subtle)] outline-none transition focus:border-[var(--color-accent-400)] focus:ring-2 focus:ring-[rgb(96_165_250_/_0.2)]"
+                                >
+                                    {REWARDS_PROGRAMS.map(({ id, label }) => (
+                                        <option key={id} value={id}>
+                                            {label}
+                                        </option>
+                                    ))}
+                                </select>
+                                <ChevronDown
+                                    size={18}
+                                    className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-accent-600)]"
+                                    aria-hidden
+                                />
+                            </div>
+                        </label>
+                    </div>
+
+                    <HorizontalScrollTabRow
+                        className="mb-6 hidden md:block lg:hidden"
+                        wrapBreakpoint="lg"
+                        innerListProps={{ role: 'tablist', 'aria-label': 'Rewards programmes' }}
+                    >
+                        {REWARDS_PROGRAMS.map(({ id, label }) => {
+                            const selected = activeProgram === id;
+                            return (
+                                <button
+                                    key={id}
+                                    ref={(el) => {
+                                        if (el) programTabRefs.current[id] = el;
+                                        else delete programTabRefs.current[id];
+                                    }}
+                                    type="button"
+                                    role="tab"
+                                    aria-selected={selected}
+                                    onClick={() => {
+                                        setProgramHash(id);
+                                        scrollTabIntoViewSmooth(programTabRefs.current[id]);
+                                    }}
+                                    className={`max-lg:snap-start min-h-[44px] shrink-0 whitespace-nowrap rounded-full border px-4 py-2.5 text-sm font-semibold transition ${
+                                        selected
+                                            ? 'border-[var(--color-accent-300)] bg-[var(--color-accent-50)] text-[var(--color-accent-800)] shadow-sm ring-1 ring-[var(--color-accent-100)]'
+                                            : 'border-[var(--color-border-default)] bg-[var(--color-surface-muted)] text-[var(--color-text-muted)] hover:border-[var(--color-accent-200)] hover:text-[var(--color-text-strong)]'
+                                    }`}
+                                >
+                                    {label}
+                                </button>
+                            );
+                        })}
+                    </HorizontalScrollTabRow>
+                </>
             )}
 
             {showWalletBar && (

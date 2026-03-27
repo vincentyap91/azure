@@ -1,8 +1,9 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { ArrowDownUp, Search } from 'lucide-react';
 import CalendarDateInput from '../CalendarDateInput';
 import SecurityTabs from '../security/SecurityTabs';
 import PromotionStyleTabs from '../PromotionStyleTabs';
+import HorizontalScrollTabRow, { scrollTabIntoViewSmooth } from '../HorizontalScrollTabRow';
 
 /** Same tab chrome as Referral Commission (`ReferralCommissionPage` → `SecurityTabs`). */
 const DOWNLINE_VIEW_TABS = [
@@ -24,9 +25,9 @@ const KPI_SUB_TABS = [
     { id: 'inactive', label: 'Inactive Downlines' },
 ];
 
-/** Same chrome as summary “Today / Yesterday / …” quick range buttons (`mt-4 flex flex-wrap gap-2`). */
+/** Same chrome as summary “Today / Yesterday / …” quick range buttons (`HorizontalScrollTabRow` on mobile). */
 function quickRangePillClassName(selected, smMinWidthClass = 'sm:min-w-[96px]') {
-    return `min-w-0 flex-1 rounded-xl border px-3 py-2.5 text-xs font-semibold transition ${smMinWidthClass} sm:flex-none sm:px-4 sm:text-sm ${
+    return `max-sm:snap-start shrink-0 whitespace-nowrap rounded-xl border px-3 py-2.5 text-xs font-semibold transition ${smMinWidthClass} sm:px-4 sm:text-sm ${
         selected
             ? 'border-[var(--color-accent-500)] bg-[var(--color-accent-50)] text-[var(--color-accent-600)]'
             : 'border-[var(--color-border-default)] bg-[var(--color-surface-muted)] text-[var(--color-text-muted)] hover:border-[var(--color-accent-200)] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-600)]'
@@ -122,6 +123,7 @@ function SummaryMetricCard({ label, value }) {
 }
 
 export default function DownlineReferralsPanel() {
+    const summaryQuickTabRefs = useRef({});
     const today = new Date();
     const [view, setView] = useState('summary');
     const [summaryStart, setSummaryStart] = useState(() => formatDateForInput(today));
@@ -175,18 +177,25 @@ export default function DownlineReferralsPanel() {
                                 }}
                             />
                         </div>
-                        <div className="mt-4 flex flex-wrap gap-2">
+                        <HorizontalScrollTabRow className="mt-4">
                             {SUMMARY_QUICK_RANGES.map(({ id, label }) => (
                                 <button
                                     key={id}
+                                    ref={(el) => {
+                                        if (el) summaryQuickTabRefs.current[id] = el;
+                                        else delete summaryQuickTabRefs.current[id];
+                                    }}
                                     type="button"
-                                    onClick={() => onSummaryQuickClick(id)}
+                                    onClick={() => {
+                                        onSummaryQuickClick(id);
+                                        scrollTabIntoViewSmooth(summaryQuickTabRefs.current[id]);
+                                    }}
                                     className={quickRangePillClassName(summaryQuickId === id)}
                                 >
                                     {label}
                                 </button>
                             ))}
-                        </div>
+                        </HorizontalScrollTabRow>
                         <div className="mt-4">
                             <button
                                 type="button"
