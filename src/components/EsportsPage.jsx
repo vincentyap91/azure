@@ -50,7 +50,7 @@ export default function EsportsPage({ onNavigate }) {
         >
             {showStickyPlayBar && (
                 <div
-                    className="fixed left-0 right-0 top-[114px] z-40 bg-[rgb(255_255_255_/_0.95)] backdrop-blur-md shadow-[0_8px_24px_rgba(16,32,72,0.12)] md:top-22"
+                    className="fixed left-0 right-0 z-40 bg-[rgb(255_255_255_/_0.95)] backdrop-blur-md shadow-[0_8px_24px_rgba(16,32,72,0.12)] md:top-22"
                     role="banner"
                     aria-label="Quick play bar"
                 >

@@ -222,6 +222,39 @@
   }
 }
 
+@layer components {
+  /**
+   * Slot / lobby game tiles: blue tint + “Play Now” only while the card (.group) is hovered or focused.
+   * (Tailwind `md:group-hover:opacity-*` alone can lose against `md:opacity-0` in the cascade.)
+   */
+  @media (min-width: 768px) {
+    .game-card-play-hover {
+      opacity: 0;
+      transition: opacity 300ms ease-out;
+    }
+
+    .group:hover .game-card-play-hover,
+    .group:focus-within .game-card-play-hover {
+      opacity: 1;
+    }
+
+    .game-card-play-hover__cta {
+      pointer-events: none;
+    }
+
+    .group:hover .game-card-play-hover .game-card-play-hover__cta,
+    .group:focus-within .game-card-play-hover .game-card-play-hover__cta {
+      pointer-events: auto;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .game-card-play-hover {
+      transition: none;
+    }
+  }
+}
+
 @layer utilities {
   .home-marquee-pausable:hover .animate-home-marquee-vertical-y,
   .home-marquee-pausable:focus-within .animate-home-marquee-vertical-y,

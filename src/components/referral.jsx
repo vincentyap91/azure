@@ -24,7 +24,9 @@ import step2Image from '../assets/step2.jpg';
 import step3Image from '../assets/step3.jpg';
 import { PAGE_BANNER_IMG, PAGE_BANNER_WRAP } from '../constants/pageBannerClasses';
 import { useReferralData } from '../context/ReferralDataContext';
+import { REFERRAL_GAME_COMMISSION_ROWS } from '../constants/referralCommissionRates';
 import DownlineReferralsPanel from './referral/DownlineReferralsPanel';
+import ReferralGameCommissionTable from './referral/ReferralGameCommissionTable';
 
 const affiliateTabs = ['Invite friends', 'My referrals', 'How it works'];
 
@@ -252,6 +254,8 @@ function MyReferralsContent() {
 
 function GameCommissionRow({ item, isOpen, onToggle }) {
     const Icon = item.icon;
+    const rows = REFERRAL_GAME_COMMISSION_ROWS[item.id] ?? [];
+
     return (
         <div className="border-b border-[var(--color-border-default)] last:border-b-0">
             <button
@@ -268,8 +272,16 @@ function GameCommissionRow({ item, isOpen, onToggle }) {
                 {isOpen ? <ChevronDown size={18} className="text-[var(--color-text-muted)]" /> : <ChevronRight size={18} className="text-[var(--color-text-muted)]" />}
             </button>
             {isOpen && (
-                <div className="border-t border-[var(--color-border-default)] bg-[var(--color-surface-subtle)] px-4 py-3 text-sm text-[var(--color-text-muted)]">
-                    Commission rates vary by provider. Contact support for detailed breakdown.
+                <div className="border-t border-[var(--color-border-default)] bg-[var(--color-surface-subtle)]">
+                    {rows.length > 0 ? (
+                        <div className="p-3 md:p-4">
+                            <ReferralGameCommissionTable rows={rows} />
+                        </div>
+                    ) : (
+                        <div className="px-4 py-3 text-sm text-[var(--color-text-muted)]">
+                            Commission rates vary by provider. Contact support for detailed breakdown.
+                        </div>
+                    )}
                 </div>
             )}
         </div>
@@ -331,7 +343,12 @@ function HowItWorksContent() {
                         <thead>
                             <tr>
                                 {depositCommissionTiers.map((t) => (
-                                    <th key={t.tier} className="border-b border-r border-white/20 bg-[#1c63b9] px-4 py-3 text-center font-bold text-white last:border-r-0">{t.tier}</th>
+                                    <th
+                                        key={t.tier}
+                                        className="border-b border-r border-white/25 bg-[linear-gradient(180deg,var(--color-brand-secondary)_0%,var(--color-brand-deep)_100%)] px-4 py-3 text-center font-bold text-white last:border-r-0"
+                                    >
+                                        {t.tier}
+                                    </th>
                                 ))}
                             </tr>
                         </thead>

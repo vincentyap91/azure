@@ -202,9 +202,9 @@ export default function SlotsPage({ selectedProviderIdFromMenu, onNavigate }) {
                                     {game.hot ? 'HOT' : 'NEW'}
                                 </span>
                             )}
-                            <div className="relative h-44 overflow-hidden sm:h-52 xl:h-56">
+                            <div className="relative h-44 overflow-hidden rounded-t-2xl sm:h-52 xl:h-56">
                                 <div
-                                    className="absolute inset-0 bg-cover bg-center transition-transform duration-500 md:group-hover:scale-110"
+                                    className="absolute inset-0 rounded-[inherit] bg-cover bg-center transition-transform duration-500 md:group-hover:scale-110"
                                     style={{ backgroundImage: `url("${game.imgUrl}")` }}
                                 />
                                 <GameCardFavouriteButton
