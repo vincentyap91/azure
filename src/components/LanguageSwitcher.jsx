@@ -16,7 +16,7 @@ const LANGUAGES = [
     { code: 'ja-jp', label: '日本語', flagCode: 'jp', short: 'JP' },
 ];
 
-export default function LanguageSwitcher({ value = 'en-us', onChange, buttonClassName = '' }) {
+export default function LanguageSwitcher({ value = 'en-us', onChange, buttonClassName = 'h-7 rounded-[12px] px-3 py-1.5' }) {
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
     const current = LANGUAGES.find((l) => l.code === value) ?? LANGUAGES[0];
@@ -35,7 +35,7 @@ export default function LanguageSwitcher({ value = 'en-us', onChange, buttonClas
             <button
                 type="button"
                 onClick={() => setOpen((o) => !o)}
-                className={`flex h-7 items-center gap-1.5 rounded-[12px] border border-white/25 bg-[linear-gradient(180deg,rgba(255,255,255,0.14)_0%,rgba(255,255,255,0.08)_100%)] px-3 py-1.5 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_8px_14px_rgba(0,0,0,0.12)] transition-all hover:border-white/40 hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.1)_100%)] ${buttonClassName}`}
+                className={`flex items-center gap-1.5 border border-white/25 bg-[linear-gradient(180deg,rgba(255,255,255,0.14)_0%,rgba(255,255,255,0.08)_100%)] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.14),0_8px_14px_rgba(0,0,0,0.12)] transition-all hover:border-white/40 hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.1)_100%)] ${buttonClassName}`}
                 aria-haspopup="listbox"
                 aria-expanded={open}
                 aria-label={`Language: ${current.label}`}

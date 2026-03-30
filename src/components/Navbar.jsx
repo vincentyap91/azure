@@ -3,9 +3,21 @@ import {
     ArrowDownToLine,
     ArrowUpFromLine,
     ChevronDown,
+    ChevronRight,
     CircleDollarSign,
+    Dices,
+    Fish,
+    Gamepad2,
+    Gift,
+    HelpCircle,
+    House,
+    Landmark,
+    LayoutGrid,
     Menu,
+    Megaphone,
     Smartphone,
+    Star,
+    Ticket,
     X,
     Headset,
     History,
@@ -32,6 +44,155 @@ import { getVipStatus } from '../constants/vipStatus';
 import VipStatusPill from './VipStatusPill';
 
 const slotsNavDropdownProviders = slotProvidersForNavDropdown();
+const DESKTOP_MAIN_LINKS = [
+    'Home', 'Casino', 'Slots', 'Sports', 'E-Sports', 'Lottery',
+    'Fishing', 'Poker', 'Promotion', 'Referral', 'VIP',
+];
+const NAV_TARGETS = {
+    Home: 'home',
+    Casino: 'live-casino',
+    Slots: 'slots',
+    Sports: 'sports',
+    'E-Sports': 'e-sports',
+    Lottery: 'lottery',
+    Fishing: 'fishing',
+    Poker: 'poker',
+    Promotion: 'promotion',
+    Referral: 'referral',
+    VIP: 'vip',
+};
+const NAV_HREFS = {
+    Home: '/',
+    Casino: '/casino',
+    Slots: '/slots',
+    Sports: '/sports',
+    'E-Sports': '/e-sports',
+    Lottery: '/lottery',
+    Fishing: '/fishing',
+    Poker: '/poker',
+    Promotion: '/promotion',
+    Referral: '/referral',
+    VIP: '/vip',
+};
+const MOBILE_PRIMARY_ITEMS = [
+    { id: 'home', label: 'Home', page: 'home', icon: House },
+    { id: 'casino', label: 'Casino', page: 'live-casino', icon: Landmark },
+    { id: 'slots', label: 'Slots', page: 'slots', icon: Dices },
+    { id: 'sports', label: 'Sports', page: 'sports', icon: Trophy },
+    { id: 'promotions', label: 'Promotions', page: 'promotion', icon: Megaphone },
+    { id: 'more', label: 'More', icon: LayoutGrid },
+];
+const MOBILE_MORE_SECTIONS = [
+    {
+        id: 'games',
+        label: 'Games',
+        icon: Gamepad2,
+        items: [
+            { id: 'e-sports', label: 'E-Sports', page: 'e-sports', icon: Trophy },
+            { id: 'lottery', label: 'Lottery', page: 'lottery', icon: Ticket },
+            { id: 'fishing', label: 'Fishing', page: 'fishing', icon: Fish },
+            { id: 'poker', label: 'Poker', page: 'poker', icon: Dices },
+        ],
+    },
+    {
+        id: 'wallet',
+        label: 'Wallet',
+        icon: Wallet,
+        items: [
+            { id: 'deposit', label: 'Deposit', page: 'deposit', icon: ArrowDownToLine },
+            { id: 'withdrawal', label: 'Withdrawal', page: 'withdrawal', icon: ArrowUpFromLine },
+            { id: 'referral-commission', label: 'Referral Commission', page: 'referral-commission', icon: Users },
+            { id: 'rebate', label: 'Rebate', page: 'rebate', icon: Percent },
+        ],
+    },
+    {
+        id: 'rewards',
+        label: 'Rewards',
+        icon: Gift,
+        items: REWARDS_PROGRAMS.map(({ id, label }) => ({
+            id,
+            label,
+            page: 'loyalty-rewards',
+            rewardsTab: id,
+            icon: REWARDS_NAV_ICONS[id] ?? Trophy,
+        })),
+    },
+    {
+        id: 'history',
+        label: 'History',
+        icon: History,
+        items: HISTORY_RECORD_NAV.map(({ id, label, icon }) => ({
+            id,
+            label,
+            page: id,
+            icon,
+        })),
+    },
+    {
+        id: 'account',
+        label: 'Account',
+        icon: UserRound,
+        items: [
+            { id: 'profile', label: 'Profile', page: 'profile', icon: UserRound },
+            { id: 'my-account', label: 'My Account', page: 'profile', icon: UserCircle2, activePages: ['profile'] },
+            { id: 'verification', label: 'Verification', page: 'verification', icon: ShieldCheck },
+            { id: 'favourites', label: 'Favourites', page: 'favourites', icon: Heart },
+            { id: 'vip', label: 'VIP', page: 'vip', icon: Trophy },
+            { id: 'referral', label: 'Referral', page: 'referral', icon: Users },
+            { id: 'settings', label: 'Settings', page: 'security', icon: Settings, activePages: ['security', 'notifications'] },
+        ],
+    },
+    {
+        id: 'support',
+        label: 'Support',
+        icon: Headset,
+        items: [
+            { id: 'live-chat', label: 'Live Chat', icon: Headset, action: 'liveChat' },
+            { id: 'help-center', label: 'Help Center', page: 'help-center', icon: HelpCircle },
+            { id: 'feedback', label: 'Feedback', page: 'feedback', icon: Star },
+            { id: 'app-download', label: 'App Download', icon: Smartphone, action: 'download' },
+            { id: 'log-out', label: 'Log Out', icon: LogOut, action: 'logout' },
+        ],
+    },
+];
+const MOBILE_MORE_ACTIVE_PAGES = new Set([
+    'e-sports',
+    'lottery',
+    'fishing',
+    'poker',
+    'deposit',
+    'withdrawal',
+    'referral-commission',
+    'rebate',
+    'loyalty-rewards',
+    'transaction-record',
+    'bet-record',
+    'commission-record',
+    'rebate-record',
+    'daily-check-in-record',
+    'promotion-record',
+    'profile',
+    'verification',
+    'favourites',
+    'vip',
+    'referral',
+    'security',
+    'notifications',
+    'help-center',
+    'feedback',
+    'my-bets',
+]);
+const MOBILE_MORE_SECTION_BY_PAGE = MOBILE_MORE_SECTIONS.reduce((accumulator, section) => {
+    section.items.forEach(({ page, activePages }) => {
+        if (page) {
+            accumulator[page] = section.id;
+        }
+        activePages?.forEach((pageId) => {
+            accumulator[pageId] = section.id;
+        });
+    });
+    return accumulator;
+}, {});
 
 export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'home', onLoginClick, onRegisterClick, authUser, onLogout, onAccountDetailsClick, onLiveChatClick, onCasinoProviderSelect, onSlotsProviderSelect }) {
     const vipLevel = authUser?.vipLevel || 'Diamond';
@@ -39,17 +200,11 @@ export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'h
     const [navProviderDropdown, setNavProviderDropdown] = useState(null);
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
+    const [openMobileMoreSection, setOpenMobileMoreSection] = useState(null);
     const [language, setLanguage] = useState('th-th');
     const [openProfileSection, setOpenProfileSection] = useState('account');
     const profileMenuRef = useRef(null);
-
-    const mainLinks = [
-        'Home', 'Casino', 'Slots', 'Sports', 'E-Sports', 'Lottery',
-        'Fishing', 'Poker',
-        'Promotion', 'Referral', 'VIP'
-    ];
-    const navTargets = { Home: 'home', Casino: 'live-casino', Slots: 'slots', Sports: 'sports', 'E-Sports': 'e-sports', Lottery: 'lottery', Fishing: 'fishing', Poker: 'poker', Promotion: 'promotion', Referral: 'referral', VIP: 'vip' };
-    const navHrefs = { Home: '/', Casino: '/casino', Slots: '/slots', Sports: '/sports', 'E-Sports': '/e-sports', Lottery: '/lottery', Fishing: '/fishing', Poker: '/poker', Promotion: '/promotion', Referral: '/referral', VIP: '/vip' };
     const accountCards = [
         { id: 'profile', label: 'Account Details', icon: UserRound },
         { id: 'verification', label: 'Verification', icon: ShieldCheck },
@@ -100,6 +255,16 @@ export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'h
         setMobileMenuOpen(false);
     }, [activePage]);
 
+    useEffect(() => {
+        if (mobileMenuOpen) {
+            return undefined;
+        }
+
+        setMobileMoreOpen(false);
+        setOpenMobileMoreSection(null);
+        return undefined;
+    }, [mobileMenuOpen]);
+
     const toggleProfileSection = (sectionKey) => {
         setOpenProfileSection((current) => (current === sectionKey ? null : sectionKey));
     };
@@ -112,6 +277,72 @@ export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'h
     const handleMobileDownloadApp = () => {
         setMobileMenuOpen(false);
         onDownloadAppClick?.();
+    };
+
+    const getMobileMoreDefaultSection = () => MOBILE_MORE_SECTION_BY_PAGE[activePage] ?? null;
+
+    const handleMobileMoreToggle = () => {
+        if (mobileMoreOpen) {
+            setMobileMoreOpen(false);
+            setOpenMobileMoreSection(null);
+            return;
+        }
+
+        setMobileMoreOpen(true);
+        setOpenMobileMoreSection((current) => current ?? getMobileMoreDefaultSection());
+    };
+
+    const handleMobileMoreSectionToggle = (sectionId) => {
+        setOpenMobileMoreSection((current) => (current === sectionId ? null : sectionId));
+    };
+
+    const isMobileMoreItemActive = ({ page, activePages, rewardsTab }) => {
+        if (activePages?.includes(activePage)) {
+            return true;
+        }
+
+        if (page !== activePage) {
+            return false;
+        }
+
+        if (page === 'loyalty-rewards' && rewardsTab && typeof window !== 'undefined') {
+            return window.location.hash.slice(1) === rewardsTab;
+        }
+
+        return true;
+    };
+
+    const handleMobileMoreItemClick = ({ page, rewardsTab, action }) => {
+        if (action === 'liveChat') {
+            setMobileMenuOpen(false);
+            onLiveChatClick?.();
+            return;
+        }
+
+        if (action === 'download') {
+            handleMobileDownloadApp();
+            return;
+        }
+
+        if (action === 'logout') {
+            setMobileMenuOpen(false);
+            onLogout?.();
+            return;
+        }
+
+        if (page === 'profile') {
+            handleMobileNavigate('profile');
+            return;
+        }
+
+        if (page === 'loyalty-rewards' && rewardsTab) {
+            handleMobileNavigate('loyalty-rewards', { rewardsTab });
+            return;
+        }
+
+        if (page) {
+            handleMobileNavigate(page);
+        }
     };
 
     return (
@@ -136,7 +367,6 @@ export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'h
                             theme="dark"
                             size="header"
                             username={authUser.name}
-                            className="h-10 px-3"
                         />
                     )}
                     <LanguageSwitcher
@@ -525,7 +755,7 @@ export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'h
                     </div>
 
                     <div className="hidden lg:flex flex-1 justify-end items-center gap-x-1">
-                        {mainLinks.map((link, idx) => {
+                        {DESKTOP_MAIN_LINKS.map((link, idx) => {
                             const isActive = (activePage === 'home' && link === 'Home') ||
                                 (activePage === 'live-casino' && link === 'Casino') ||
                                 (activePage === 'slots' && link === 'Slots') ||
@@ -540,7 +770,7 @@ export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'h
                             return (
                                 <a
                                     key={idx}
-                                    href={navHrefs[link] ?? '#'}
+                                    href={NAV_HREFS[link] ?? '#'}
                                     onMouseEnter={() => {
                                         if (link === 'Casino') setNavProviderDropdown('casino');
                                         else if (link === 'Slots') setNavProviderDropdown('slots');
@@ -551,7 +781,7 @@ export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'h
                                         if (link === 'Slots') setNavProviderDropdown('slots');
                                     }}
                                     onClick={(event) => {
-                                        const target = navTargets[link];
+                                        const target = NAV_TARGETS[link];
                                         if (target) {
                                             event.preventDefault();
                                             onNavigate?.(target);
@@ -631,53 +861,80 @@ export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'h
             >
                 <div className="relative border-b border-white/10 px-4 py-4">
                     <div className="min-w-0">
-                            {authUser ? (
-                                <button
-                                    type="button"
-                                    onClick={() => handleMobileNavigate('profile')}
-                                    className="w-full pr-14 text-left text-2xl font-black leading-tight transition hover:opacity-90"
-                                >
-                                    Hi, {authUser.name}
-                                </button>
-                            ) : (
-                                <h2 className="pr-14 text-2xl font-black leading-tight">Play Anywhere</h2>
-                            )}
-                            {authUser && (
-                                <div className="mt-3 space-y-3">
-                                    <VipStatusPill level={vipLevel} theme="dark" />
-                                    <div className="rounded-[22px] border border-white/10 bg-white/5 p-3 w-full">
-                                        <div className="flex items-center justify-between gap-3">
-                                            <div>
-                                                <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[var(--color-nav-text-accent)]">
-                                                    Balance
-                                                </p>
-                                                <p className="mt-1 text-lg font-black text-white">{authUser.balance}</p>
-                                            </div>
-                                            <span className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-[rgb(255_216_77_/_0.22)] bg-[rgb(255_216_77_/_0.08)] text-[var(--color-nav-gold)]">
-                                                <CircleDollarSign size={18} />
-                                            </span>
+                        {authUser ? (
+                            <button
+                                type="button"
+                                onClick={() => handleMobileNavigate('profile')}
+                                className="w-full pr-14 text-left text-2xl font-black leading-tight transition hover:opacity-90"
+                            >
+                                Hi, {authUser.name}
+                            </button>
+                        ) : (
+                            <div className="pr-14">
+                                <h2 className="text-2xl font-black leading-tight">Play Anywhere</h2>
+                                <p className="mt-1 text-sm text-white/70">Your essentials stay up top. Everything else is tucked into More.</p>
+                            </div>
+                        )}
+
+                        {authUser ? (
+                            <div className="mt-3 space-y-3">
+                                <VipStatusPill level={vipLevel} theme="dark" />
+                                <div className="w-full rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.09)_0%,rgba(255,255,255,0.04)_100%)] p-4 shadow-[0_16px_28px_rgba(1,12,33,0.24)]">
+                                    <div className="flex items-center justify-between gap-3">
+                                        <div>
+                                            <p className="text-[11px] font-black uppercase tracking-[0.18em] text-[var(--color-nav-text-accent)]">
+                                                Balance
+                                            </p>
+                                            <p className="mt-1 text-lg font-black text-white">{authUser.balance}</p>
                                         </div>
-                                        <div className="mt-3 grid grid-cols-2 gap-2">
-                                            <button
-                                                type="button"
-                                                onClick={() => handleMobileNavigate('deposit')}
-                                                className="btn-theme-cta-soft inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl px-4 text-sm font-black"
-                                            >
-                                                <ArrowDownToLine size={16} />
-                                                Deposit
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => handleMobileNavigate('withdrawal')}
-                                                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 text-sm font-bold text-white transition hover:bg-white/15"
-                                            >
-                                                <ArrowUpFromLine size={16} />
-                                                Withdraw
-                                            </button>
-                                        </div>
+                                        <span className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-[rgb(255_216_77_/_0.22)] bg-[rgb(255_216_77_/_0.08)] text-[var(--color-nav-gold)]">
+                                            <CircleDollarSign size={18} />
+                                        </span>
+                                    </div>
+                                    <div className="mt-4 grid grid-cols-2 gap-3">
+                                        <button
+                                            type="button"
+                                            onClick={() => handleMobileNavigate('deposit')}
+                                            className="btn-theme-cta-soft inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl px-4 text-sm font-black"
+                                        >
+                                            <ArrowDownToLine size={16} />
+                                            Deposit
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() => handleMobileNavigate('withdrawal')}
+                                            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 text-sm font-bold text-white transition hover:bg-white/15"
+                                        >
+                                            <ArrowUpFromLine size={16} />
+                                            Withdraw
+                                        </button>
                                     </div>
                                 </div>
-                            )}
+                            </div>
+                        ) : (
+                            <div className="mt-4 grid grid-cols-2 gap-3">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setMobileMenuOpen(false);
+                                        onLoginClick?.();
+                                    }}
+                                    className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-white/30 bg-white/5 px-4 text-sm font-semibold text-white transition hover:bg-white/10"
+                                >
+                                    Login
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setMobileMenuOpen(false);
+                                        onRegisterClick?.();
+                                    }}
+                                    className="btn-theme-cta-soft inline-flex min-h-12 items-center justify-center rounded-2xl px-4 text-sm font-black"
+                                >
+                                    Join Now
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     <button
@@ -692,152 +949,158 @@ export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'h
                 </div>
 
                 <div className="flex-1 overflow-y-auto px-4 py-4">
-                    <div className="grid grid-cols-2 gap-2">
-                        {mainLinks.map((link) => (
-                            <button
-                                key={link}
-                                type="button"
-                                onClick={() => handleMobileNavigate(navTargets[link])}
-                                className={`min-h-12 rounded-2xl border px-4 py-3 text-left text-sm font-bold transition ${
-                                    (activePage === 'home' && link === 'Home') ||
-                                    (activePage === 'live-casino' && link === 'Casino') ||
-                                    (activePage === 'slots' && link === 'Slots') ||
-                                    (activePage === 'sports' && link === 'Sports') ||
-                                    (activePage === 'e-sports' && link === 'E-Sports') ||
-                                    (activePage === 'lottery' && link === 'Lottery') ||
-                                    (activePage === 'fishing' && link === 'Fishing') ||
-                                    (activePage === 'poker' && link === 'Poker') ||
-                                    (activePage === 'promotion' && link === 'Promotion') ||
-                                    (activePage === 'referral' && link === 'Referral') ||
-                                    (activePage === 'vip' && link === 'VIP')
-                                        ? 'border-amber-300 bg-[linear-gradient(180deg,var(--color-cta-start)_0%,var(--color-cta-end)_100%)] text-[var(--color-cta-text)] shadow-[var(--shadow-cta-soft)]'
-                                        : 'border-white/10 bg-white/5 text-white hover:bg-white/10'
-                                }`}
-                            >
-                                {link}
-                            </button>
-                        ))}
-                    </div>
+                    <div className="space-y-2.5">
+                        {MOBILE_PRIMARY_ITEMS.map(({ id, label, page, icon: Icon }) => {
+                            const isMoreRow = id === 'more';
+                            const isActive = isMoreRow ? MOBILE_MORE_ACTIVE_PAGES.has(activePage) : activePage === page;
 
-                    {authUser ? (
-                        <div className="mt-6 space-y-4">
-                            <div className="grid grid-cols-1 gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() => handleMobileNavigate('profile')}
-                                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 text-sm font-bold text-white transition hover:bg-white/15"
-                                >
-                                    <UserRound size={16} />
-                                    Profile
-                                </button>
-                            </div>
+                            return (
+                                <div key={id} className="overflow-hidden rounded-[22px]">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            if (isMoreRow) {
+                                                handleMobileMoreToggle();
+                                                return;
+                                            }
 
-                            <div className="rounded-[22px] border border-white/10 bg-white/5 p-3">
-                                <p className="mb-2 text-[11px] font-black uppercase tracking-[0.18em] text-[var(--color-nav-text-accent)]">
-                                    Rewards
-                                </p>
-                                <div className="grid grid-cols-2 gap-2">
-                                    {REWARDS_PROGRAMS.map(({ id, label }) => {
-                                        const NavIcon = REWARDS_NAV_ICONS[id] ?? Trophy;
-                                        return (
-                                            <button
-                                                key={id}
-                                                type="button"
-                                                onClick={() => handleMobileNavigate('loyalty-rewards', { rewardsTab: id })}
-                                                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-3 text-left text-xs font-bold text-white transition hover:bg-white/15"
-                                            >
-                                                <NavIcon size={15} className="shrink-0 text-[var(--color-nav-blue-icon)]" />
-                                                <span className="min-w-0 leading-tight">{label}</span>
-                                            </button>
-                                        );
-                                    })}
+                                            handleMobileNavigate(page);
+                                        }}
+                                        className={`flex min-h-[58px] w-full items-center gap-3 rounded-[22px] border px-4 py-4 text-left transition ${
+                                            isActive
+                                                ? 'border-amber-300 bg-[linear-gradient(180deg,rgba(255,212,74,0.98)_0%,rgba(255,181,44,0.96)_100%)] text-[var(--color-cta-text)] shadow-[0_14px_26px_rgba(255,174,39,0.22)]'
+                                                : 'border-white/10 bg-white/[0.06] text-white hover:bg-white/[0.1]'
+                                        }`}
+                                        aria-expanded={isMoreRow ? mobileMoreOpen : undefined}
+                                    >
+                                        <span
+                                            className={`inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border ${
+                                                isActive
+                                                    ? 'border-amber-950/10 bg-amber-950/10 text-[var(--color-cta-text)]'
+                                                    : 'border-white/10 bg-white/10 text-[var(--color-nav-gold)]'
+                                            }`}
+                                        >
+                                            <Icon size={18} />
+                                        </span>
+                                        <span className="min-w-0 flex-1 text-base font-bold">{label}</span>
+                                        <ChevronRight
+                                            size={18}
+                                            className={`shrink-0 transition-transform ${mobileMoreOpen && isMoreRow ? 'rotate-90' : ''}`}
+                                        />
+                                    </button>
+
+                                    {isMoreRow && mobileMoreOpen && (
+                                        <div className="mt-2 space-y-2 rounded-[22px] border border-white/10 bg-white/[0.04] p-2.5">
+                                            {MOBILE_MORE_SECTIONS.map(({ id: sectionId, label: sectionLabel, icon: SectionIcon, items }) => {
+                                                const sectionHasActiveItem = items.some((item) => isMobileMoreItemActive(item));
+                                                const sectionOpen = openMobileMoreSection === sectionId;
+
+                                                return (
+                                                    <div
+                                                        key={sectionId}
+                                                        className={`overflow-hidden rounded-[20px] border transition ${
+                                                            sectionHasActiveItem
+                                                                ? 'border-[rgb(255_216_77_/_0.28)] bg-[rgb(255_216_77_/_0.08)]'
+                                                                : 'border-white/10 bg-white/[0.05]'
+                                                        }`}
+                                                    >
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => handleMobileMoreSectionToggle(sectionId)}
+                                                            className="flex min-h-[54px] w-full items-center gap-3 px-4 py-3.5 text-left"
+                                                            aria-expanded={sectionOpen}
+                                                        >
+                                                            <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/10 text-[var(--color-nav-gold)]">
+                                                                <SectionIcon size={17} />
+                                                            </span>
+                                                            <span className="min-w-0 flex-1 text-sm font-black uppercase tracking-[0.16em] text-white/88">
+                                                                {sectionLabel}
+                                                            </span>
+                                                            <ChevronRight
+                                                                size={17}
+                                                                className={`shrink-0 text-white/75 transition-transform ${sectionOpen ? 'rotate-90' : ''}`}
+                                                            />
+                                                        </button>
+
+                                                        {sectionOpen && (
+                                                            <div className="space-y-1.5 border-t border-white/10 px-2 pb-2 pt-1.5">
+                                                                {items.map((item) => {
+                                                                    const itemActive = isMobileMoreItemActive(item);
+                                                                    const ItemIcon = item.icon;
+
+                                                                    return (
+                                                                        <button
+                                                                            key={item.id}
+                                                                            type="button"
+                                                                            onClick={() => handleMobileMoreItemClick(item)}
+                                                                            className={`flex min-h-[52px] w-full items-center gap-3 rounded-[18px] px-3.5 py-3 text-left transition ${
+                                                                                itemActive
+                                                                                    ? 'bg-[linear-gradient(180deg,rgba(255,212,74,0.94)_0%,rgba(255,181,44,0.9)_100%)] text-[var(--color-cta-text)] shadow-[0_10px_18px_rgba(255,174,39,0.18)]'
+                                                                                    : 'bg-transparent text-white/88 hover:bg-white/[0.08] hover:text-white'
+                                                                            }`}
+                                                                        >
+                                                                            <span
+                                                                                className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl ${
+                                                                                    itemActive
+                                                                                        ? 'bg-amber-950/10 text-[var(--color-cta-text)]'
+                                                                                        : 'bg-white/10 text-[var(--color-nav-gold)]'
+                                                                                }`}
+                                                                            >
+                                                                                <ItemIcon size={16} />
+                                                                            </span>
+                                                                            <span className="min-w-0 flex-1 text-sm font-semibold">{item.label}</span>
+                                                                            <ChevronRight size={16} className="shrink-0 opacity-70" />
+                                                                        </button>
+                                                                    );
+                                                                })}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
                                 </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setMobileMenuOpen(false);
-                                        onLiveChatClick?.();
-                                    }}
-                                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 text-sm font-bold text-white transition hover:bg-white/15"
-                                >
-                                    <Headset size={16} />
-                                    Live Chat
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handleMobileDownloadApp}
-                                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 text-sm font-bold text-white transition hover:bg-white/15"
-                                >
-                                    <Smartphone size={16} />
-                                    App
-                                </button>
-                            </div>
-
-                            <div className="grid grid-cols-1 gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setMobileMenuOpen(false);
-                                        onLogout?.();
-                                    }}
-                                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-[rgb(255_216_77_/_0.3)] bg-[rgb(255_216_77_/_0.08)] px-4 text-sm font-black text-[var(--color-nav-gold)] transition hover:bg-[rgb(255_216_77_/_0.14)]"
-                                >
-                                    <LogOut size={16} />
-                                    Log Out
-                                </button>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="mt-6 space-y-4">
-                            <div className="grid grid-cols-2 gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setMobileMenuOpen(false);
-                                        onLoginClick?.();
-                                    }}
-                                    className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-white/35 px-4 text-sm font-semibold text-white transition hover:bg-white/10"
-                                >
-                                    Login
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setMobileMenuOpen(false);
-                                        onRegisterClick?.();
-                                    }}
-                                    className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--color-success-main)] px-4 text-sm font-semibold text-white shadow-[0_2px_8px_rgba(57,181,74,0.35)] transition hover:bg-[var(--color-success-hover)]"
-                                >
-                                    Join Now
-                                </button>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-2">
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setMobileMenuOpen(false);
-                                        onLiveChatClick?.();
-                                    }}
-                                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 text-sm font-bold text-white transition hover:bg-white/15"
-                                >
-                                    <Headset size={16} />
-                                    Live Chat
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handleMobileDownloadApp}
-                                    className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 text-sm font-bold text-white transition hover:bg-white/15"
-                                >
-                                    <Smartphone size={16} />
-                                    App
-                                </button>
-                            </div>
-                        </div>
-                    )}
+                            );
+                        })}
+                    </div>
+                </div>
+                <div className="border-t border-white/10 px-4 py-4">
+                    <div className="space-y-3">
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setMobileMenuOpen(false);
+                                onLiveChatClick?.();
+                            }}
+                            className="inline-flex min-h-[54px] w-full items-center justify-center gap-2 rounded-2xl border border-[rgb(255_216_77_/_0.24)] bg-[linear-gradient(180deg,rgba(255,216,77,0.18)_0%,rgba(255,216,77,0.08)_100%)] px-4 text-sm font-black text-[var(--color-nav-gold)] transition hover:bg-[linear-gradient(180deg,rgba(255,216,77,0.22)_0%,rgba(255,216,77,0.12)_100%)]"
+                        >
+                            <Headset size={17} />
+                            Live Chat
+                        </button>
+                        {authUser ? (
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setMobileMenuOpen(false);
+                                    onLogout?.();
+                                }}
+                                className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/[0.05] px-4 text-sm font-semibold text-white/88 transition hover:bg-white/[0.09] hover:text-white"
+                            >
+                                <LogOut size={16} />
+                                Log Out
+                            </button>
+                        ) : (
+                            <button
+                                type="button"
+                                onClick={handleMobileDownloadApp}
+                                className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-2xl border border-white/15 bg-white/[0.05] px-4 text-sm font-semibold text-white/88 transition hover:bg-white/[0.09] hover:text-white"
+                            >
+                                <Smartphone size={16} />
+                                App Download
+                            </button>
+                        )}
+                    </div>
                 </div>
             </aside>
 

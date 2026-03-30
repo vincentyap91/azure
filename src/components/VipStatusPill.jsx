@@ -12,12 +12,12 @@ export default function VipStatusPill({ level = 'Diamond', theme = 'light', size
 
   const medalSize = header ? 'h-6 w-6' : compact ? 'h-5 w-5' : large ? 'h-10 w-10' : 'h-7 w-7';
   const textSize = header ? 'text-xs' : compact ? 'text-[11px]' : large ? 'text-sm md:text-base' : 'text-xs';
-  const padding = header ? 'px-3 py-1' : compact ? 'px-2.5 py-1' : large ? 'px-4 py-2.5 md:px-5 md:py-3' : 'px-3 py-1.5';
+  const padding = header ? 'px-3 py-0' : compact ? 'px-2.5 py-1' : large ? 'px-4 py-2.5 md:px-5 md:py-3' : 'px-3 py-1.5';
   const gap = isColumn && large ? 'gap-2.5' : header ? 'gap-2' : 'gap-2';
 
   const flexDir = isColumn ? 'flex-col' : 'flex-row';
 
-  const basePillClasses = `inline-flex ${flexDir} items-center ${gap} ${header ? 'h-7 rounded-[10px]' : 'rounded-full'} ${padding} ${textSize} transition-all duration-200 ${header ? 'shrink-0' : ''} ${className}`;
+  const basePillClasses = `inline-flex ${flexDir} items-center ${gap} ${header ? 'h-10 rounded-xl' : 'rounded-full'} ${padding} ${textSize} transition-all duration-200 ${header ? 'shrink-0' : ''} ${className}`;
 
   const lightStyles = 'border border-[var(--color-accent-100)] bg-[var(--color-accent-50)] text-[var(--color-accent-700)]';
   const darkStyles = 'border border-[rgb(61_125_203)] bg-[linear-gradient(180deg,#143567_0%,#0e2547_100%)] text-[rgb(219_234_255)] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]';
