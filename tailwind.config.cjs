@@ -11,9 +11,15 @@ module.exports = {
           '0%': { transform: 'translateY(0)' },
           '100%': { transform: 'translateY(-50%)' },
         },
+        /** Hero announcement strip: text moves right → left (must not live only under `@theme` in theme.css — browsers ignore it). */
+        marquee: {
+          '0%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(-100%)' },
+        },
       },
       animation: {
         'home-marquee-vertical-y': 'home-marquee-vertical-y 40s linear infinite',
+        marquee: 'marquee 20s linear infinite',
       },
     },
   },

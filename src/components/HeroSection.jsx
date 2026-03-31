@@ -28,9 +28,9 @@ export default function HeroSection() {
                     <div className="flex items-center justify-center shrink-0 pr-4 text-white">
                         <Volume2 size={16} fill="currentColor" strokeWidth={1} />
                     </div>
-                    <div className="flex-1 overflow-hidden h-full flex items-center relative">
-                        <div className="whitespace-nowrap animate-[marquee_20s_linear_infinite] text-xs text-white/90">
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                    <div className="relative flex h-full flex-1 items-center overflow-hidden">
+                        <div className="inline-block whitespace-nowrap animate-marquee text-xs text-white/90 will-change-transform">
+                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&apos;s standard dummy text ever since the 1500s.
                         </div>
                     </div>
                 </div>
