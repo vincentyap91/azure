@@ -48,6 +48,30 @@ export function recordTransactionNotification({ kind }) {
     }
 }
 
+/**
+ * Record any push-style notification for the Notifications page “Recent” list.
+ * @param {{ title: string, message: string, status?: string, kind?: string }} payload
+ */
+export function recordPushNotificationEntry({ title, message, status = 'info', kind = 'push' }) {
+    const entry = {
+        id: `${Date.now()}-${kind}-${Math.random().toString(36).slice(2, 10)}`,
+        kind,
+        title,
+        message,
+        status,
+        createdAt: new Date().toISOString(),
+    };
+
+    try {
+        const prev = loadRecentNotifications();
+        const next = [entry, ...prev].slice(0, MAX_ITEMS);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+        window.dispatchEvent(new CustomEvent('riocity-recent-notifications-updated'));
+    } catch {
+        /* quota */
+    }
+}
+
 export function clearRecentNotifications() {
     try {
         localStorage.removeItem(STORAGE_KEY);

@@ -7,6 +7,7 @@ import CopyInputField from './security/CopyInputField';
 import PaymentConfirmModal from './PaymentConfirmModal';
 import ProcessingCountdownBanner from './ProcessingCountdownBanner';
 import { useActionNotifications } from '../context/ActionNotificationsContext';
+import { PUSH_EVENT } from '../constants/pushNotificationCopy';
 
 const DEPOSIT_STEPS = [
     { id: 1, label: 'Choose Deposit Type' },
@@ -91,7 +92,7 @@ const MIN_AMOUNT_NORMAL = 50;
 const MAX_AMOUNT_NORMAL = 10000;
 
 export default function DepositPage({ onNavigate }) {
-    const { showTransactionNotification } = useActionNotifications();
+    const { showTransactionNotification, showPushNotification } = useActionNotifications();
     const [step, setStep] = useState(1);
     const [depositSpeedTab, setDepositSpeedTab] = useState('fast');
     const [depositOptionType, setDepositOptionType] = useState('instant');
@@ -104,6 +105,8 @@ export default function DepositPage({ onNavigate }) {
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
     const [processingCountdown, setProcessingCountdown] = useState(null);
     const fileInputRef = useRef(null);
+    const lastSubmittedAmountRef = useRef(null);
+    const prevCountdownRef = useRef(null);
 
     const MAX_UPLOAD_SIZE = 2 * 1024 * 1024; // 2MB
     const receiptPreviewUrl = useMemo(() => (uploadedReceipt ? URL.createObjectURL(uploadedReceipt) : null), [uploadedReceipt]);
@@ -183,7 +186,8 @@ export default function DepositPage({ onNavigate }) {
     };
 
     const handleCloseConfirmModal = () => {
-        showTransactionNotification({ kind: 'deposit' });
+        lastSubmittedAmountRef.current = amountNum;
+        showTransactionNotification({ kind: 'deposit', amount: amountNum });
         setConfirmModalOpen(false);
         setStep(1);
         setAmount('');
@@ -205,6 +209,18 @@ export default function DepositPage({ onNavigate }) {
         }, 1000);
         return () => clearInterval(t);
     }, [processingCountdown]);
+
+    useEffect(() => {
+        const prev = prevCountdownRef.current;
+        if (prev != null && prev > 0 && processingCountdown === null && lastSubmittedAmountRef.current != null) {
+            showPushNotification({
+                event: PUSH_EVENT.DEPOSIT_SUCCESS,
+                amount: lastSubmittedAmountRef.current,
+            });
+            lastSubmittedAmountRef.current = null;
+        }
+        prevCountdownRef.current = processingCountdown;
+    }, [processingCountdown, showPushNotification]);
 
     const selectedBankLabel = selectedBank ? BANKS.find((b) => b.id === selectedBank)?.label ?? 'Select Bank Account' : 'Select Bank Account';
     const canSelectChannel = (depositOptionType === 'ewallet' && selectedTng) || (depositOptionType === 'instant' && selectedBank);
@@ -243,7 +259,7 @@ export default function DepositPage({ onNavigate }) {
             ) : (
             <>
             {/* Progress indicator */}
-            <div className="mb-8 overflow-x-auto">
+            <div className="mb-8 overflow-x-auto py-2">
                 <div className="flex min-w-max items-center gap-0">
                     {DEPOSIT_STEPS.map((s, idx) => {
                         const isCompleted = step > s.id;
@@ -257,7 +273,7 @@ export default function DepositPage({ onNavigate }) {
                                             isCompleted
                                                 ? 'bg-[var(--color-accent-600)] text-white'
                                                 : isActive
-                                                  ? 'bg-[var(--color-accent-600)] text-white ring-4'
+                                                  ? 'bg-[var(--color-accent-600)] text-white ring-4 ring-[rgb(96_165_250_/_0.18)] shadow-[0_8px_18px_rgba(37,99,235,0.18)]'
                                                   : 'bg-[var(--color-surface-muted)] text-[var(--color-text-muted)]'
                                         }`}
                                     >

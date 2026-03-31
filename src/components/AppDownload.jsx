@@ -1,5 +1,8 @@
 import React from 'react';
-import { Apple, Play } from 'lucide-react';
+import { Download, QrCode } from 'lucide-react';
+
+const APK_DOWNLOAD_URL = 'https://pksoftcdn.azureedge.net/apk/skywin.apk';
+const APK_QR_CODE_URL = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&format=png&qzone=2&data=${encodeURIComponent(APK_DOWNLOAD_URL)}`;
 
 const GearSVG = () => (
     <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-full">
@@ -112,11 +115,6 @@ const PhoneFront = () => (
 );
 
 export default function AppDownload() {
-    const downloadOptions = [
-        { icon: <Apple size={14} fill="currentColor" />, label: 'iOS Download' },
-        { icon: <Play size={10} fill="currentColor" className="ml-0.5" />, label: 'APK Download' }
-    ];
-
     return (
         <section
             id="download-app"
@@ -185,24 +183,72 @@ export default function AppDownload() {
                     </div>
                 </div>
 
-                <div className="grid w-full gap-4 sm:grid-cols-2 lg:grid-cols-2">
-                    {downloadOptions.map(({ icon, label }) => (
-                        <div
-                            key={label}
-                            className="flex flex-col items-center gap-3 rounded-[22px] border border-white/80 bg-white/72 p-4 shadow-[0_12px_24px_rgba(0,114,188,0.08)] backdrop-blur-sm"
-                        >
-                            <div className="relative overflow-hidden rounded-[16px] border border-gray-200 bg-white p-1 shadow-sm group">
-                                <div className="flex h-[96px] w-[96px] items-center justify-center rounded-[12px] border border-dashed border-gray-300">
-                                    <span className="text-xs font-bold text-gray-300">QR CODE</span>
+                <div className="flex w-full justify-center lg:justify-end">
+                    <div className="relative w-full">
+                        <div className="pointer-events-none absolute inset-x-10 bottom-3 h-14 rounded-full bg-[rgb(0_174_239_/_0.12)] blur-3xl" />
+
+                        <div className="relative overflow-hidden rounded-[30px] border border-white/85 bg-[linear-gradient(180deg,rgba(255,255,255,0.84)_0%,rgba(243,250,255,0.78)_100%)] p-4 shadow-[0_18px_36px_rgba(0,114,188,0.12)] backdrop-blur-md sm:px-4 sm:py-4">
+                            <div className="pointer-events-none absolute right-[-20px] top-[-20px] h-24 w-24 rounded-full bg-[rgb(0_174_239_/_0.12)] blur-2xl" />
+                            <div className="pointer-events-none absolute left-[-12px] bottom-8 h-16 w-16 rounded-full bg-white/60 blur-2xl" />
+
+                            <div className="relative">
+                                <div className="inline-flex items-center gap-2 rounded-full border border-white/80 bg-white/85 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--color-brand-secondary)]">
+                                    <QrCode size={13} />
+                                    Android APK
                                 </div>
-                                <div className="absolute left-0 top-0 h-[1px] w-full -translate-y-full bg-[var(--color-brand-primary)] shadow-[var(--shadow-scan)] group-hover:animate-[scan_1.5s_linear_infinite]" />
+
+                                <div className="mt-3 rounded-[24px] border border-[rgb(218_236_247)] bg-[linear-gradient(180deg,rgba(255,255,255,0.88)_0%,rgba(239,249,255,0.92)_100%)] px-3 py-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.75),0_10px_22px_rgba(0,114,188,0.08)]">
+                                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3">
+                                        <div className="flex shrink-0 justify-center">
+                                            <div className="relative overflow-hidden rounded-[18px] border border-[rgb(214_228_240)] bg-white p-1.5 shadow-[0_8px_18px_rgba(0,114,188,0.10)] group">
+                                                <div className="flex h-[102px] w-[102px] items-center justify-center rounded-[14px] border border-dashed border-gray-300 bg-[linear-gradient(180deg,#ffffff_0%,#f4f9fd_100%)] sm:h-[108px] sm:w-[108px]">
+                                                    <img
+                                                        src={APK_QR_CODE_URL}
+                                                        alt="Riocity9 Android APK QR code"
+                                                        className="block h-[88px] w-[88px] object-contain sm:h-[92px] sm:w-[92px]"
+                                                    />
+                                                </div>
+                                                <div className="absolute left-0 top-0 h-[1px] w-full -translate-y-full bg-[var(--color-brand-primary)] shadow-[var(--shadow-scan)] group-hover:animate-[scan_1.5s_linear_infinite]" />
+                                            </div>
+                                        </div>
+
+                                        <div className="flex min-w-0 flex-1 flex-col items-center text-center sm:items-start sm:text-left">
+                                            <h3 className="text-[1.08rem] font-extrabold tracking-tight text-[var(--color-text-brand-soft)]">
+                                                Scan or tap to install
+                                            </h3>
+                                            <p className="mt-1 text-[12px] font-semibold leading-relaxed text-[var(--color-brand-secondary)]/78">
+                                                Quick Android access with QR scan and direct APK download.
+                                            </p>
+
+                                            <div className="mt-2 flex flex-wrap justify-center gap-1.5 sm:justify-start">
+                                                <span className="rounded-full border border-[rgb(202_227_244)] bg-[rgb(244_251_255)] px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.08em] text-[rgb(77_114_145)]">
+                                                    Scan Ready
+                                                </span>
+                                                <span className="rounded-full border border-[rgb(202_227_244)] bg-[rgb(244_251_255)] px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.08em] text-[rgb(77_114_145)]">
+                                                    Direct APK
+                                                </span>
+                                            </div>
+
+                                            <a
+                                                href={APK_DOWNLOAD_URL}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="mt-2.5 flex min-h-9 w-full items-center justify-center gap-2 rounded-full bg-[linear-gradient(90deg,#00CFFF_0%,var(--color-brand-primary)_100%)] px-4 py-2 text-sm font-bold text-white shadow-[0_10px_20px_rgba(0,174,239,0.24)] transition-transform hover:scale-[1.02]"
+                                                aria-label="Download Riocity9 Android APK"
+                                            >
+                                                <Download size={14} />
+                                                APK Download
+                                            </a>
+
+                                            <p className="mt-1.5 text-[10px] font-semibold leading-relaxed text-[var(--color-brand-secondary)]/72">
+                                                Desktop scan, mobile tap to install instantly.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <button className="flex min-h-10 w-full items-center justify-center gap-1.5 rounded-full bg-[linear-gradient(90deg,#00CFFF_0%,var(--color-brand-primary)_100%)] px-4 py-2 text-sm font-bold text-white shadow-[0_8px_18px_rgba(0,174,239,0.2)] transition-transform hover:scale-[1.02]">
-                                {icon}
-                                {label}
-                            </button>
                         </div>
-                    ))}
+                    </div>
                 </div>
             </div>
         </section>

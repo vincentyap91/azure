@@ -41,8 +41,20 @@ function ToggleRow({ label, checked, onChange }) {
 }
 
 function RecentNotificationCard({ item }) {
-    const Icon = item.kind === 'deposit' ? ArrowDownToLine : ArrowUpFromLine;
+    const Icon =
+        item.kind === 'deposit'
+            ? ArrowDownToLine
+            : item.kind === 'withdrawal'
+              ? ArrowUpFromLine
+              : Bell;
     const status = item.status ?? 'ongoing';
+    const isLive = status === 'ongoing';
+    const statusLabel =
+        typeof status === 'string' && ['success', 'error', 'warning', 'info'].includes(status)
+            ? status
+            : isLive
+              ? 'ongoing'
+              : String(status);
 
     return (
         <div className="surface-card flex gap-4 rounded-2xl px-4 py-4 transition hover:border-[var(--color-accent-200)] md:px-5 md:py-5">
@@ -60,9 +72,19 @@ function RecentNotificationCard({ item }) {
                     </time>
                 </div>
                 <p className="mt-1 text-xs leading-relaxed text-[var(--color-text-muted)] md:text-sm">{item.message}</p>
-                <div className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-[var(--color-accent-100)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-[var(--color-accent-700)]">
-                    <Loader2 size={12} className="animate-spin" aria-hidden />
-                    {status === 'ongoing' ? 'Ongoing' : status}
+                <div
+                    className={`mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${
+                        status === 'success'
+                            ? 'bg-[rgb(220_252_231)] text-[var(--color-success-main)]'
+                            : status === 'error'
+                              ? 'bg-[rgb(254_226_226)] text-[var(--color-danger-main)]'
+                              : status === 'warning'
+                                ? 'bg-[rgb(254_249_195)] text-[var(--color-hot-main)]'
+                                : 'bg-[var(--color-accent-100)] text-[var(--color-accent-700)]'
+                    }`}
+                >
+                    {isLive ? <Loader2 size={12} className="animate-spin" aria-hidden /> : null}
+                    {isLive ? 'Pending' : statusLabel}
                 </div>
             </div>
         </div>
@@ -87,6 +109,9 @@ export default function NotificationsPage() {
     const handleToggle = (id) => {
         setPreferences((prev) => {
             const next = { ...prev, [id]: !prev[id] };
+            if (id === 'push' && next.push && typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission().catch(() => {});
+            }
             saveNotificationPreferences(next);
             return next;
         });

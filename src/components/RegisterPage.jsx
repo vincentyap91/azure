@@ -1,11 +1,31 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ChevronDown, Eye, EyeOff, Lock, Mail, Phone, Send, UserRound } from 'lucide-react';
 import promoImage from '../assets/register-banner.jpg';
 import promoImageMobile from '../assets/register-banner-mobile.jpg';
 import { PAGE_BANNER_IMG } from '../constants/pageBannerClasses';
+import VerifyPhoneNumberStep from './verification/VerifyPhoneNumberStep';
+import RegistrationCompletedModal from './verification/RegistrationCompletedModal';
 
-export default function RegisterPage({ onLoginClick }) {
+export default function RegisterPage({ onLoginClick, onRegisterSuccess, onContactCustomerService }) {
     const [showPassword, setShowPassword] = useState(false);
+    const [username, setUsername] = useState('');
+    const [phone, setPhone] = useState('');
+    const [phase, setPhase] = useState('form');
+    const [verifyKey, setVerifyKey] = useState(0);
+
+    const handleRegister = (e) => {
+        e.preventDefault();
+        setVerifyKey((k) => k + 1);
+        setPhase('verify');
+    };
+
+    const handleVerified = useCallback(() => {
+        setPhase('success');
+    }, []);
+
+    const handleRegistrationFlowComplete = useCallback(() => {
+        onRegisterSuccess?.(username.trim() || 'Member');
+    }, [username, onRegisterSuccess]);
 
     return (
         <main className="w-full bg-[linear-gradient(180deg,var(--gradient-register-page-start)_0%,var(--gradient-register-page-mid)_45%,var(--gradient-register-page-end)_100%)] py-6 md:py-10">
@@ -28,6 +48,20 @@ export default function RegisterPage({ onLoginClick }) {
 
                         <article className="bg-[linear-gradient(180deg,var(--gradient-register-page-start)_0%,var(--gradient-register-panel-mid)_52%,var(--gradient-register-panel-end)_100%)] p-4 text-white md:p-6">
                             <div className="mx-auto w-full max-w-[420px]">
+                                {phase === 'success' ? (
+                                    <div className="flex min-h-[260px] flex-col items-center justify-center gap-2 px-2 py-10 text-center sm:min-h-[300px]">
+                                        <p className="text-sm font-semibold text-[rgb(35_64_106)]">Finishing your registration…</p>
+                                    </div>
+                                ) : phase === 'verify' ? (
+                                    <VerifyPhoneNumberStep
+                                        key={verifyKey}
+                                        phoneRaw={phone}
+                                        onVerified={handleVerified}
+                                        onBack={() => setPhase('form')}
+                                        onContactCustomerService={onContactCustomerService}
+                                    />
+                                ) : (
+                                    <>
                                 <button
                                     type="button"
                                     className="mx-auto inline-flex h-10 items-center gap-2 rounded-md border border-[rgb(152_198_238)] bg-[var(--color-brand-deep)] px-4 text-sm font-semibold text-white transition hover:brightness-110"
@@ -42,13 +76,17 @@ export default function RegisterPage({ onLoginClick }) {
                                     <div className="h-px flex-1 bg-[rgb(171_204_235)]" />
                                 </div>
 
-                                <form className="mt-4 space-y-3">
+                                <form className="mt-4 space-y-3" onSubmit={handleRegister} noValidate>
                                     <label className="block">
                                         <span className="sr-only">Username</span>
                                         <div className="flex h-11 items-center gap-2 rounded-md border border-[rgb(159_201_238)] bg-[var(--color-surface-base-80)] px-3 shadow-[var(--inset-panel)]">
                                             <UserRound size={16} className="text-[rgb(79_125_183)]" />
                                             <input
+                                                name="username"
+                                                value={username}
+                                                onChange={(ev) => setUsername(ev.target.value)}
                                                 placeholder="Username *"
+                                                autoComplete="username"
                                                 className="w-full bg-transparent text-sm text-[rgb(35_64_106)] outline-none placeholder:text-[rgb(111_133_168)]"
                                             />
                                         </div>
@@ -88,6 +126,10 @@ export default function RegisterPage({ onLoginClick }) {
                                                 <Phone size={16} className="text-[rgb(79_125_183)]" />
                                                 <input
                                                     placeholder="Telephone Number *"
+                                                    value={phone}
+                                                    onChange={(ev) => setPhone(ev.target.value)}
+                                                    inputMode="tel"
+                                                    autoComplete="tel"
                                                     className="w-full bg-transparent text-sm text-[rgb(35_64_106)] outline-none placeholder:text-[rgb(111_133_168)]"
                                                 />
                                             </div>
@@ -133,7 +175,7 @@ export default function RegisterPage({ onLoginClick }) {
                                     </label>
 
                                     <button
-                                        type="button"
+                                        type="submit"
                                         className="btn-theme-auth h-11 w-full rounded-md text-base font-black tracking-wide transition hover:brightness-105"
                                     >
                                         REGISTER
@@ -149,11 +191,16 @@ export default function RegisterPage({ onLoginClick }) {
                                         LOGIN
                                     </button>
                                 </p>
+                                    </>
+                                )}
                             </div>
                         </article>
                     </div>
                 </div>
             </section>
+            {phase === 'success' ? (
+                <RegistrationCompletedModal onComplete={handleRegistrationFlowComplete} />
+            ) : null}
         </main>
     );
 }

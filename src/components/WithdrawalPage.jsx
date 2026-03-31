@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { AlertCircle, ArrowRight, Check, ChevronDown, HelpCircle } from 'lucide-react';
 import PaymentConfirmModal from './PaymentConfirmModal';
+import RolloverRequirementModal from './RolloverRequirementModal';
 import ProcessingCountdownBanner from './ProcessingCountdownBanner';
 import { useActionNotifications } from '../context/ActionNotificationsContext';
+import { PUSH_EVENT } from '../constants/pushNotificationCopy';
 import eWalletImg from '../assets/e-wallet.png';
 import instantDepositImg from '../assets/instant-deposit.png';
 
@@ -46,8 +48,11 @@ const BANKS = [
 const PRESET_AMOUNTS = [100, 200, 500, 1000, 2000, 5000];
 const PROCESSING_COUNTDOWN_SECONDS = 5 * 60;
 
+/** When false, opening Withdrawal (nav/URL) and Confirm & Withdraw both show the rollover warning. Replace with API / account flag. */
+const IS_ROLLOVER_REQUIREMENT_MET = false;
+
 export default function WithdrawalPage({ onNavigate }) {
-    const { showTransactionNotification } = useActionNotifications();
+    const { showTransactionNotification, showPushNotification } = useActionNotifications();
     const [step, setStep] = useState(1);
     const [withdrawalMethod, setWithdrawalMethod] = useState('ewallet');
     const [selectedEwallet, setSelectedEwallet] = useState('');
@@ -59,7 +64,10 @@ export default function WithdrawalPage({ onNavigate }) {
     const [bankDropdownOpen, setBankDropdownOpen] = useState(false);
     const [ewalletDropdownOpen, setEwalletDropdownOpen] = useState(false);
     const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+    const [rolloverWarningOpen, setRolloverWarningOpen] = useState(false);
     const [processingCountdown, setProcessingCountdown] = useState(null);
+    const lastSubmittedAmountRef = useRef(null);
+    const prevCountdownRef = useRef(null);
 
     const amountNum = parseFloat(amount) || 0;
     const selectedEwalletOption = E_WALLET_OPTIONS.find((e) => e.id === selectedEwallet);
@@ -88,11 +96,16 @@ export default function WithdrawalPage({ onNavigate }) {
             : selectedBank && bankAccountName.trim() && bankAccountNumber.trim()) && isValidAmount;
 
     const handleConfirmWithdraw = () => {
+        if (!IS_ROLLOVER_REQUIREMENT_MET) {
+            setRolloverWarningOpen(true);
+            return;
+        }
         setConfirmModalOpen(true);
     };
 
     const handleCloseConfirmModal = () => {
-        showTransactionNotification({ kind: 'withdrawal' });
+        lastSubmittedAmountRef.current = amountNum;
+        showTransactionNotification({ kind: 'withdrawal', amount: amountNum });
         setConfirmModalOpen(false);
         setStep(1);
         setAmount('');
@@ -106,6 +119,12 @@ export default function WithdrawalPage({ onNavigate }) {
     };
 
     useEffect(() => {
+        if (!IS_ROLLOVER_REQUIREMENT_MET) {
+            setRolloverWarningOpen(true);
+        }
+    }, []);
+
+    useEffect(() => {
         if (processingCountdown == null || processingCountdown <= 0) return undefined;
         const t = setInterval(() => {
             setProcessingCountdown((prev) => (prev <= 1 ? null : prev - 1));
@@ -113,12 +132,33 @@ export default function WithdrawalPage({ onNavigate }) {
         return () => clearInterval(t);
     }, [processingCountdown]);
 
+    useEffect(() => {
+        const prev = prevCountdownRef.current;
+        if (prev != null && prev > 0 && processingCountdown === null && lastSubmittedAmountRef.current != null) {
+            showPushNotification({
+                event: PUSH_EVENT.WITHDRAWAL_SUCCESS,
+                amount: lastSubmittedAmountRef.current,
+            });
+            lastSubmittedAmountRef.current = null;
+        }
+        prevCountdownRef.current = processingCountdown;
+    }, [processingCountdown, showPushNotification]);
+
     return (
         <div className="page-container">
             <PaymentConfirmModal
                 open={confirmModalOpen}
                 onClose={handleCloseConfirmModal}
                 type="withdrawal"
+            />
+            <RolloverRequirementModal
+                open={rolloverWarningOpen}
+                onClose={() => setRolloverWarningOpen(false)}
+                progressPercent={0}
+                latestTopUpBonus="1.00"
+                latestEventAt="2026-03-24 16:14:23"
+                remainingCurrent="0.00"
+                remainingTarget="1.00"
             />
             <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
@@ -146,7 +186,7 @@ export default function WithdrawalPage({ onNavigate }) {
             ) : (
             <>
             {/* Progress indicator */}
-            <div className="mb-8 overflow-x-auto">
+            <div className="mb-8 overflow-x-auto py-2">
                 <div className="flex min-w-max items-center gap-0">
                     {WITHDRAWAL_STEPS.map((s, idx) => {
                         const isCompleted = step > s.id;
@@ -160,7 +200,7 @@ export default function WithdrawalPage({ onNavigate }) {
                                             isCompleted
                                                 ? 'bg-[var(--color-accent-600)] text-white'
                                                 : isActive
-                                                  ? 'bg-[var(--color-accent-600)] text-white ring-4'
+                                                  ? 'bg-[var(--color-accent-600)] text-white ring-4 ring-[rgb(96_165_250_/_0.18)] shadow-[0_8px_18px_rgba(37,99,235,0.18)]'
                                                   : 'bg-[var(--color-surface-muted)] text-[var(--color-text-muted)]'
                                         }`}
                                     >

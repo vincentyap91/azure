@@ -176,68 +176,89 @@ function DailyBonusPanel() {
 
     return (
         <div className="space-y-6">
-            <div className="overflow-hidden rounded-2xl border border-[var(--color-border-accent)] bg-[linear-gradient(135deg,var(--color-accent-50)_0%,rgb(219_234_254)_45%,var(--color-surface-base)_100%)] shadow-[var(--shadow-subtle)]">
-                        <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:justify-between sm:p-6">
-                            <div className="min-w-0">
-                                <h3 className="text-lg font-bold text-[var(--color-text-strong)]">Daily Check In</h3>
-                                <p className="mt-2 text-sm text-[var(--color-text-main)]">
-                                    You have accumulated{' '}
-                                    <span className="font-bold text-amber-600">Day {streakDays}</span> check-in
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex flex-wrap items-center gap-4 border-t border-[var(--color-border-accent)] bg-[var(--color-surface-base)]/80 px-5 py-5 sm:px-6">
-                            <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-[linear-gradient(145deg,rgb(250_204_21)_0%,rgb(234_179_8)_100%)] shadow-md">
-                                <Trophy className="h-10 w-10 text-amber-950/90" strokeWidth={1.5} />
-                            </div>
-                            <p className="min-w-0 flex-1 text-sm font-medium text-[var(--color-text-muted)]">
-                                Claim MYR rewards each day. Some days may require minimum valid turnover on your main wallet.
-                            </p>
-                        </div>
+            <div className="overflow-hidden rounded-[var(--radius-panel-lg)] border border-[var(--color-border-brand)] bg-[var(--color-surface-base)] shadow-[var(--shadow-card-soft)]">
+                {/* Light blue header — matches screenshot top block */}
+                <div className="bg-[linear-gradient(180deg,var(--color-accent-50)_0%,rgb(219_234_254)_100%)] px-5 py-5 sm:px-6 sm:py-6">
+                    <h3 className="text-lg font-bold text-[rgb(18_63_128)] md:text-xl">Daily Check In</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-main)]">
+                        You have accumulated{' '}
+                        <span className="font-bold text-[var(--color-cta-strong-end)]">Day {streakDays}</span> check-in
+                    </p>
+                </div>
+                {/* Gray-blue info banner + square yellow trophy */}
+                <div className="flex flex-wrap items-center gap-4 border-t border-[var(--color-border-default)] bg-[linear-gradient(180deg,var(--color-surface-muted)_0%,var(--color-accent-50)_40%)] px-5 py-4 sm:px-6 sm:py-5">
+                    <div
+                        className="flex h-14 w-14 shrink-0 items-center justify-center rounded-[var(--radius-control)] bg-[linear-gradient(180deg,var(--color-cta-start)_0%,var(--color-cta-end)_100%)] shadow-[var(--shadow-subtle)] ring-1 ring-[var(--color-cta-border)]/50"
+                        aria-hidden
+                    >
+                        <Trophy className="h-7 w-7 text-[rgb(15_23_42)]" strokeWidth={2} />
                     </div>
-
+                    <p className="min-w-0 flex-1 text-sm font-medium leading-relaxed text-[var(--color-text-main)]">
+                        Claim MYR rewards each day. Some days may require minimum valid turnover on your main wallet.
+                    </p>
+                </div>
+                {/* Day cards — white area inside same card */}
+                <div className="border-t border-[var(--color-border-default)] bg-[var(--color-surface-base)] p-4 sm:p-5 md:p-6">
                     <div className="overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]">
-                        <div className="flex min-w-0 gap-2 sm:grid sm:grid-cols-7 sm:gap-3">
-                            {days.map((d) => (
-                                <div
-                                    key={d.id}
-                                    className="flex w-[104px] shrink-0 flex-col rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-base)] p-3 shadow-sm sm:w-auto sm:min-w-0"
-                                >
-                                    <p className="text-center text-xs font-bold uppercase tracking-wide text-[var(--color-text-muted)]">
-                                        {d.label}
-                                    </p>
-                                    <div className="mt-2 flex flex-1 flex-col items-center justify-center gap-1">
-                                        <Coins className="h-6 w-6 text-amber-600" />
-                                        <p className="text-center text-[11px] font-bold leading-tight text-[var(--color-text-strong)] sm:text-xs">
-                                            {d.reward}
+                        <div className="flex min-w-0 gap-2.5 sm:grid sm:grid-cols-7 sm:gap-3 md:gap-4">
+                            {days.map((d) => {
+                                const isClaimable = d.status === 'claimable';
+                                const isClaimed = d.status === 'claimed';
+                                return (
+                                    <div
+                                        key={d.id}
+                                        className={`flex w-[108px] shrink-0 snap-start flex-col rounded-[var(--radius-control)] border bg-[var(--color-surface-base)] p-3 shadow-[var(--shadow-subtle)] transition-[border-color,box-shadow] duration-200 sm:w-auto sm:min-w-0 sm:p-3.5 ${
+                                            isClaimable
+                                                ? 'border-2 border-[var(--color-nav-gold)] shadow-[var(--shadow-cta-soft)]'
+                                                : isClaimed
+                                                  ? 'border border-[var(--color-accent-200)]'
+                                                  : 'border border-[var(--color-border-default)]'
+                                        }`}
+                                    >
+                                        <p className="text-center text-[11px] font-bold uppercase tracking-wide text-[rgb(18_63_128)] sm:text-xs">
+                                            {d.label}
                                         </p>
-                                    </div>
-                                    <div className="mt-3">
-                                        {d.status === 'claimable' && (
-                                            <button
-                                                type="button"
-                                                onClick={() => handleClaimDay(d.id)}
-                                                className="btn-theme-primary w-full rounded-lg py-2 text-xs font-bold"
-                                            >
-                                                Claim
-                                            </button>
-                                        )}
-                                        {d.status === 'locked' && (
-                                            <div className="flex items-center justify-center gap-1 rounded-lg bg-[var(--color-surface-muted)] py-2 text-[var(--color-text-soft)]">
-                                                <Lock size={14} />
-                                                <span className="text-[10px] font-semibold uppercase">Locked</span>
-                                            </div>
-                                        )}
-                                        {d.status === 'claimed' && (
-                                            <p className="rounded-lg bg-[var(--color-accent-50)] py-2 text-center text-[10px] font-bold text-[var(--color-accent-800)]">
-                                                Claimed
+                                        <div className="mt-2 flex flex-1 flex-col items-center justify-center gap-1.5">
+                                            <Coins
+                                                className="h-6 w-6 text-[var(--color-cta-strong-end)] sm:h-7 sm:w-7"
+                                                strokeWidth={2}
+                                                aria-hidden
+                                            />
+                                            <p className="text-center text-[11px] font-bold leading-tight text-[rgb(18_63_128)] sm:text-xs">
+                                                {d.reward}
                                             </p>
-                                        )}
+                                        </div>
+                                        <div className="mt-3">
+                                            {d.status === 'claimable' && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleClaimDay(d.id)}
+                                                    className="btn-theme-primary w-full rounded-[var(--radius-control-xs)] py-2.5 text-xs font-bold text-white shadow-sm transition hover:brightness-105 active:brightness-95"
+                                                >
+                                                    Claim
+                                                </button>
+                                            )}
+                                            {d.status === 'locked' && (
+                                                <div className="flex items-center justify-center gap-1 rounded-[var(--radius-control-xs)] bg-[var(--color-surface-muted)] py-2 text-[var(--color-text-soft)]">
+                                                    <Lock size={13} strokeWidth={2.25} aria-hidden />
+                                                    <span className="text-[10px] font-bold uppercase tracking-wide">
+                                                        Locked
+                                                    </span>
+                                                </div>
+                                            )}
+                                            {d.status === 'claimed' && (
+                                                <p className="rounded-[var(--radius-control-xs)] bg-[var(--color-accent-50)] py-2 text-center text-[10px] font-bold text-[var(--color-accent-700)]">
+                                                    Claimed
+                                                </p>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     </div>
+                </div>
+            </div>
 
             <TermsBlock title="Terms & Condition" subtitle="Daily Check-In T&C">
                 <ol className="list-decimal space-y-2 pl-4">

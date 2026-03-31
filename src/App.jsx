@@ -1,4 +1,4 @@
-import React, { Suspense, useCallback, useEffect, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import {
   clearAuthSession,
   isAuthSessionExpired,
@@ -49,7 +49,8 @@ import './index.css';
 import LiveChatModal from './components/LiveChatModal';
 import { ReferralDataProvider } from './context/ReferralDataContext';
 import { FavouritesProvider } from './context/FavouritesContext';
-import { ActionNotificationsProvider } from './context/ActionNotificationsContext';
+import { ActionNotificationsProvider, useActionNotifications } from './context/ActionNotificationsContext';
+import { PUSH_EVENT } from './constants/pushNotificationCopy';
 import { REWARDS_PROGRAM_IDS } from './constants/rewardsPrograms';
 import { HISTORY_RECORD_PAGE_IDS } from './constants/historyRecordPages';
 import { parseGameDetailSlugFromPathname } from './utils/gameDetailRoutes';
@@ -146,35 +147,109 @@ function resolvePageFromPath() {
 }
 
 const DOWNLOAD_APP_HASH = '#download-app';
+const PROTECTED_PAGE_IDS = new Set([
+  'profile',
+  'verification',
+  'favourites',
+  'my-bets',
+  'loyalty-rewards',
+  'feedback',
+  'help-center',
+  'security',
+  'notifications',
+  'rebate',
+  'referral-commission',
+  'deposit',
+  'withdrawal',
+  ...HISTORY_RECORD_PAGE_IDS,
+]);
 
-function App() {
-  const [page, setPage] = useState(resolvePageFromPath);
-  const [routePath, setRoutePath] = useState(() => window.location.pathname);
+function isProtectedPage(pageId) {
+  return PROTECTED_PAGE_IDS.has(pageId);
+}
+
+/** Inactivity-based sign-out (demo client guard). Session storage expiry is separate. */
+const IDLE_LOGOUT_MS = 45 * 60 * 1000;
+
+function AppInner() {
+  const initialAuthUser = loadAuthSession();
+  const { showPushNotification } = useActionNotifications();
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [liveChatOpen, setLiveChatOpen] = useState(false);
-  const [authUser, setAuthUser] = useState(() => loadAuthSession());
+  const [authUser, setAuthUser] = useState(initialAuthUser);
+  const [page, setPage] = useState(() => {
+    const nextPage = resolvePageFromPath();
+    return !initialAuthUser && isProtectedPage(nextPage) ? 'home' : nextPage;
+  });
+  const [routePath, setRoutePath] = useState(() => {
+    const nextPage = resolvePageFromPath();
+    return !initialAuthUser && isProtectedPage(nextPage) ? '/' : window.location.pathname;
+  });
   const [selectedCasinoProviderIdFromMenu, setSelectedCasinoProviderIdFromMenu] = useState(null);
   const [selectedSlotsProviderIdFromMenu, setSelectedSlotsProviderIdFromMenu] = useState(null);
+  const lastActivityRef = useRef(Date.now());
 
-  const handleLogout = useCallback(() => {
-    setAuthUser(null);
-    clearAuthSession();
+  const redirectToPublicHome = useCallback(({ openLogin = false, replace = true } = {}) => {
+    const targetUrl = '/';
+    const currentFullUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+
+    setPage('home');
+    setRoutePath('/');
+
+    if (currentFullUrl !== targetUrl) {
+      if (replace) {
+        window.history.replaceState({}, '', targetUrl);
+      } else {
+        window.history.pushState({}, '', targetUrl);
+      }
+    }
+
+    if (openLogin) {
+      setLoginModalOpen(true);
+    }
   }, []);
 
-  const handleLogin = useCallback((userOrUsername) => {
+  const handleLogout = useCallback(
+    (opts) => {
+      const reason = opts && typeof opts === 'object' ? opts.reason : 'user';
+      if (reason === 'session_expired') {
+        showPushNotification({ event: PUSH_EVENT.SESSION_TIMEOUT });
+      } else if (reason === 'idle') {
+        showPushNotification({ event: PUSH_EVENT.AUTO_LOGOUT });
+      } else {
+        showPushNotification({ event: PUSH_EVENT.LOGOUT });
+      }
+      setAuthUser(null);
+      clearAuthSession();
+      setSelectedCasinoProviderIdFromMenu(null);
+      setSelectedSlotsProviderIdFromMenu(null);
+      if (isProtectedPage(page) || isProtectedPage(resolvePageFromPath())) {
+        redirectToPublicHome({ replace: true });
+      }
+    },
+    [page, redirectToPublicHome, showPushNotification]
+  );
+
+  const handleLogin = useCallback((userOrUsername, options = {}) => {
+    const { suppressLoginToast = false } = options;
     const user =
       typeof userOrUsername === 'object' && userOrUsername?.name
         ? userOrUsername
         : { name: userOrUsername || 'demo', balance: 'MYR 0.00', notifications: 1, vipLevel: 'Diamond' };
     setAuthUser(user);
     saveAuthSession(user);
-  }, []);
+    lastActivityRef.current = Date.now();
+    const name = typeof userOrUsername === 'object' && userOrUsername?.name ? userOrUsername.name : userOrUsername;
+    if (!suppressLoginToast) {
+      showPushNotification({ event: PUSH_EVENT.LOGIN_SUCCESS, userName: name || user.name });
+    }
+  }, [showPushNotification]);
 
   useEffect(() => {
     if (!authUser) return undefined;
     const checkExpiry = () => {
       if (isAuthSessionExpired()) {
-        handleLogout();
+        handleLogout({ reason: 'session_expired' });
       }
     };
     const id = window.setInterval(checkExpiry, 60_000);
@@ -186,13 +261,43 @@ function App() {
   }, [authUser, handleLogout]);
 
   useEffect(() => {
+    if (!authUser) return undefined;
+    const bump = () => {
+      lastActivityRef.current = Date.now();
+    };
+    const evs = ['mousedown', 'keydown', 'scroll', 'touchstart'];
+    evs.forEach((e) => window.addEventListener(e, bump, { passive: true }));
+    const interval = window.setInterval(() => {
+      if (Date.now() - lastActivityRef.current > IDLE_LOGOUT_MS) {
+        handleLogout({ reason: 'idle' });
+      }
+    }, 30_000);
+    return () => {
+      evs.forEach((e) => window.removeEventListener(e, bump));
+      window.clearInterval(interval);
+    };
+  }, [authUser, handleLogout]);
+
+  useEffect(() => {
     const onPopState = () => {
-      setPage(resolvePageFromPath());
+      const nextPage = resolvePageFromPath();
+      if (!authUser && isProtectedPage(nextPage)) {
+        redirectToPublicHome({ openLogin: true, replace: true });
+        return;
+      }
+      setPage(nextPage);
       setRoutePath(window.location.pathname);
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
-  }, []);
+  }, [authUser, redirectToPublicHome]);
+
+  useEffect(() => {
+    const nextPage = resolvePageFromPath();
+    if (!authUser && isProtectedPage(nextPage)) {
+      redirectToPublicHome({ openLogin: true, replace: true });
+    }
+  }, [authUser, redirectToPublicHome]);
 
   useEffect(() => {
     const p = window.location.pathname.toLowerCase();
@@ -269,6 +374,10 @@ function App() {
       withdrawal: '/withdrawal',
       ...Object.fromEntries(HISTORY_RECORD_PAGE_IDS.map((id) => [id, `/${id}`])),
     };
+    if (!authUser && isProtectedPage(resolvedPage)) {
+      setLoginModalOpen(true);
+      return;
+    }
     const nextPath = pathByPage[resolvedPage] ?? pathByPage[targetPage] ?? '/';
     setPage(resolvedPage);
 
@@ -304,9 +413,6 @@ function App() {
   };
 
   return (
-    <ReferralDataProvider>
-    <FavouritesProvider>
-    <ActionNotificationsProvider>
     <div className={`relative min-h-screen w-full overflow-x-hidden font-sans ${
       page === 'home'
         ? 'bg-[var(--color-page-home)]'
@@ -343,7 +449,7 @@ function App() {
         onLoginClick={() => setLoginModalOpen(true)}
         onRegisterClick={() => handleNavigate('register')}
         authUser={authUser}
-        onLogout={handleLogout}
+        onLogout={() => handleLogout({ reason: 'user' })}
         onAccountDetailsClick={() => handleNavigate('profile')}
         onLiveChatClick={() => setLiveChatOpen(true)}
         onCasinoProviderSelect={(menuProvider) => {
@@ -398,7 +504,10 @@ function App() {
       ) : page === 'vip' ? (
         <VipPage />
       ) : page === 'referral' ? (
-        <ReferralPage />
+        <ReferralPage
+          authUser={authUser}
+          onLoginClick={() => setLoginModalOpen(true)}
+        />
       ) : page === 'profile' ? (
         <ProfilePage authUser={authUser} onLogout={handleLogout} onNavigate={handleNavigate} onLiveChatClick={() => setLiveChatOpen(true)} />
       ) : page === 'loyalty-rewards' ? (
@@ -454,7 +563,15 @@ function App() {
           <WithdrawalPage onNavigate={handleNavigate} />
         </AccountLayout>
       ) : (
-        <RegisterPage onLoginClick={() => setLoginModalOpen(true)} />
+        <RegisterPage
+          onLoginClick={() => setLoginModalOpen(true)}
+          onRegisterSuccess={(userName) => {
+            showPushNotification({ event: PUSH_EVENT.REGISTER_SUCCESS, userName });
+            handleLogin(userName, { suppressLoginToast: true });
+            handleNavigate('home');
+          }}
+          onContactCustomerService={() => setLiveChatOpen(true)}
+        />
       )}
       </Suspense>
 
@@ -481,10 +598,17 @@ function App() {
         authUser={authUser}
       />
     </div>
-    </ActionNotificationsProvider>
-    </FavouritesProvider>
-    </ReferralDataProvider>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <ReferralDataProvider>
+      <FavouritesProvider>
+        <ActionNotificationsProvider>
+          <AppInner />
+        </ActionNotificationsProvider>
+      </FavouritesProvider>
+    </ReferralDataProvider>
+  );
+}
