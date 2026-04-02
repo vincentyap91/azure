@@ -108,7 +108,7 @@ export default function EsportsPage({ onNavigate }) {
                                     <img
                                         src={bannerProvider.src}
                                         alt={bannerProvider.name}
-                                        className="h-10 max-w-[140px] object-contain sm:h-12 sm:max-w-[170px] md:h-20 md:max-w-none"
+                                        className="h-10 max-w-[140px] object-contain sm:h-12 sm:max-w-[170px] md:h-15 md:max-w-none"
                                     />
                                 </div>
                                 <h1 className="mt-3 hidden text-3xl font-bold uppercase tracking-[0.03em] text-[rgb(25_41_71)] md:block">
