@@ -1,5 +1,6 @@
 ﻿import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
 
 export default function PromotionDetailModal({
     open,
@@ -12,6 +13,8 @@ export default function PromotionDetailModal({
     applySteps = [],
     providers = [],
 }) {
+    useBodyScrollLock(open);
+
     useEffect(() => {
         if (!open) {
             return undefined;
@@ -23,12 +26,9 @@ export default function PromotionDetailModal({
             }
         };
 
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
         window.addEventListener('keydown', handleEscape);
 
         return () => {
-            document.body.style.overflow = previousOverflow;
             window.removeEventListener('keydown', handleEscape);
         };
     }, [open, onClose]);

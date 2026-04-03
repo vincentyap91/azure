@@ -42,6 +42,7 @@ import { settingsOptions } from '../constants/settingsOptions';
 import { REWARDS_NAV_ICONS, REWARDS_PROGRAMS } from '../constants/rewardsPrograms';
 import { getVipStatus } from '../constants/vipStatus';
 import VipStatusPill from './VipStatusPill';
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
 
 const slotsNavDropdownProviders = slotProvidersForNavDropdown();
 const DESKTOP_MAIN_LINKS = [
@@ -223,6 +224,8 @@ export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'h
         { id: 'rebate', label: 'Rebate', icon: Percent },
     ];
 
+    useBodyScrollLock(mobileMenuOpen);
+
     useEffect(() => {
         if (!profileMenuOpen) {
             return undefined;
@@ -237,19 +240,6 @@ export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'h
         window.addEventListener('pointerdown', handlePointerDown);
         return () => window.removeEventListener('pointerdown', handlePointerDown);
     }, [profileMenuOpen]);
-
-    useEffect(() => {
-        if (!mobileMenuOpen) {
-            return undefined;
-        }
-
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
-
-        return () => {
-            document.body.style.overflow = previousOverflow;
-        };
-    }, [mobileMenuOpen]);
 
     useEffect(() => {
         setMobileMenuOpen(false);

@@ -15,8 +15,14 @@ const CERTIFICATION_LOGOS = [
     { key: 'begambleaware', src: footerBeGambleAware, alt: 'BeGambleAware' },
 ];
 
-export default function Footer() {
-    const links = ['About Us', 'Live Chat', 'Referral', 'Terms & Conditions', 'Follow Us'];
+export default function Footer({ onNavigate, onLiveChatClick }) {
+    const links = [
+        { label: 'About Us', onClick: () => onNavigate?.('about') },
+        { label: 'Live Chat', onClick: () => onLiveChatClick?.() },
+        { label: 'Referral', onClick: () => onNavigate?.('referral') },
+        { label: 'Terms & Conditions', onClick: () => onNavigate?.('help-center', { helpTab: 'tc' }) },
+        { label: 'Follow Us', href: '#' },
+    ];
 
     return (
         <footer className="relative flex w-full flex-col border-t border-[rgb(168_226_251)] bg-[linear-gradient(180deg,var(--gradient-footer-start)_0%,var(--gradient-footer-end)_100%)] pb-6 pt-12">
@@ -39,7 +45,13 @@ export default function Footer() {
                     <div className="flex-1 flex flex-wrap justify-end gap-x-2 gap-y-2 content-start self-start pt-1">
                         {links.map((link, idx) => (
                             <React.Fragment key={idx}>
-                                <a href="#" className="text-xs font-semibold text-[var(--color-brand-secondary)] transition-colors hover:text-[var(--color-brand-primary)]">{link}</a>
+                                <button
+                                    type="button"
+                                    onClick={link.onClick}
+                                    className="text-xs font-semibold text-[var(--color-brand-secondary)] transition-colors hover:text-[var(--color-brand-primary)]"
+                                >
+                                    {link.label}
+                                </button>
                                 {idx < links.length - 1 && <span className="select-none text-xs text-[rgb(0_174_239_/_0.5)]">|</span>}
                             </React.Fragment>
                         ))}

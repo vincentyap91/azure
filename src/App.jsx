@@ -35,6 +35,7 @@ import FavouritesPage from './components/FavouritesPage';
 import MyBetsPage from './components/MyBetsPage';
 import FeedbackPage from './components/FeedbackPage';
 import HelpCenterPage from './components/HelpCenterPage';
+import AboutUsPage from './components/AboutUsPage';
 import SecurityPage from './components/SecurityPage';
 import NotificationsPage from './components/NotificationsPage';
 import RebatePage from './components/RebatePage';
@@ -117,6 +118,12 @@ function resolvePageFromPath() {
   }
   if (pathname === '/help' || pathname === '/help-center') {
     return 'help-center';
+  }
+  if (pathname === '/terms' || pathname === '/terms-and-conditions') {
+    return 'help-center';
+  }
+  if (pathname === '/about' || pathname === '/about-us') {
+    return 'about';
   }
   if (pathname === '/security') {
     return 'security';
@@ -310,6 +317,10 @@ function AppInner() {
     if (p === '/app-download' || p === '/download' || p === '/mobile') {
       window.history.replaceState({}, '', `/${DOWNLOAD_APP_HASH}`);
     }
+    if (p === '/terms' || p === '/terms-and-conditions') {
+      window.history.replaceState({}, '', '/help#tc');
+      window.dispatchEvent(new Event('hashchange'));
+    }
   }, []);
 
   const scrollToDownloadAppSection = useCallback(() => {
@@ -373,6 +384,7 @@ function AppInner() {
       'loyalty-rewards': '/loyalty-rewards',
       feedback: '/feedback',
       'help-center': '/help',
+      about: '/about',
       security: '/security',
       notifications: '/notifications',
       rebate: '/rebate',
@@ -408,12 +420,16 @@ function AppInner() {
     if (resolvedPage === 'deposit' && options?.depositBonusId) {
       fullUrl = `/deposit?bonus=${encodeURIComponent(String(options.depositBonusId))}`;
     }
+    if (resolvedPage === 'help-center') {
+      const helpTab = options?.helpTab;
+      fullUrl = helpTab ? `/help#${encodeURIComponent(String(helpTab))}` : '/help';
+    }
 
     const currentFull = `${window.location.pathname}${window.location.search}${window.location.hash}`;
     if (currentFull !== fullUrl) {
       window.history.pushState({}, '', fullUrl);
       // pushState does not fire hashchange; rewards UI listens on hashchange for in-page tab switches
-      if (resolvedPage === 'loyalty-rewards') {
+      if (resolvedPage === 'loyalty-rewards' || resolvedPage === 'help-center') {
         window.dispatchEvent(new Event('hashchange'));
       }
     }
@@ -443,6 +459,8 @@ function AppInner() {
             : page === 'vip'
               ? 'bg-[var(--color-page-default)]'
             : page === 'referral'
+              ? 'bg-[var(--color-page-default)]'
+            : page === 'about'
               ? 'bg-[var(--color-page-default)]'
             : page === 'profile' || page === 'verification' || page === 'favourites' || page === 'my-bets' || page === 'loyalty-rewards' || page === 'feedback' || page === 'help-center' || page === 'security' || page === 'notifications' || page === 'rebate' || page === 'referral-commission' || page === 'deposit' || page === 'withdrawal' || HISTORY_RECORD_PAGE_IDS.includes(page)
               ? 'bg-[var(--color-page-account)]'
@@ -540,9 +558,11 @@ function AppInner() {
         <AccountLayout activePage="feedback" authUser={authUser} onNavigate={handleNavigate} onLogout={handleLogout} onLiveChatClick={() => setLiveChatOpen(true)}>
           <FeedbackPage />
         </AccountLayout>
+      ) : page === 'about' ? (
+        <AboutUsPage />
       ) : page === 'help-center' ? (
         <AccountLayout activePage="help-center" authUser={authUser} onNavigate={handleNavigate} onLogout={handleLogout} onLiveChatClick={() => setLiveChatOpen(true)}>
-          <HelpCenterPage />
+          <HelpCenterPage navigationState={pageNavigationState} />
         </AccountLayout>
       ) : page === 'security' ? (
         <AccountLayout activePage="security" authUser={authUser} onNavigate={handleNavigate} onLogout={handleLogout} onLiveChatClick={() => setLiveChatOpen(true)}>
@@ -585,7 +605,7 @@ function AppInner() {
       )}
       </Suspense>
 
-      <Footer />
+      <Footer onNavigate={handleNavigate} onLiveChatClick={() => setLiveChatOpen(true)} />
       </div>
 
       <LoginModal

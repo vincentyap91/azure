@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { Check, X } from 'lucide-react';
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
 
 export default function PaymentConfirmModal({ open, onClose, type = 'deposit' }) {
+    useBodyScrollLock(open);
+
     useEffect(() => {
         if (!open) return undefined;
         const handleEscape = (e) => { if (e.key === 'Escape') onClose?.(); };
-        const prevOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
         window.addEventListener('keydown', handleEscape);
         return () => {
-            document.body.style.overflow = prevOverflow;
             window.removeEventListener('keydown', handleEscape);
         };
     }, [open, onClose]);

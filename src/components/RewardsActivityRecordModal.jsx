@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react';
 import { X } from 'lucide-react';
 import AccountHistoryRecordPanel from './AccountHistoryRecordPanel';
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
 
 /**
  * Rewards “Record” popup — same filter + table pattern as Referral Commission → History.
  */
 export default function RewardsActivityRecordModal({ open, onClose, filterSlot, columns, recordContextKey, tableEmptyMessage }) {
+    useBodyScrollLock(open);
+
     useEffect(() => {
         if (!open) return undefined;
         const handleEscape = (event) => {
             if (event.key === 'Escape') onClose?.();
         };
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
         window.addEventListener('keydown', handleEscape);
         return () => {
-            document.body.style.overflow = previousOverflow;
             window.removeEventListener('keydown', handleEscape);
         };
     }, [open, onClose]);

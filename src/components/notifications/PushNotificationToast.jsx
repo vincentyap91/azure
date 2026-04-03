@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import {
     AlertTriangle,
     ArrowDownToLine,
@@ -17,7 +17,7 @@ import { PUSH_VARIANT } from '../../constants/pushNotificationCopy';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 
 const DURATION_MS_DEFAULT = 5200;
-const DURATION_MS_AUTH = 4200;
+const DURATION_MS_AUTH = 5200;
 
 const variantStyles = {
     [PUSH_VARIANT.success]: {
@@ -222,5 +222,3 @@ export function PushNotificationToast({
 export const PUSH_TOAST_DURATION_DEFAULT_MS = DURATION_MS_DEFAULT;
 export const PUSH_TOAST_DURATION_AUTH_MS = DURATION_MS_AUTH;
 export const ACTION_NOTIFICATION_DURATION_MS = DURATION_MS_DEFAULT;
-
-

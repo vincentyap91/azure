@@ -1,5 +1,6 @@
 ﻿import React, { useEffect } from 'react';
 import { AlertCircle, AlertTriangle } from 'lucide-react';
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
 
 function formatPercent(value) {
     const n = Number(value);
@@ -77,16 +78,15 @@ export default function RolloverRequirementModal({
     remainingTarget = '1.00',
     warningMessage = 'Unable to withdraw funds due to incomplete rollover progress.',
 }) {
+    useBodyScrollLock(open);
+
     useEffect(() => {
         if (!open) return undefined;
         const onKey = (e) => {
             if (e.key === 'Escape') onClose?.();
         };
-        const prevOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
         document.addEventListener('keydown', onKey);
         return () => {
-            document.body.style.overflow = prevOverflow;
             document.removeEventListener('keydown', onKey);
         };
     }, [open, onClose]);

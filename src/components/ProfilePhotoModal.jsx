@@ -1,5 +1,6 @@
 ﻿import React, { useEffect, useRef, useState } from 'react';
 import { ImagePlus, UserCircle2, X } from 'lucide-react';
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
 
 const ACCEPT = 'image/jpeg,image/png,image/webp,image/gif';
 const MAX_BYTES = 2 * 1024 * 1024;
@@ -8,6 +9,8 @@ export default function ProfilePhotoModal({ open, onClose, initialUrl, onSave })
     const inputRef = useRef(null);
     const [preview, setPreview] = useState(null);
     const [error, setError] = useState('');
+
+    useBodyScrollLock(open);
 
     useEffect(() => {
         if (!open) {
@@ -18,11 +21,8 @@ export default function ProfilePhotoModal({ open, onClose, initialUrl, onSave })
                 onClose?.();
             }
         };
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
         window.addEventListener('keydown', handleEscape);
         return () => {
-            document.body.style.overflow = previousOverflow;
             window.removeEventListener('keydown', handleEscape);
         };
     }, [open, onClose]);

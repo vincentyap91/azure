@@ -1,6 +1,8 @@
 ﻿import React, { useEffect } from 'react';
 import { Percent, Wallet, X } from 'lucide-react';
 
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
+
 function InfoCard({ label, value, icon: Icon }) {
     return (
         <div className="flex items-center gap-4 rounded-[20px] border border-[rgb(228_234_243)] bg-white p-4 shadow-[0_4px_14px_rgba(15,23,42,0.04)] sm:p-5">
@@ -27,16 +29,15 @@ export default function ProviderLaunchModal({
     onStartGame,
     startLabel = 'Start Game',
 }) {
+    useBodyScrollLock(open);
+
     useEffect(() => {
         if (!open) return undefined;
         const handleEscape = (e) => {
             if (e.key === 'Escape') onClose?.();
         };
-        const prevOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
         window.addEventListener('keydown', handleEscape);
         return () => {
-            document.body.style.overflow = prevOverflow;
             window.removeEventListener('keydown', handleEscape);
         };
     }, [open, onClose]);

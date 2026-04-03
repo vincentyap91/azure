@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { AlertCircle, AlertTriangle, X } from 'lucide-react';
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
 
 export default function PromotionWarningModal({
     open,
@@ -10,16 +11,15 @@ export default function PromotionWarningModal({
     warningMessage = 'You may not be able to redeem some promotions after you continue.',
     continueLabel = 'Continue Anyway',
 }) {
+    useBodyScrollLock(open);
+
     useEffect(() => {
         if (!open) return undefined;
         const handleEscape = (event) => {
             if (event.key === 'Escape') onClose?.();
         };
-        const prevOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
         window.addEventListener('keydown', handleEscape);
         return () => {
-            document.body.style.overflow = prevOverflow;
             window.removeEventListener('keydown', handleEscape);
         };
     }, [open, onClose]);
@@ -39,7 +39,7 @@ export default function PromotionWarningModal({
                 role="dialog"
                 aria-modal="true"
                 aria-label="Promotion warning"
-                className="relative z-[1] flex w-full max-w-[620px] flex-col overflow-hidden rounded-[22px] border border-[rgb(219_228_243)] bg-[var(--color-surface-base)] shadow-[var(--shadow-modal)]"
+                className="relative z-[1] flex w-full max-w-[500px] flex-col overflow-hidden rounded-[22px] border border-[rgb(219_228_243)] bg-[var(--color-surface-base)] shadow-[var(--shadow-modal)]"
                 onClick={(event) => event.stopPropagation()}
             >
                 <div className="flex items-center justify-between gap-4 border-b border-[rgb(228_234_243)] px-5 py-3.5 sm:px-6">

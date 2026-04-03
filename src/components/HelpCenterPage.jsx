@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChevronDown, Search } from 'lucide-react';
 
 const mainTabs = [
@@ -20,10 +20,70 @@ const subCategoryTabs = [
 const faqItems = [
     { id: 1, question: 'How do I create an account?', answer: 'Click the Register button in the top right corner, fill in your details, and verify your email. You can start playing within minutes.' },
     { id: 2, question: 'What payment methods are accepted?', answer: 'We accept major e-wallets, bank transfers, and credit/debit cards. All transactions are encrypted and secure.' },
-    { id: 3, question: 'How do I withdraw my winnings?', answer: 'Go to your account dashboard, select Withdraw, choose your preferred method, and follow the verification steps. Withdrawals are typically processed within 24–48 hours.' },
+    { id: 3, question: 'How do I withdraw my winnings?', answer: 'Go to your account dashboard, select Withdraw, choose your preferred method, and follow the verification steps. Withdrawals are typically processed within 24-48 hours.' },
     { id: 4, question: 'Is my personal information secure?', answer: 'Yes. We use industry-standard encryption and never share your data with third parties. Your account is protected by secure login and optional 2FA.' },
     { id: 5, question: 'How can I contact customer support?', answer: 'Use our 24/7 Live Chat from any page, or email support@riocity.com. Our team typically responds within minutes.' },
 ];
+
+const termsSections = [
+    {
+        title: 'General',
+        items: [
+            'These terms govern access to and use of the Riocity9 platform. By registering, logging in, depositing, placing bets, or using any service on the site, you confirm that you have read, understood, and agreed to these terms together with any applicable game rules, bonus terms, or platform policies.',
+            'You must be of legal age in your jurisdiction to register and use the platform.',
+            'You are responsible for ensuring that online gaming is permitted where you access the service.',
+            'Riocity9 may refuse service, suspend access, or restrict activity where required for security, compliance, operational, or responsible-gaming reasons.',
+            'Rules, promotions, products, limits, and content may be updated from time to time, and continued use of the platform constitutes acceptance of the latest version.',
+        ],
+    },
+    {
+        title: "Member's Account",
+        items: [
+            'Members are responsible for keeping account information accurate, complete, and secure. The account holder is solely responsible for activity conducted through their credentials unless otherwise determined by Riocity9 after review.',
+            'Only one account is allowed per person, household, device group, payment source, or shared environment unless the platform has approved otherwise.',
+            'Registration details must be true and kept up to date. Riocity9 may request supporting documents at any time for identity or account review.',
+            'Passwords, verification codes, and account access details must not be shared with any third party.',
+            'Accounts may be suspended, limited, or closed if duplicate registration, identity inconsistency, suspicious activity, or policy breaches are detected.',
+        ],
+    },
+    {
+        title: 'Deposits & Withdrawals',
+        items: [
+            'All financial activity on the platform is subject to internal review, payment-channel rules, fraud screening, and verification requirements. Processing time can vary depending on the payment method, account status, and compliance checks.',
+            'Deposits and withdrawals may only be made through approved channels and under the account holder name where required.',
+            'Riocity9 may request identity, payment-source, or account-ownership documents before approving selected transactions.',
+            'Withdrawal requests may be delayed, adjusted, or rejected where rollover, bonus, security, or verification requirements remain incomplete.',
+            'Chargebacks, payment disputes, fraudulent transaction claims, or reversed deposits may lead to account suspension and recovery action.',
+        ],
+    },
+    {
+        title: 'Management of Betting Transactions',
+        items: [
+            'All wagers, bet confirmations, settlements, cancellations, and related records are managed according to platform rules and the relevant product or game logic in effect at the time the transaction is accepted.',
+            'A bet is only considered accepted once it is confirmed by the platform and recorded in the betting history or system record.',
+            'Riocity9 may void, reject, or cancel bets affected by obvious errors, incorrect odds, duplicate transmissions, pricing mistakes, technical faults, or interrupted game states.',
+            'Where a game round, event, or settlement is impacted by malfunction, disconnection, corruption, or force majeure, the platform reserves the right to review or reverse the affected transaction.',
+            'System records maintained by Riocity9 will be treated as the primary reference in the event of transaction disputes unless there is clear evidence to the contrary.',
+        ],
+    },
+    {
+        title: 'Misc / Disclaimers / Other Terms',
+        items: [
+            'Riocity9 provides the service on an operational best-effort basis and does not guarantee uninterrupted availability at all times. Access may be affected by maintenance, connectivity issues, third-party providers, or events beyond reasonable control.',
+            'The platform is not liable for indirect, incidental, or consequential loss arising from the use of the service except where required by law.',
+            'All trademarks, content, design assets, and platform materials remain the property of their respective owners and may not be reused without permission.',
+            'If any part of these terms is found invalid or unenforceable, the remaining provisions will continue to apply.',
+            'For account support or clarification on platform rules, members should contact customer service through the official support channels available on the site.',
+        ],
+    },
+];
+
+function resolveHelpMainTab(defaultTab) {
+    const hashTab = typeof window !== 'undefined' ? window.location.hash.slice(1).toLowerCase() : '';
+    if (hashTab === 'faq' || hashTab === 'tc' || hashTab === 'bet-rules') return hashTab;
+    if (defaultTab === 'faq' || defaultTab === 'tc' || defaultTab === 'bet-rules') return defaultTab;
+    return 'faq';
+}
 
 function AccordionItem({ index, question, answer, isOpen, onToggle }) {
     return (
@@ -50,11 +110,25 @@ function AccordionItem({ index, question, answer, isOpen, onToggle }) {
     );
 }
 
-export default function HelpCenterPage() {
-    const [mainTab, setMainTab] = useState('faq');
+export default function HelpCenterPage({ navigationState = null }) {
+    const [mainTab, setMainTab] = useState(() => resolveHelpMainTab(navigationState?.helpTab));
     const [subTab, setSubTab] = useState('general');
     const [searchQuery, setSearchQuery] = useState('');
     const [expandedId, setExpandedId] = useState(null);
+
+    useEffect(() => {
+        setMainTab(resolveHelpMainTab(navigationState?.helpTab));
+    }, [navigationState?.helpTab]);
+
+    useEffect(() => {
+        const syncFromHash = () => setMainTab(resolveHelpMainTab(navigationState?.helpTab));
+        window.addEventListener('hashchange', syncFromHash);
+        window.addEventListener('popstate', syncFromHash);
+        return () => {
+            window.removeEventListener('hashchange', syncFromHash);
+            window.removeEventListener('popstate', syncFromHash);
+        };
+    }, [navigationState?.helpTab]);
 
     const toggleExpand = (id) => {
         setExpandedId((current) => (current === id ? null : id));
@@ -137,10 +211,26 @@ export default function HelpCenterPage() {
                         </div>
                     )}
                     {mainTab === 'tc' && (
-                        <div className="surface-card rounded-2xl p-6 md:p-8">
-                            <p className="text-sm font-medium leading-relaxed text-[var(--color-text-muted)]">
-                                Terms and Conditions content will appear here. This section covers account rules, user responsibilities, and platform policies.
-                            </p>
+                        <div className="space-y-4">
+                            {termsSections.map((section) => (
+                                <section key={section.title} className="surface-card rounded-2xl p-6 md:p-8">
+                                    <h2 className="text-lg font-bold tracking-tight text-[var(--color-text-strong)] md:text-xl">
+                                        {section.title}
+                                    </h2>
+                                    <ol className="mt-4 space-y-3">
+                                        {section.items.map((item, index) => (
+                                            <li key={item} className="flex items-start gap-3">
+                                                <span className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-50)] text-xs font-bold text-[var(--color-accent-700)]">
+                                                    {index + 1}
+                                                </span>
+                                                <p className="text-sm font-medium leading-relaxed text-[var(--color-text-muted)]">
+                                                    {item}
+                                                </p>
+                                            </li>
+                                        ))}
+                                    </ol>
+                                </section>
+                            ))}
                         </div>
                     )}
                     {mainTab === 'bet-rules' && (

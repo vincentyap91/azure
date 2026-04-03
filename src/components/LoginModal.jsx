@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Lock, Send, UserRound, X } from 'lucide-react';
 import TwoFactorLoginModal from './TwoFactorLoginModal';
 import { loginWithTelegram, verifyLogin, verify2FALogin } from '../services/authService';
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
 
 export default function LoginModal({
     open,
@@ -18,6 +19,8 @@ export default function LoginModal({
     const [loginError, setLoginError] = useState('');
     const [loginLoading, setLoginLoading] = useState(false);
     const [telegramLoading, setTelegramLoading] = useState(false);
+
+    useBodyScrollLock(open);
 
     useEffect(() => {
         if (!open) {
@@ -36,11 +39,8 @@ export default function LoginModal({
                 else onClose?.();
             }
         };
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
         window.addEventListener('keydown', handleEscape);
         return () => {
-            document.body.style.overflow = previousOverflow;
             window.removeEventListener('keydown', handleEscape);
         };
     }, [open, onClose, show2FA]);
