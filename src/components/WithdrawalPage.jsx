@@ -249,13 +249,13 @@ export default function WithdrawalPage({ onNavigate, navigationState }) {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div className="grid grid-cols-2 gap-3 sm:gap-4">
                             {WITHDRAWAL_METHODS.map(({ id, label, image }) => (
                                 <button
                                     key={id}
                                     type="button"
                                     onClick={() => setWithdrawalMethod(id)}
-                                    className={`flex flex-col items-center gap-3 rounded-xl border-2 p-6 transition ${
+                                    className={`flex h-full min-h-[7.25rem] flex-col items-center justify-center gap-2 rounded-xl border-2 p-4 text-center transition sm:min-h-0 sm:gap-3 sm:p-6 ${
                                         withdrawalMethod === id
                                             ? 'border-[var(--color-accent-500)] bg-[var(--color-accent-50)]'
                                             : 'border-[var(--color-border-default)] bg-[var(--color-surface-base)] hover:border-[var(--color-accent-200)]'
@@ -264,9 +264,9 @@ export default function WithdrawalPage({ onNavigate, navigationState }) {
                                     <img
                                         src={image}
                                         alt={label}
-                                        className="h-14 w-auto object-contain"
+                                        className="h-12 w-auto max-w-full object-contain sm:h-14"
                                     />
-                                    <p className="text-base font-bold text-[var(--color-text-strong)]">{label}</p>
+                                    <p className="text-sm font-bold leading-tight text-[var(--color-text-strong)] sm:text-base">{label}</p>
                                 </button>
                             ))}
                         </div>

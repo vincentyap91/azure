@@ -1,5 +1,6 @@
 ﻿import React, { useEffect, useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, HelpCircle, Home, MessageCircle, MoreHorizontal, Search, Send, X } from 'lucide-react';
+import liveChatSupportAvatar from '../assets/live-chat-support-avatar.svg';
 
 const messageThreads = [
     {
@@ -10,29 +11,25 @@ const messageThreads = [
         time: '3w',
         unread: true,
         status: 'Active 4h ago',
-        avatar: 'ðŸ¦‹',
-        accent: 'bg-[linear-gradient(180deg,#ffdfc2_0%,#d77fa5_100%)]',
         type: 'article',
-        articleTitle: 'CNY Is Just Around The Corner Boss ðŸŽ',
+        articleTitle: 'CNY Is Just Around The Corner Boss 🐎',
         articleBody: [
             'Want extra ong this CNY? Better join GemChat early!',
-            'Members get exclusive rewards, surprise treats, and æ˜¥èŠ‚ gifts ðŸ’Œ',
+            'Members get exclusive rewards, surprise treats, and 春节 gifts 💌',
             'Join our player community for info on promos, bonuses & more.',
-            'Wanna know even more? GemNews is perfect for ya ðŸ‘€',
+            'Wanna know even more? GemNews is perfect for ya 👀',
         ],
     },
     {
         id: 'luna-social',
         name: 'Luna',
         title: 'Chat with Luna',
-        preview: 'Luna: Social Platforms You Use âœ¨ Hi vince...',
+        preview: 'Luna: Social Platforms You Use ✨ Hi vince...',
         time: '3w',
         unread: true,
         status: 'Active 4h ago',
-        avatar: 'ðŸ¦‹',
-        accent: 'bg-[linear-gradient(180deg,#ffdfc2_0%,#d77fa5_100%)]',
         type: 'article',
-        articleTitle: 'Social Platforms You Use âœ¨',
+        articleTitle: 'Social Platforms You Use ✨',
         articleBody: [
             'Hi demo, we are sharing more support updates on our social platforms.',
             'Follow GemChat for the latest promos, reminders, and festive news.',
@@ -43,24 +40,20 @@ const messageThreads = [
         id: 'nora',
         name: 'Nora',
         title: 'The team can also help',
-        preview: 'Hello there. ðŸŒŸ Welcome to GemBet Support. ðŸ‘‹',
+        preview: 'Hello there. 🌟 Welcome to GemBet Support. 👋',
         time: 'Just now',
         unread: false,
         status: 'The team can also help',
-        avatar: 'ðŸ§š',
-        accent: 'bg-[linear-gradient(180deg,#ffb56f_0%,#8a4cff_100%)]',
         type: 'assistant',
     },
     {
         id: 'rory',
         name: 'Rory',
         title: 'Active',
-        preview: 'Please select a topic related to your inquiry. ðŸ™',
+        preview: 'Please select a topic related to your inquiry. 🙏',
         time: 'Just now',
         unread: false,
         status: 'Active',
-        avatar: 'ðŸ°',
-        accent: 'bg-[linear-gradient(180deg,#445bff_0%,#112a88_100%)]',
         type: 'support',
     },
 ];
@@ -82,14 +75,19 @@ const helpTopics = [
 
 const supportTags = ['Deposit', 'Withdrawal', 'Bonus', 'Verification', 'Technical Issue', 'Sports Inquiries', 'Casino Inquiries', 'Other'];
 
-function Avatar({ thread, small = false }) {
+function Avatar({ small = false }) {
     return (
         <span
-            className={`inline-flex items-center justify-center rounded-full border border-white/20 text-white shadow-[var(--shadow-brand-soft)] ${thread.accent} ${
-                small ? 'h-10 w-10 text-lg' : 'h-12 w-12 text-xl'
+            className={`inline-flex shrink-0 overflow-hidden rounded-full border border-[rgb(59_130_246_/_0.22)] bg-[var(--color-surface-base)] shadow-[var(--shadow-brand-soft)] ${
+                small ? 'h-10 w-10' : 'h-12 w-12'
             }`}
         >
-            {thread.avatar}
+            <img
+                src={liveChatSupportAvatar}
+                alt=""
+                className="h-full w-full object-cover object-center"
+                draggable={false}
+            />
         </span>
     );
 }
@@ -208,7 +206,7 @@ export default function LiveChatModal({ open, onClose, authUser }) {
                 <div className="border-b border-[rgb(171_204_235)] pb-5">
                     <p className="text-2xl font-bold leading-tight text-[var(--color-text-strong)]">
                         Hi {username},
-                        <span className="ml-2 inline-block">ðŸ‘‹</span>
+                        <span className="ml-2 inline-block">👋</span>
                     </p>
                     <p className="mt-1 text-2xl font-bold leading-tight text-[var(--color-brand-secondary)]">
                         How can we help you?
@@ -230,7 +228,7 @@ export default function LiveChatModal({ open, onClose, authUser }) {
                                     }}
                                     className="flex w-full items-start gap-3 text-left transition hover:opacity-90"
                                 >
-                                    <Avatar thread={thread} small />
+                                    <Avatar small />
                                     <div className="min-w-0 flex-1">
                                         <p className="text-base font-semibold text-[var(--color-text-strong)]">{recentChat.title}</p>
                                         <p className="mt-1 truncate text-base leading-6 text-[var(--color-text-muted)]">{recentChat.preview}</p>
@@ -327,7 +325,7 @@ export default function LiveChatModal({ open, onClose, authUser }) {
                             }}
                             className="surface-card flex w-full items-start gap-3 rounded-2xl px-4 py-4 text-left transition hover:border-[var(--color-accent-200)] hover:shadow-[var(--shadow-card-raised)]"
                         >
-                            <Avatar thread={thread} small />
+                            <Avatar small />
                             <div className="min-w-0 flex-1">
                                 <div className="flex items-start justify-between gap-3">
                                     <p className="text-base font-semibold text-[var(--color-text-strong)]">{thread.title}</p>
@@ -416,7 +414,7 @@ export default function LiveChatModal({ open, onClose, authUser }) {
                     >
                         <ChevronLeft size={18} strokeWidth={3} />
                     </button>
-                    <Avatar thread={thread} small />
+                    <Avatar small />
                     <div className="min-w-0 flex-1">
                         <p className="text-base font-semibold text-[var(--color-brand-secondary)]">{thread.name}</p>
                         <div className="flex items-center gap-2">
@@ -443,7 +441,7 @@ export default function LiveChatModal({ open, onClose, authUser }) {
                 <p className="text-center text-sm text-[var(--color-text-muted)]">Ask us anything, or share your feedback.</p>
                 <article className="surface-card mt-5 rounded-3xl px-5 py-5 text-left">
                     <div className="flex items-center gap-3">
-                        <Avatar thread={thread} small />
+                        <Avatar small />
                         <span className="text-sm text-[var(--color-text-muted)]">{thread.name}</span>
                     </div>
                     <h3 className="mt-4 text-2xl font-semibold leading-tight text-[var(--color-text-strong)]">{thread.articleTitle}</h3>
@@ -468,7 +466,7 @@ export default function LiveChatModal({ open, onClose, authUser }) {
                     >
                         <ChevronLeft size={18} strokeWidth={3} />
                     </button>
-                    <Avatar thread={thread} small />
+                    <Avatar small />
                     <div className="min-w-0 flex-1">
                         <p className="text-base font-semibold text-[var(--color-brand-secondary)]">{thread.name}</p>
                         <p className="text-sm text-[var(--color-text-muted)]">{thread.title}</p>
@@ -492,12 +490,12 @@ export default function LiveChatModal({ open, onClose, authUser }) {
                 <p className="text-center text-sm text-[var(--color-text-muted)]">Ask us anything, or share your feedback.</p>
                 <article className="surface-card soft-blue-panel mt-5 w-[86%] rounded-[24px] px-4 py-4 text-left">
                     <div className="space-y-4 text-base leading-7 text-[var(--color-text-strong)]">
-                        <p>Hello there. ðŸŒŸ Welcome to GemBet Support. ðŸ‘‹</p>
+                        <p>Hello there. 🌟 Welcome to GemBet Support. 👋</p>
                         <p>Want extra ong this CNY? Better join GemChat early!</p>
                         <p>How can we assist you today?</p>
                     </div>
                 </article>
-                <p className="mt-3 text-sm text-[var(--color-text-muted)]">Nora â€¢ AI Agent â€¢ Just now</p>
+                <p className="mt-3 text-sm text-[var(--color-text-muted)]">Nora • AI Agent • Just now</p>
 
                 <div className="mt-20 flex flex-wrap justify-end gap-3">
                     {supportTags.map((tag) => {
@@ -537,7 +535,7 @@ export default function LiveChatModal({ open, onClose, authUser }) {
                     >
                         <ChevronLeft size={18} strokeWidth={3} />
                     </button>
-                    <Avatar thread={thread} small />
+                    <Avatar small />
                     <div className="min-w-0 flex-1">
                         <p className="text-base font-semibold text-[var(--color-brand-secondary)]">{thread.name}</p>
                         <div className="flex items-center gap-2">
@@ -563,7 +561,7 @@ export default function LiveChatModal({ open, onClose, authUser }) {
             <div className="flex-1 overflow-y-auto px-5 pb-5 pt-5">
                 <article className="surface-card soft-blue-panel w-[86%] rounded-[24px] px-4 py-4 text-left">
                     <div className="space-y-4 text-base leading-7 text-[var(--color-text-strong)]">
-                        <p>Please select a topic related to your inquiry. ðŸ™</p>
+                        <p>Please select a topic related to your inquiry. 🙏</p>
                     </div>
                 </article>
 
@@ -578,14 +576,14 @@ export default function LiveChatModal({ open, onClose, authUser }) {
 
                 <article className="surface-card soft-blue-panel mt-6 w-[86%] rounded-[24px] px-4 py-4 text-left">
                     <div className="space-y-4 text-base leading-7 text-[var(--color-text-strong)]">
-                        <p>Thank you for selecting the topic. ðŸŒŸ</p>
+                        <p>Thank you for selecting the topic. 🌟</p>
                         <p>We will connect you with our Support Agent shortly.</p>
-                        <p>If you have a screenshot of the issue, it will help us resolve it quickly. ðŸ’Ž</p>
+                        <p>If you have a screenshot of the issue, it will help us resolve it quickly. 💎</p>
                     </div>
                 </article>
 
                 <div className="mt-5 flex items-center justify-center gap-3 text-base text-[var(--color-text-main)]">
-                    <Avatar thread={thread} small />
+                    <Avatar small />
                     <span className="font-medium">{thread.name} joined the conversation</span>
                 </div>
             </div>
@@ -594,10 +592,10 @@ export default function LiveChatModal({ open, onClose, authUser }) {
                 <div className="rounded-[20px] border border-[var(--color-border-default)] bg-[var(--color-surface-base)] px-4 py-3">
                     <p className="text-base text-[var(--color-text-muted)]">Message...</p>
                     <div className="mt-4 flex items-center gap-4 text-[var(--color-text-muted)]">
-                        <span>ðŸ“Ž</span>
-                        <span>ðŸ˜Š</span>
+                        <span>📎</span>
+                        <span>😊</span>
                         <span className="text-lg font-bold">GIF</span>
-                        <span>ðŸŽ¤</span>
+                        <span>🎤</span>
                         <button
                             type="button"
                             className="ml-auto inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-surface-muted)] text-[var(--color-text-soft)]"

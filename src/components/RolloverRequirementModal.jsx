@@ -9,7 +9,7 @@ function formatPercent(value) {
 }
 
 function formatDisplay(value) {
-    if (value == null) return 'â€”';
+    if (value == null) return '—';
     if (typeof value === 'number' && Number.isFinite(value)) return value.toFixed(2);
     return String(value);
 }
@@ -62,7 +62,7 @@ function ProgressRing({ percent }) {
 }
 
 /**
- * Rollover / turnover requirement not met â€” blocks withdraw or similar actions until OK.
+ * Rollover / turnover requirement not met — blocks withdraw or similar actions until OK.
  * Shell matches TacErrorModal: overlay, panel radius, shadow, primary OK CTA.
  */
 export default function RolloverRequirementModal({

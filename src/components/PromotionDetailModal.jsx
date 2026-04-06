@@ -106,7 +106,7 @@ export default function PromotionDetailModal({
                     <div className="mt-6 rounded-[20px] border border-[rgb(228_234_243)] bg-[linear-gradient(180deg,var(--gradient-soft-panel-start)_0%,var(--gradient-soft-panel-end)_100%)] p-4 sm:p-5">
                         <h4 className="text-lg font-bold text-[var(--color-text-strong)]">Event Details</h4>
 
-                        {/* Mobile: same orange header identity as desktop â€” label strip + value column */}
+                        {/* Mobile: same orange header identity as desktop — label strip + value column */}
                         <div className="mt-4 overflow-hidden rounded-2xl border border-[rgb(228_234_243)] bg-white sm:hidden">
                             <dl className="divide-y divide-[rgb(228_234_243)]">
                                 {detailCells.map((cell) => (

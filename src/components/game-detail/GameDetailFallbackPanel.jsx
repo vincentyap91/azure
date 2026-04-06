@@ -2,6 +2,8 @@ import React from 'react';
 
 /**
  * Centered status panel (e.g. registration failed) inside the game container.
+ * Uses the same surface + spacing tokens as other cards on the site.
+ *
  * @param {Object} props
  * @param {string} props.message
  * @param {import('react').ReactNode} [props.actions] — primary/secondary buttons
@@ -10,10 +12,16 @@ export default function GameDetailFallbackPanel({ message, actions = null }) {
     return (
         <div
             role="status"
-            className="max-w-md rounded-2xl border border-white/10 bg-[rgb(30_41_59_/_0.95)] px-6 py-8 text-center shadow-xl backdrop-blur-sm md:px-10"
+            className="w-full max-w-md rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-surface-base)] px-5 py-7 text-center shadow-[var(--shadow-card-raised)] sm:px-7 sm:py-8"
         >
-            <p className="text-base font-semibold text-white md:text-lg">{message}</p>
-            {actions ? <div className="mt-6 flex flex-wrap items-center justify-center gap-3">{actions}</div> : null}
+            <p className="text-[15px] font-bold leading-snug tracking-tight text-[var(--color-text-strong)] sm:text-base">
+                {message}
+            </p>
+            {actions ? (
+                <div className="mt-6 flex w-full flex-row flex-wrap gap-2.5 sm:mt-7 sm:gap-3">
+                    {actions}
+                </div>
+            ) : null}
         </div>
     );
 }

@@ -5,8 +5,8 @@ const DEFAULT_CLASS =
     'btn-theme-cta inline-flex h-10 min-w-[100px] flex-1 items-center justify-center rounded-xl px-5 text-sm font-bold tracking-wide shadow-[0_6px_14px_rgba(242,154,0,0.28)] transition hover:-translate-y-0.5 hover:brightness-105';
 
 /**
- * Join Now (guest) â†’ register. Claim Now (logged in) â†’ deposit with optional bonus pre-select.
- * Reuse on any promotion card; keep â€œMore Infoâ€ as a separate control.
+ * Join Now (guest) → register. Claim Now (logged in) → deposit with optional bonus pre-select.
+ * Reuse on any promotion card; keep “More Info” as a separate control.
  */
 export default function PromotionCtaButton({ authUser, onNavigate, promotion, className }) {
     const loggedIn = Boolean(authUser);

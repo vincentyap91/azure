@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="lc-grad" x1="64" y1="4" x2="64" y2="124" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7dd3fc"/>
+      <stop offset="0.5" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#1e3a8a"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="64" fill="url(#lc-grad)"/>
+  <circle cx="64" cy="64" r="58" stroke="rgba(255,255,255,0.22)" stroke-width="2"/>
+  <!-- shoulders / shirt -->
+  <path fill="#f1f5f9" d="M28 108c0-18 14-32 36-32s36 14 36 32v12H28v-12z"/>
+  <path fill="#cbd5e1" d="M40 108c8-6 18-10 24-10s16 4 24 10v12H40v-12z"/>
+  <!-- head -->
+  <circle cx="64" cy="50" r="26" fill="#f8fafc"/>
+  <!-- subtle shadow under headset -->
+  <ellipse cx="64" cy="54" rx="20" ry="18" fill="#0f172a" opacity="0.06"/>
+  <!-- headset band -->
+  <path stroke="#e2e8f0" stroke-width="5" stroke-linecap="round" d="M30 52c0-20 15-34 34-34s34 14 34 34"/>
+  <!-- ear cups -->
+  <rect x="22" y="44" width="18" height="28" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <rect x="88" y="44" width="18" height="28" rx="9" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+  <!-- mic boom -->
+  <path stroke="#94a3b8" stroke-width="3" stroke-linecap="round" d="M88 66c10 4 16 12 16 22"/>
+  <circle cx="106" cy="90" r="5" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+</svg>

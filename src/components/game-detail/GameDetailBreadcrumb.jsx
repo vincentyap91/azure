@@ -3,7 +3,7 @@ import { ChevronRight } from 'lucide-react';
 
 /**
  * @param {Object} props
- * @param {{ label: string, href?: string, onNavigate?: () => void }[]} props.items â€” last item is highlighted as current.
+ * @param {{ label: string, href?: string, onNavigate?: () => void }[]} props.items — last item is highlighted as current.
  */
 export default function GameDetailBreadcrumb({ items = [] }) {
     if (items.length === 0) return null;

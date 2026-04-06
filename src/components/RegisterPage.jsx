@@ -50,7 +50,7 @@ export default function RegisterPage({ onLoginClick, onRegisterSuccess, onContac
                             <div className="mx-auto w-full max-w-[420px]">
                                 {phase === 'success' ? (
                                     <div className="flex min-h-[260px] flex-col items-center justify-center gap-2 px-2 py-10 text-center sm:min-h-[300px]">
-                                        <p className="text-sm font-semibold text-[rgb(35_64_106)]">Finishing your registrationâ€¦</p>
+                                        <p className="text-sm font-semibold text-[rgb(35_64_106)]">Finishing your registration…</p>
                                     </div>
                                 ) : phase === 'verify' ? (
                                     <VerifyPhoneNumberStep

@@ -3,8 +3,9 @@ import { Maximize2 } from 'lucide-react';
 import GameDetailFallbackPanel from './GameDetailFallbackPanel';
 
 /**
- * Wide game stage (21:9): shorter than 16:9 so more page content stays visible; iframe, custom children, or fallback overlay.
+ * Game stage: wide 21:9 on desktop page, or full-bleed height inside mobile play modal.
  * @param {Object} props
+ * @param {'embedded' | 'fullscreen'} [props.variant]
  * @param {string} [props.iframeUrl]
  * @param {string} [props.iframeTitle]
  * @param {boolean} [props.showFallback]
@@ -13,6 +14,7 @@ import GameDetailFallbackPanel from './GameDetailFallbackPanel';
  * @param {import('react').ReactNode} [props.children] — replaces iframe when no iframeUrl (e.g. custom loader)
  */
 export default function GameDetailPlayer({
+    variant = 'embedded',
     iframeUrl,
     iframeTitle = 'Game',
     showFallback = false,
@@ -40,15 +42,24 @@ export default function GameDetailPlayer({
     }, []);
 
     const showIframe = Boolean(iframeUrl) && !showFallback;
+    const isFullscreen = variant === 'fullscreen';
 
     return (
         <div
             ref={wrapRef}
-            className={`relative w-full overflow-hidden rounded-2xl bg-slate-950 shadow-[var(--shadow-card-raised)] ring-1 ring-[var(--color-border-default)] ${
-                fs ? 'rounded-none ring-0 shadow-none' : ''
+            className={`relative w-full overflow-hidden bg-slate-950 ${
+                isFullscreen
+                    ? 'flex h-full min-h-0 flex-1 flex-col rounded-none shadow-none ring-0'
+                    : `rounded-2xl shadow-[var(--shadow-card-raised)] ring-1 ring-[var(--color-border-default)] ${
+                          fs ? 'rounded-none ring-0 shadow-none' : ''
+                      }`
             }`}
         >
-            <div className="relative aspect-[21/9] w-full">
+            <div
+                className={
+                    isFullscreen ? 'relative min-h-0 flex-1 w-full' : 'relative aspect-[21/9] w-full'
+                }
+            >
                 {children && !showIframe ? (
                     <div className="absolute inset-0 flex items-center justify-center bg-slate-950">{children}</div>
                 ) : null}
@@ -64,19 +75,21 @@ export default function GameDetailPlayer({
                 ) : null}
 
                 {showFallback ? (
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/90 p-4">
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/88 p-4 sm:p-6">
                         <GameDetailFallbackPanel message={fallbackMessage} actions={fallbackActions} />
                     </div>
                 ) : null}
 
-                <button
-                    type="button"
-                    onClick={toggleFullscreen}
-                    className="absolute bottom-3 right-3 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/20 bg-black/50 text-white backdrop-blur-sm transition hover:bg-black/70"
-                    aria-label={fs ? 'Exit fullscreen' : 'Enter fullscreen'}
-                >
-                    <Maximize2 size={18} />
-                </button>
+                {!isFullscreen ? (
+                    <button
+                        type="button"
+                        onClick={toggleFullscreen}
+                        className="absolute bottom-3 right-3 inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/20 bg-black/50 text-white backdrop-blur-sm transition hover:bg-black/70"
+                        aria-label={fs ? 'Exit fullscreen' : 'Enter fullscreen'}
+                    >
+                        <Maximize2 size={18} />
+                    </button>
+                ) : null}
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import FooterPaymentMethods from './FooterPaymentMethods';
 import footerBeGambleAware from '../assets/footer/18_begambleaware.png';
 import footerBmmTestlabs from '../assets/footer/bmmtestlabs.png';
@@ -6,7 +6,7 @@ import footerLogoGli from '../assets/footer/GLI-Logo-English.svg';
 import footerLogoITech from '../assets/footer/iTech-Logo.svg';
 import footerPagcor from '../assets/footer/PAGCORlogos.png';
 
-/** Order: testing / compliance marks, then jurisdiction, then responsible-gaming mark â€” all from `src/assets/footer` */
+/** Order: testing / compliance marks, then jurisdiction, then responsible-gaming mark — all from `src/assets/footer` */
 const CERTIFICATION_LOGOS = [
     { key: 'itech', src: footerLogoITech, alt: 'iTech Labs' },
     { key: 'gli', src: footerLogoGli, alt: 'Gaming Laboratories International (GLI)' },
@@ -15,7 +15,9 @@ const CERTIFICATION_LOGOS = [
     { key: 'begambleaware', src: footerBeGambleAware, alt: 'BeGambleAware' },
 ];
 
-export default function Footer({ onNavigate, onLiveChatClick }) {
+export default function Footer({ onNavigate, onLiveChatClick, mobileVisualTone = 'default' }) {
+    const softerMobile = mobileVisualTone === 'softer';
+
     const links = [
         { label: 'About Us', onClick: () => onNavigate?.('about') },
         { label: 'Live Chat', onClick: () => onLiveChatClick?.() },
@@ -25,16 +27,33 @@ export default function Footer({ onNavigate, onLiveChatClick }) {
     ];
 
     return (
-        <footer className="relative flex w-full flex-col border-t border-[rgb(168_226_251)] bg-[linear-gradient(180deg,var(--gradient-footer-start)_0%,var(--gradient-footer-end)_100%)] pb-6 pt-12">
-            <div className="page-container relative z-10 flex flex-col gap-8">
-
+        <footer
+            className={`relative flex w-full flex-col border-t border-[rgb(168_226_251)] bg-[linear-gradient(180deg,var(--gradient-footer-start)_0%,var(--gradient-footer-end)_100%)] pb-6 pt-12 ${
+                softerMobile ? 'max-md:pt-9 max-md:pb-5' : ''
+            }`}
+        >
+            <div className={`page-container relative z-10 flex flex-col gap-8 ${softerMobile ? 'max-md:gap-5' : ''}`}>
                 {/* Huge opaque LOGO in center background of footer content */}
-                <div className="absolute -top-10 left-1/2 -translate-x-1/2 pointer-events-none select-none z-0">
-                    <h2 className="text-2xl font-bold italic text-white/50 drop-shadow-sm tracking-widest">LOGO</h2>
+                <div
+                    className={`absolute -top-10 left-1/2 z-0 -translate-x-1/2 pointer-events-none select-none ${
+                        softerMobile ? 'max-md:-top-7' : ''
+                    }`}
+                >
+                    <h2
+                        className={`text-2xl font-bold italic tracking-widest text-white/50 drop-shadow-sm ${
+                            softerMobile ? 'max-md:text-lg max-md:text-white/35' : ''
+                        }`}
+                    >
+                        LOGO
+                    </h2>
                 </div>
 
                 {/* Top Info & Links Row */}
-                <div className="flex flex-col md:flex-row justify-between w-full pt-8 relative z-10 gap-6">
+                <div
+                    className={`relative z-10 flex w-full flex-col justify-between gap-6 pt-8 md:flex-row ${
+                        softerMobile ? 'max-md:gap-4 max-md:pt-5' : ''
+                    }`}
+                >
                     {/* Description Left */}
                     <div className="flex-1 max-w-[450px]">
                         <p className="text-xs font-semibold leading-relaxed tracking-wide text-[var(--color-brand-secondary)] opacity-90">
@@ -65,7 +84,11 @@ export default function Footer({ onNavigate, onLiveChatClick }) {
                 </div>
 
                 {/* Certifications and Compliance */}
-                <div className="w-full flex flex-col md:flex-row justify-center gap-12 md:gap-24 relative z-10 mt-4 border-t border-white/50 pt-8">
+                <div
+                    className={`relative z-10 mt-4 flex w-full flex-col justify-center gap-12 border-t border-white/50 pt-8 md:flex-row md:gap-24 ${
+                        softerMobile ? 'max-md:mt-3 max-md:gap-8 max-md:pt-6' : ''
+                    }`}
+                >
 
                     <div className="flex flex-col items-center gap-3">
                         <h4 className="text-xs font-bold uppercase tracking-wider text-[var(--color-brand-primary)]">Certificated by</h4>

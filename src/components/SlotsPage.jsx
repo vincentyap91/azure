@@ -14,7 +14,7 @@ const CDN = 'https://cdn.i8global.com/lb9/master';
 const slotProviders = [
     { name: 'Pragmatic Play', src: `${CDN}/pragmaticplay/pp-202505140448040730-202506200354029751.svg`, featured: true },
     { name: 'PlayTech Slots', src: `${CDN}/playtechslots/playtech-202505140443475046-202507230000384478-202508140011404228.svg`, featured: true },
-    /* AdvantPlay: strip-only asset (navbar mega-menu uses `matchedSlotProviders` â€” keep URLs independent). */
+    /* AdvantPlay: strip-only asset (navbar mega-menu uses `matchedSlotProviders` — keep URLs independent). */
     { name: 'AdvantPlay', src: `${CDN}/advantplay1/advantplay-min-202507170638442926-202509040235032332-202509180625238829.png`, featured: true },
     { name: 'JiLi', src: `${CDN}/jili/jili-min-202506200742098986-202508110205447696-202508212322163049.png`, featured: true },
     { name: 'JDB', src: `${CDN}/jdb/jdbslot-min-202506200911451833-202506250030508552.png`, featured: true },
@@ -51,7 +51,7 @@ const liveBigWins = [
     { user: 'John D.', amount: 'MYR 120,500', game: 'Archer', time: '8 min ago', amountColor: 'text-[var(--color-danger-main)]' },
 ];
 
-const INITIAL_GAMES = 30; // 5 rows Ã— 6 columns (lg)
+const INITIAL_GAMES = 30; // 5 rows × 6 columns (lg)
 
 export default function SlotsPage({ selectedProviderIdFromMenu, onNavigate }) {
     const [activeTab, setActiveTab] = useState('All Games');

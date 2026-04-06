@@ -35,8 +35,14 @@ export default function AccountLayout({ activePage, authUser, onNavigate, onLogo
                                 onNavigate?.(page, options);
                                 setMobileSidebarOpen(false);
                             }}
-                            onLogout={onLogout}
-                            onLiveChatClick={onLiveChatClick}
+                            onLogout={() => {
+                                setMobileSidebarOpen(false);
+                                onLogout?.();
+                            }}
+                            onLiveChatClick={() => {
+                                onLiveChatClick?.();
+                                setMobileSidebarOpen(false);
+                            }}
                         />
                     </div>
 

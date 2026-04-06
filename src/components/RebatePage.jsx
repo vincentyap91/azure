@@ -56,7 +56,40 @@ const HISTORY_QUICK_RANGES = [
     { id: 'month', label: 'In a month' },
 ];
 
-export default function RebatePage({ onNavigate }) {
+const claimButtonClass =
+    'btn-theme-primary inline-flex min-h-12 w-full shrink-0 items-center justify-center rounded-xl px-6 text-sm font-bold shadow-sm transition hover:scale-[1.02] md:min-h-11 md:w-auto md:min-w-[120px]';
+
+const tableHeadClassLeft =
+    'px-3 py-2.5 text-left text-[10px] font-bold uppercase tracking-wider text-[var(--color-accent-600)] sm:px-4 sm:py-3 sm:text-xs md:text-[var(--color-text-muted)]';
+const tableHeadClassRight =
+    'px-3 py-2.5 text-right text-[10px] font-bold uppercase tracking-wider text-[var(--color-accent-600)] sm:px-4 sm:py-3 sm:text-xs md:text-[var(--color-text-muted)]';
+
+function RebateEarnedSummary() {
+    return (
+        <div className="flex items-center gap-3 sm:gap-4">
+            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(180deg,var(--color-cta-start)_0%,var(--color-cta-end)_100%)] text-[var(--color-cta-text)] sm:h-12 sm:w-12">
+                <Star className="h-[22px] w-[22px] sm:h-6 sm:w-6" strokeWidth={2} aria-hidden />
+            </span>
+            <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold leading-snug text-[var(--color-text-muted)] sm:text-sm">Total Rebate Earned</p>
+                <p className="mt-1 text-lg font-bold tabular-nums text-[var(--color-accent-600)] sm:text-xl md:text-2xl">MYR 0.000</p>
+            </div>
+        </div>
+    );
+}
+
+function EmptyTableNotice({ message, hint, colSpan = 2 }) {
+    return (
+        <td colSpan={colSpan} className="px-4 py-10 md:py-12">
+            <div className="mx-auto flex max-w-[20rem] flex-col items-center justify-center rounded-xl border border-dashed border-[var(--color-border-default)] bg-[var(--color-surface-muted)]/50 px-4 py-6">
+                <p className="text-center text-sm font-semibold text-[var(--color-text-strong)]">{message}</p>
+                {hint ? <p className="mt-1 text-center text-xs leading-relaxed text-[var(--color-text-muted)]">{hint}</p> : null}
+            </div>
+        </td>
+    );
+}
+
+export default function RebatePage() {
     const [activeTab, setActiveTab] = useState('unclaim');
     const [benefitCategory, setBenefitCategory] = useState('all');
     const today = new Date();
@@ -83,47 +116,56 @@ export default function RebatePage({ onNavigate }) {
 
     return (
         <div className="page-container">
-            <h1 className="page-title mb-8">Rebate</h1>
+            <h1 className="page-title mb-5 md:mb-8">Rebate</h1>
 
-            <div className="mb-8">
-                <SecurityTabs activeTab={activeTab} onTabChange={setActiveTab} tabs={REBATE_TABS} />
+            <div className="mb-5 md:mb-8">
+                <SecurityTabs activeTab={activeTab} onTabChange={setActiveTab} tabs={REBATE_TABS} layout="equal-mobile" />
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
                 {activeTab === 'unclaim' && (
                     <>
-                        <div className="surface-card flex flex-wrap items-center justify-between gap-4 rounded-2xl p-5 shadow-[var(--shadow-card-soft)] md:p-6">
-                            <div className="flex items-center gap-4">
-                                <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[linear-gradient(180deg,var(--color-cta-start)_0%,var(--color-cta-end)_100%)] text-[var(--color-cta-text)]">
-                                    <Star size={24} strokeWidth={2} />
-                                </span>
-                                <div>
-                                    <p className="text-sm font-semibold text-[var(--color-text-muted)]">Total Rebate Earned</p>
-                                    <p className="mt-1 text-xl font-bold text-[var(--color-accent-600)] md:text-2xl">MYR 0.000</p>
-                                </div>
+                        <div className="surface-card rounded-2xl p-4 shadow-[var(--shadow-card-soft)] sm:p-5 md:p-6">
+                            <div className="flex flex-col gap-3 md:hidden">
+                                <RebateEarnedSummary />
+                                <button type="button" className={claimButtonClass}>
+                                    Claim
+                                </button>
                             </div>
-                            <button
-                                type="button"
-                                className="btn-theme-primary inline-flex h-11 min-w-[120px] items-center justify-center rounded-xl px-6 text-sm font-bold shadow-sm transition hover:scale-[1.02]"
-                            >
-                                Claim
-                            </button>
+                            <div className="hidden items-center justify-between gap-4 md:flex">
+                                <div className="flex items-center gap-4">
+                                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[linear-gradient(180deg,var(--color-cta-start)_0%,var(--color-cta-end)_100%)] text-[var(--color-cta-text)]">
+                                        <Star size={24} strokeWidth={2} />
+                                    </span>
+                                    <div>
+                                        <p className="text-sm font-semibold text-[var(--color-text-muted)]">Total Rebate Earned</p>
+                                        <p className="mt-1 text-xl font-bold text-[var(--color-accent-600)] md:text-2xl">MYR 0.000</p>
+                                    </div>
+                                </div>
+                                <button
+                                    type="button"
+                                    className="btn-theme-primary inline-flex h-11 min-w-[120px] shrink-0 items-center justify-center rounded-xl px-6 text-sm font-bold shadow-sm transition hover:scale-[1.02]"
+                                >
+                                    Claim
+                                </button>
+                            </div>
                         </div>
 
                         <div className="surface-card overflow-hidden rounded-2xl shadow-[var(--shadow-card-soft)]">
                             <div className="overflow-x-auto">
-                                <table className="w-full min-w-[320px] border-collapse text-sm">
+                                <table className="w-full min-w-[280px] border-collapse text-sm md:min-w-[320px]">
                                     <thead>
                                         <tr className="border-b border-[var(--color-border-default)] bg-[var(--color-surface-subtle)]">
-                                            <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)]">Date</th>
-                                            <th className="px-4 py-3 text-right text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)]">Amount</th>
+                                            <th className={tableHeadClassLeft}>Date</th>
+                                            <th className={tableHeadClassRight}>Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td colSpan={2} className="px-4 py-12 text-center text-sm font-medium text-[var(--color-text-muted)]">
-                                                No data found
-                                            </td>
+                                            <EmptyTableNotice
+                                                message="No data found"
+                                                hint="Rebate lines will show here when available."
+                                            />
                                         </tr>
                                     </tbody>
                                 </table>
@@ -133,8 +175,8 @@ export default function RebatePage({ onNavigate }) {
                 )}
 
                 {activeTab === 'history' && (
-                    <div className="space-y-6">
-                        <div className="surface-card rounded-2xl p-5 shadow-[var(--shadow-card-soft)] md:p-6">
+                    <div className="space-y-4 md:space-y-6">
+                        <div className="surface-card rounded-2xl p-4 shadow-[var(--shadow-card-soft)] sm:p-5 md:p-6">
                             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                 <CalendarDateInput
                                     label="Start Claim Date"
@@ -147,13 +189,13 @@ export default function RebatePage({ onNavigate }) {
                                     onChange={(e) => setHistoryEnd(e.target.value)}
                                 />
                             </div>
-                            <div className="mt-4 flex gap-2">
+                            <div className="mt-4 flex flex-wrap gap-2">
                                 {HISTORY_QUICK_RANGES.map(({ id, label }) => (
                                     <button
                                         key={id}
                                         type="button"
                                         onClick={() => setHistoryRangeFromQuick(id)}
-                                        className={`min-w-0 flex-1 rounded-xl border px-3 py-2.5 text-sm font-semibold transition sm:px-4 ${
+                                        className={`min-h-11 min-w-0 flex-1 rounded-xl border px-3 py-2.5 text-sm font-semibold transition sm:min-h-0 sm:px-4 ${
                                             historyQuickRange === id
                                                 ? 'border-[var(--color-accent-500)] bg-[var(--color-accent-50)] text-[var(--color-accent-600)]'
                                                 : 'border-[var(--color-border-default)] bg-[var(--color-surface-muted)] text-[var(--color-text-muted)] hover:border-[var(--color-accent-200)] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-600)]'
@@ -166,7 +208,7 @@ export default function RebatePage({ onNavigate }) {
                             <div className="mt-4">
                                 <button
                                     type="button"
-                                    className="btn-theme-cta inline-flex h-11 min-w-[120px] items-center justify-center rounded-xl px-6 text-sm font-bold shadow-sm transition hover:scale-[1.02]"
+                                    className="btn-theme-cta inline-flex min-h-12 w-full items-center justify-center rounded-xl px-6 text-sm font-bold shadow-sm transition hover:scale-[1.02] sm:min-h-11 sm:w-auto sm:min-w-[120px]"
                                 >
                                     Submit
                                 </button>
@@ -174,18 +216,19 @@ export default function RebatePage({ onNavigate }) {
                         </div>
                         <div className="surface-card overflow-hidden rounded-2xl shadow-[var(--shadow-card-soft)]">
                             <div className="overflow-x-auto">
-                                <table className="w-full min-w-[320px] border-collapse text-sm">
+                                <table className="w-full min-w-[280px] border-collapse text-sm md:min-w-[320px]">
                                     <thead>
                                         <tr className="border-b border-[var(--color-border-default)] bg-[var(--color-surface-subtle)]">
-                                            <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)]">Claimed Time</th>
-                                            <th className="px-4 py-3 text-right text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)]">Amount</th>
+                                            <th className={tableHeadClassLeft}>Claimed Time</th>
+                                            <th className={tableHeadClassRight}>Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td colSpan={2} className="px-4 py-12 text-center text-sm font-medium text-[var(--color-text-muted)]">
-                                                No data found
-                                            </td>
+                                            <EmptyTableNotice
+                                                message="No data found"
+                                                hint="Submitted history will appear here after claims are processed."
+                                            />
                                         </tr>
                                     </tbody>
                                 </table>
@@ -195,14 +238,14 @@ export default function RebatePage({ onNavigate }) {
                 )}
 
                 {activeTab === 'benefit' && (
-                    <div className="space-y-6">
-                        <div className="flex gap-1 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-base)] p-1 shadow-[var(--shadow-subtle)]">
+                    <div className="space-y-4 md:space-y-6">
+                        <div className="-mx-1 flex gap-1 overflow-x-auto overflow-y-hidden rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-base)] p-1 pb-2 shadow-[var(--shadow-subtle)] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:pb-1">
                             {BENEFIT_CATEGORY_TABS.map(({ id, label }) => (
                                 <button
                                     key={id}
                                     type="button"
                                     onClick={() => setBenefitCategory(id)}
-                                    className={`min-w-0 flex-1 rounded-lg px-2 py-2.5 text-sm font-semibold transition sm:px-4 ${
+                                    className={`min-h-11 shrink-0 rounded-lg px-3 py-2.5 text-sm font-semibold transition sm:min-h-0 sm:min-w-0 sm:flex-1 sm:px-4 ${
                                         benefitCategory === id
                                             ? 'btn-theme-primary shadow-sm'
                                             : 'bg-[var(--color-surface-muted)] text-[var(--color-text-muted)] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-600)]'
@@ -217,22 +260,26 @@ export default function RebatePage({ onNavigate }) {
                                 <table className="w-full min-w-[400px] border-collapse text-sm">
                                     <thead>
                                         <tr className="border-b border-[var(--color-border-default)] bg-[var(--color-surface-subtle)]">
-                                            <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)]">Game Provider</th>
-                                            <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)]">Category</th>
-                                            <th className="px-4 py-3 text-right text-xs font-bold uppercase tracking-wider text-[var(--color-text-muted)]">Rebate Benefit</th>
+                                            <th className={tableHeadClassLeft}>Game Provider</th>
+                                            <th className={tableHeadClassLeft}>Category</th>
+                                            <th className={tableHeadClassRight}>Rebate Benefit</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {REBATE_BENEFIT_ROWS.filter(
-                                            (row) => benefitCategory === 'all' || row.category.toLowerCase() === benefitCategory.toLowerCase()
+                                            (row) => benefitCategory === 'all' || row.category.toLowerCase() === benefitCategory.toLowerCase(),
                                         ).map((row) => (
                                             <tr
                                                 key={`${row.provider}-${row.category}`}
                                                 className="border-b border-[var(--color-border-default)] transition hover:bg-[var(--color-surface-subtle)]"
                                             >
-                                                <td className="px-4 py-3.5 font-medium text-[var(--color-text-strong)]">{row.provider}</td>
-                                                <td className="px-4 py-3.5 text-[var(--color-text-muted)]">{row.category}</td>
-                                                <td className="px-4 py-3.5 text-right font-semibold text-[var(--color-accent-600)]">{row.rebate}</td>
+                                                <td className="px-3 py-3 text-sm font-medium text-[var(--color-text-strong)] md:px-4 md:py-3.5">
+                                                    {row.provider}
+                                                </td>
+                                                <td className="px-3 py-3 text-sm text-[var(--color-text-muted)] md:px-4 md:py-3.5">{row.category}</td>
+                                                <td className="px-3 py-3 text-right text-sm font-semibold text-[var(--color-accent-600)] md:px-4 md:py-3.5">
+                                                    {row.rebate}
+                                                </td>
                                             </tr>
                                         ))}
                                     </tbody>

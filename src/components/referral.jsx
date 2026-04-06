@@ -34,7 +34,7 @@ import ReferralGameCommissionTable from './referral/ReferralGameCommissionTable'
 
 const affiliateTabs = ['Invite Friends', 'My Referrals', 'My Rewards', 'How It Works'];
 
-// Placeholder data â€“ replace with real user data when integrated
+// Placeholder data – replace with real user data when integrated
 const REFERRAL_CODE = '589092';
 const REFERRAL_URL = `${typeof window !== 'undefined' ? window.location.origin : ''}/register?code=${REFERRAL_CODE}`;
 
@@ -827,7 +827,7 @@ export default function ReferralPage({ authUser, onLoginClick }) {
 
     return (
         <main className="w-full bg-[var(--color-page-default)] pb-14">
-            {/* Top bar â€” matches Live Casino strip */}
+            {/* Top bar — matches Live Casino strip */}
             <section className="w-full border-y border-[var(--color-border-default)] bg-[var(--color-surface-base-85)] backdrop-blur">
                 <div className="mx-auto flex h-12 w-full max-w-screen-2xl items-center justify-between px-[var(--space-page-x)] md:px-[var(--space-page-x-md)]">
                     <div className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
@@ -841,7 +841,7 @@ export default function ReferralPage({ authUser, onLoginClick }) {
                 </div>
             </section>
 
-            {/* Hero â€” Live Casino layout, no CTA / no provider logo */}
+            {/* Hero — Live Casino layout, no CTA / no provider logo */}
             <section className="w-full">
                 <div className="w-full mx-auto">
                     <div className={PAGE_BANNER_WRAP}>

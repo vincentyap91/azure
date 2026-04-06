@@ -197,7 +197,7 @@ const MOBILE_MORE_SECTION_BY_PAGE = MOBILE_MORE_SECTIONS.reduce((accumulator, se
 
 export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'home', onLoginClick, onRegisterClick, authUser, onLogout, onAccountDetailsClick, onLiveChatClick, onCasinoProviderSelect, onSlotsProviderSelect }) {
     const vipLevel = authUser?.vipLevel || 'Diamond';
-    /** `null` | `'casino'` | `'slots'` â€” shared mega-menu pattern */
+    /** `null` | `'casino'` | `'slots'` — shared mega-menu pattern */
     const [navProviderDropdown, setNavProviderDropdown] = useState(null);
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import {
     Banknote,
     ChevronDown,
@@ -10,17 +10,9 @@ import {
     UserCircle2,
 } from 'lucide-react';
 import AccountLayout from './AccountLayout';
-import CalendarDateInput from './CalendarDateInput';
 import ProfilePhotoModal from './ProfilePhotoModal';
 import VipStatusPill from './VipStatusPill';
 import { BANKS } from '../constants/banks';
-
-function formatDateForInput(d) {
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${y}-${m}-${day}`;
-}
 
 const PROFILE_PHOTO_STORAGE_KEY = 'riocity_profile_photo';
 
@@ -47,6 +39,27 @@ const contactFields = [
     { key: 'phone', label: 'Phone Number', type: 'tel' }
 ];
 
+
+/** ISO date `yyyy-mm-dd` → display `mm/dd/yyyy` (matches account summary style). */
+function formatBirthdayDisplay(iso) {
+    if (!iso) return '—';
+    const parts = String(iso).split('-');
+    if (parts.length !== 3) return iso;
+    const [y, m, d] = parts;
+    if (!y || !m || !d) return iso;
+    return `${m.padStart(2, '0')}/${d.padStart(2, '0')}/${y}`;
+}
+
+function ReadOnlyValue({ label, value }) {
+    return (
+        <div className="block">
+            <span className="mb-2 block text-sm font-medium text-[var(--color-text-muted)]">{label}</span>
+            <div className="flex h-12 items-center rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-muted)] px-4 text-sm font-medium text-[var(--color-text-strong)] shadow-[var(--shadow-subtle)] select-none">
+                <span className="min-w-0 break-all">{value || '—'}</span>
+            </div>
+        </div>
+    );
+}
 
 function Field({ label, value, placeholder, type = 'text', editable, onChange, icon: Icon }) {
     return (
@@ -80,7 +93,7 @@ function Field({ label, value, placeholder, type = 'text', editable, onChange, i
     );
 }
 
-function SectionCard({ title, description, editing, onToggleEdit, children, actions }) {
+function SectionCard({ title, description, editing, onToggleEdit, children, actions, showEditButton = true }) {
     return (
         <section className="surface-card rounded-2xl p-6 transition-all md:p-8">
             <div className="flex flex-wrap items-start justify-between gap-4">
@@ -91,17 +104,19 @@ function SectionCard({ title, description, editing, onToggleEdit, children, acti
                     )}
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                     {actions}
-                    <button
-                        type="button"
-                        onClick={onToggleEdit}
-                        aria-pressed={editing}
-                        className="btn-theme-primary inline-flex min-h-[44px] items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold shadow-sm transition-all hover:scale-[1.02] hover:shadow-md"
-                    >
-                        <PencilLine size={16} />
-                        {editing ? 'Save' : 'Edit'}
-                    </button>
+                    {showEditButton ? (
+                        <button
+                            type="button"
+                            onClick={onToggleEdit}
+                            aria-pressed={editing}
+                            className="btn-theme-primary inline-flex min-h-[44px] items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold shadow-sm transition-all hover:scale-[1.02] hover:shadow-md"
+                        >
+                            <PencilLine size={16} />
+                            {editing ? 'Save' : 'Edit'}
+                        </button>
+                    ) : null}
                 </div>
             </div>
 
@@ -113,11 +128,10 @@ function SectionCard({ title, description, editing, onToggleEdit, children, acti
 export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChatClick }) {
     const vipLevel = authUser?.vipLevel || 'Diamond';
     const [editing, setEditing] = useState({
-        personal: false,
         contact: false,
-        banking: false
     });
     const [showBankForm, setShowBankForm] = useState(false);
+    const [editingBankId, setEditingBankId] = useState(null);
     const [bankDropdownOpen, setBankDropdownOpen] = useState(false);
     const [bankAccounts, setBankAccounts] = useState([]);
     const [bankForm, setBankForm] = useState({
@@ -160,31 +174,76 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
         setBankForm((current) => ({ ...current, [field]: value }));
     };
 
+    const resetBankFormFields = () => {
+        setBankForm({ bankId: '', accountHolder: '', accountNumber: '', branchName: '' });
+    };
+
+    const closeBankForm = () => {
+        setShowBankForm(false);
+        setEditingBankId(null);
+        resetBankFormFields();
+        setBankDropdownOpen(false);
+    };
+
+    const openAddBankForm = () => {
+        setEditingBankId(null);
+        resetBankFormFields();
+        setShowBankForm(true);
+        setBankDropdownOpen(false);
+    };
+
+    const openEditBankForm = (acc) => {
+        setEditingBankId(acc.id);
+        setBankForm({
+            bankId: acc.bankId,
+            accountHolder: acc.accountHolder,
+            accountNumber: acc.accountNumber,
+            branchName: acc.branchName || '',
+        });
+        setShowBankForm(true);
+        setBankDropdownOpen(false);
+    };
+
     const handleSaveBankAccount = () => {
         const bank = BANKS.find((b) => b.id === bankForm.bankId);
         if (!bankForm.bankId || !bankForm.accountHolder?.trim() || !bankForm.accountNumber?.trim()) return;
-        setBankAccounts((prev) => [
-            ...prev,
-            {
-                id: crypto.randomUUID?.() ?? Date.now().toString(),
-                bankId: bankForm.bankId,
-                bankName: bank?.label ?? bankForm.bankId,
-                bankImage: bank?.image,
-                accountHolder: bankForm.accountHolder.trim(),
-                accountNumber: bankForm.accountNumber.trim(),
-                branchName: bankForm.branchName?.trim() || ''
-            }
-        ]);
-        setBankForm({ bankId: '', accountHolder: '', accountNumber: '', branchName: '' });
-        setShowBankForm(false);
-        setEditing((c) => ({ ...c, banking: false }));
+        if (editingBankId) {
+            setBankAccounts((prev) =>
+                prev.map((a) =>
+                    a.id === editingBankId
+                        ? {
+                              ...a,
+                              bankId: bankForm.bankId,
+                              bankName: bank?.label ?? bankForm.bankId,
+                              bankImage: bank?.image,
+                              accountHolder: bankForm.accountHolder.trim(),
+                              accountNumber: bankForm.accountNumber.trim(),
+                              branchName: bankForm.branchName?.trim() || '',
+                          }
+                        : a,
+                ),
+            );
+        } else {
+            setBankAccounts((prev) => [
+                ...prev,
+                {
+                    id: crypto.randomUUID?.() ?? Date.now().toString(),
+                    bankId: bankForm.bankId,
+                    bankName: bank?.label ?? bankForm.bankId,
+                    bankImage: bank?.image,
+                    accountHolder: bankForm.accountHolder.trim(),
+                    accountNumber: bankForm.accountNumber.trim(),
+                    branchName: bankForm.branchName?.trim() || '',
+                },
+            ]);
+        }
+        closeBankForm();
     };
 
     const handleRemoveBankAccount = (id) => {
+        if (editingBankId === id) closeBankForm();
         setBankAccounts((prev) => prev.filter((a) => a.id !== id));
     };
-
-    const birthdayMax = formatDateForInput(new Date());
 
     const handleProfilePhotoSave = (dataUrl) => {
         setProfilePhotoUrl(dataUrl);
@@ -195,7 +254,7 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
                 localStorage.removeItem(PROFILE_PHOTO_STORAGE_KEY);
             }
         } catch {
-            /* ignore quota / private mode â€” image still shows for this session */
+            /* ignore quota / private mode — image still shows for this session */
         }
     };
 
@@ -272,40 +331,18 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
                         <SectionCard
                             title="Personal Info"
                             description="Core account identity and referral information."
-                            editing={editing.personal}
-                            onToggleEdit={() => toggleEdit('personal')}
+                            showEditButton={false}
+                            editing={false}
+                            onToggleEdit={() => {}}
                         >
                             <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-                                {personalFields.map(({ key, label, placeholder }) =>
-                                    key === 'birthday' ? (
-                                        <label key={key} className="block">
-                                            <span className="mb-2 block text-sm font-medium text-[var(--color-text-muted)]">{label}</span>
-                                            <CalendarDateInput
-                                                label={null}
-                                                value={formValues.birthday}
-                                                onChange={updateField('birthday')}
-                                                disabled={!editing.personal}
-                                                max={birthdayMax}
-                                                min="1900-01-01"
-                                                className="w-full"
-                                                inputClassName={
-                                                    editing.personal
-                                                        ? 'h-12 border-[var(--color-accent-300)] bg-[var(--color-surface-base)] hover:border-[var(--color-accent-400)]'
-                                                        : 'h-12 cursor-not-allowed border-[var(--color-border-default)] bg-[var(--color-surface-muted)] text-[var(--color-text-muted)]'
-                                                }
-                                            />
-                                        </label>
-                                    ) : (
-                                        <Field
-                                            key={key}
-                                            label={label}
-                                            value={formValues[key]}
-                                            placeholder={placeholder}
-                                            editable={editing.personal}
-                                            onChange={updateField(key)}
-                                        />
-                                    ),
-                                )}
+                                {personalFields.map(({ key, label }) => (
+                                    <ReadOnlyValue
+                                        key={key}
+                                        label={label}
+                                        value={key === 'birthday' ? formatBirthdayDisplay(formValues.birthday) : formValues[key]}
+                                    />
+                                ))}
                             </div>
                         </SectionCard>
 
@@ -333,14 +370,15 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
                         <SectionCard
                             title="Banking Details"
                             description="Manage payout-ready banking information in a secure format."
-                            editing={editing.banking}
-                            onToggleEdit={showBankForm ? handleSaveBankAccount : () => { setShowBankForm(true); setEditing((c) => ({ ...c, banking: true })); }}
+                            showEditButton={false}
+                            editing={false}
+                            onToggleEdit={() => {}}
                             actions={
                                 <>
                                     {!showBankForm && (
                                         <button
                                             type="button"
-                                            onClick={() => { setShowBankForm(true); setEditing((c) => ({ ...c, banking: true })); }}
+                                            onClick={openAddBankForm}
                                             className="btn-theme-primary inline-flex min-h-[44px] items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold shadow-sm transition-all hover:scale-[1.02] hover:shadow-md"
                                         >
                                             <Banknote size={16} />
@@ -348,19 +386,31 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
                                         </button>
                                     )}
                                     {showBankForm && (
-                                        <button
-                                            type="button"
-                                            onClick={() => { setShowBankForm(false); setEditing((c) => ({ ...c, banking: false })); setBankForm({ bankId: '', accountHolder: '', accountNumber: '', branchName: '' }); }}
-                                            className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-muted)] px-4 py-2.5 text-sm font-semibold text-[var(--color-text-strong)] transition hover:bg-[var(--color-surface-subtle)]"
-                                        >
-                                            Cancel
-                                        </button>
+                                        <>
+                                            <button
+                                                type="button"
+                                                onClick={closeBankForm}
+                                                className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-muted)] px-4 py-2.5 text-sm font-semibold text-[var(--color-text-strong)] transition hover:bg-[var(--color-surface-subtle)]"
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={handleSaveBankAccount}
+                                                className="btn-theme-primary inline-flex min-h-[44px] items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold shadow-sm transition-all hover:scale-[1.02] hover:shadow-md"
+                                            >
+                                                Save
+                                            </button>
+                                        </>
                                     )}
                                 </>
                             }
                         >
                             {showBankForm ? (
                                 <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+                                    <p className="col-span-full text-sm font-semibold text-[var(--color-text-strong)]">
+                                        {editingBankId ? 'Edit bank account' : 'Add bank account'}
+                                    </p>
                                     <div>
                                         <span className="mb-2 block text-sm font-medium text-[var(--color-text-muted)]">Bank <span className="text-[var(--color-danger-main)]">*</span></span>
                                         <div className="relative">
@@ -409,7 +459,7 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
                                         {bankAccounts.map((acc) => (
                                             <div
                                                 key={acc.id}
-                                                className="flex items-start gap-4 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-muted)] p-4 transition hover:border-[var(--color-accent-200)]"
+                                                className="flex items-start gap-3 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-muted)] p-4 transition hover:border-[var(--color-accent-200)] sm:gap-4"
                                             >
                                                 <div className="flex min-w-0 flex-1 flex-col gap-1">
                                                     <div className="flex items-center gap-2">
@@ -420,14 +470,24 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
                                                     <p className="font-mono text-sm font-medium text-[var(--color-text-strong)]">{acc.accountNumber}</p>
                                                     {acc.branchName && <p className="text-xs text-[var(--color-text-soft)]">{acc.branchName}</p>}
                                                 </div>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleRemoveBankAccount(acc.id)}
-                                                    aria-label="Remove bank account"
-                                                    className="shrink-0 rounded-lg p-2 text-[var(--color-text-muted)] transition hover:bg-[var(--color-danger-main)]/10 hover:text-[var(--color-danger-main)]"
-                                                >
-                                                    <Trash2 size={18} />
-                                                </button>
+                                                <div className="flex shrink-0 items-start gap-0.5">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => openEditBankForm(acc)}
+                                                        aria-label="Edit bank account"
+                                                        className="rounded-lg p-2 text-[var(--color-text-muted)] transition hover:bg-[var(--color-accent-100)]/60 hover:text-[var(--color-accent-600)]"
+                                                    >
+                                                        <PencilLine size={18} />
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => handleRemoveBankAccount(acc.id)}
+                                                        aria-label="Remove bank account"
+                                                        className="rounded-lg p-2 text-[var(--color-text-muted)] transition hover:bg-[var(--color-danger-main)]/10 hover:text-[var(--color-danger-main)]"
+                                                    >
+                                                        <Trash2 size={18} />
+                                                    </button>
+                                                </div>
                                             </div>
                                         ))}
                                     </div>
@@ -443,7 +503,7 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
                                     </p>
                                     <button
                                         type="button"
-                                        onClick={() => { setShowBankForm(true); setEditing((c) => ({ ...c, banking: true })); }}
+                                        onClick={openAddBankForm}
                                         className="btn-theme-primary mt-6 inline-flex min-h-[44px] items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold shadow-sm transition-all hover:scale-[1.02] hover:shadow-md"
                                     >
                                         <Banknote size={16} />

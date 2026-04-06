@@ -98,7 +98,7 @@ export function buildOtpAuthUri(secret, accountName, issuer = TWO_FA_ISSUER) {
   return `otpauth://totp/${label}?${query.toString()}`;
 }
 
-/** Generate 2FA secret â€“ returns base32 secret for TOTP */
+/** Generate 2FA secret – returns base32 secret for TOTP */
 export async function generate2FASecret() {
   // In production, this should come from the backend.
   return toBase32Secret(32);

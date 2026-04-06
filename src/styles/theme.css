@@ -277,7 +277,7 @@
 
     /* Keep the ticker moving (system “reduce motion” must not make the homepage feeds look broken). */
     .animate-home-marquee-vertical-y {
-      animation-duration: 100s !important;
+      animation-duration: 40s !important;
       animation-timing-function: linear !important;
       animation-iteration-count: infinite !important;
     }
@@ -489,6 +489,16 @@
 
     .page-title {
       font-size: var(--text-page-title-md);
+    }
+  }
+
+  /**
+   * About Us hero image (mobile): soft horizontal fade on left into text column.
+   */
+  @media (max-width: 767.98px) {
+    .content-hero-visual-img-frame {
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.45) 18%, rgba(0, 0, 0, 0.92) 36%, #000 100%);
+      mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.45) 18%, rgba(0, 0, 0, 0.92) 36%, #000 100%);
     }
   }
 }

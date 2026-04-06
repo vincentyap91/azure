@@ -605,7 +605,11 @@ function AppInner() {
       )}
       </Suspense>
 
-      <Footer onNavigate={handleNavigate} onLiveChatClick={() => setLiveChatOpen(true)} />
+      <Footer
+        onNavigate={handleNavigate}
+        onLiveChatClick={() => setLiveChatOpen(true)}
+        mobileVisualTone={page === 'referral-commission' || page === 'rebate' ? 'softer' : 'default'}
+      />
       </div>
 
       <LoginModal

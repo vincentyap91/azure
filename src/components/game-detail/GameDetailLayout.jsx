@@ -1,8 +1,10 @@
-﻿import React from 'react';
+import React, { useEffect, useState } from 'react';
 import GameDetailBreadcrumb from './GameDetailBreadcrumb';
 import GameDetailPlayer from './GameDetailPlayer';
 import GameDetailDataTable from './GameDetailDataTable';
 import GameDetailRecommendedCarousel from './GameDetailRecommendedCarousel';
+import GameDetailMobileInfoCard from './GameDetailMobileInfoCard';
+import GameDetailPlayModal from './GameDetailPlayModal';
 
 /**
  * Full game detail template: breadcrumb, title bar, player, provider line, ranking, recommended, latest bets.
@@ -11,7 +13,9 @@ import GameDetailRecommendedCarousel from './GameDetailRecommendedCarousel';
  * @param {{ label: string, href?: string, onNavigate?: () => void }[]} props.breadcrumbItems
  * @param {string} props.gameTitle
  * @param {string} props.providerName
- * @param {string} [props.gameSubtitle] â€” optional line under title
+ * @param {string} [props.gameImageUrl] — thumbnail for mobile info card
+ * @param {() => void} [props.onProviderNavigate] — optional (e.g. go to category lobby)
+ * @param {string} [props.gameSubtitle] — optional line under title
  * @param {string} [props.iframeUrl]
  * @param {string} [props.iframeTitle]
  * @param {boolean} [props.showGameFallback]
@@ -27,12 +31,14 @@ import GameDetailRecommendedCarousel from './GameDetailRecommendedCarousel';
  * @param {() => void} [props.onRecommendedMoreGames]
  * @param {(game: object) => void} [props.onRecommendedGameClick]
  * @param {string} [props.recommendedTitle]
- * @param {import('react').ReactNode} [props.children] â€” extra content below latest bets
+ * @param {import('react').ReactNode} [props.children] — extra content below latest bets
  */
 export default function GameDetailLayout({
     breadcrumbItems,
     gameTitle,
     providerName,
+    gameImageUrl = '',
+    onProviderNavigate,
     gameSubtitle,
     iframeUrl,
     iframeTitle,
@@ -51,6 +57,22 @@ export default function GameDetailLayout({
     recommendedTitle = 'Recommended Games',
     children = null,
 }) {
+    const [mobilePlayOpen, setMobilePlayOpen] = useState(false);
+    const [isDesktop, setIsDesktop] = useState(() =>
+        typeof window !== 'undefined' ? window.matchMedia('(min-width:768px)').matches : false,
+    );
+
+    useEffect(() => {
+        const mq = window.matchMedia('(min-width:768px)');
+        const onChange = () => {
+            setIsDesktop(mq.matches);
+            if (mq.matches) setMobilePlayOpen(false);
+        };
+        onChange();
+        mq.addEventListener('change', onChange);
+        return () => mq.removeEventListener('change', onChange);
+    }, []);
+
     return (
         <main className="w-full bg-gradient-to-b from-[var(--gradient-live-page-start)] via-[var(--gradient-live-page-mid)] to-[var(--gradient-live-page-end)] pb-14 font-sans md:pb-20 lg:pb-24">
             <div className="mx-auto flex w-full max-w-screen-2xl flex-col px-4 md:px-8">
@@ -59,7 +81,7 @@ export default function GameDetailLayout({
                         <GameDetailBreadcrumb items={breadcrumbItems} />
                     </div>
 
-                    <div className="flex flex-col gap-1 border-b border-[var(--color-border-default)] pb-5 md:flex-row md:items-end md:justify-between md:pb-6">
+                    <div className="hidden flex-col gap-1 border-b border-[var(--color-border-default)] pb-5 md:flex md:flex-row md:items-end md:justify-between md:pb-6">
                         <div className="min-w-0">
                             <h1 className="text-2xl font-bold tracking-tight text-[var(--color-text-strong)] md:text-3xl lg:text-3xl lg:leading-tight">
                                 {gameTitle}
@@ -71,19 +93,48 @@ export default function GameDetailLayout({
                     </div>
                 </header>
 
-                <div className="mt-6 md:mt-8 lg:mt-9">
-                    <GameDetailPlayer
+                {/* Mobile: compact info card; embedded player not mounted so iframe never loads until Play */}
+                {!isDesktop ? (
+                    <div className="mt-5">
+                        <GameDetailMobileInfoCard
+                            gameTitle={gameTitle}
+                            providerName={providerName}
+                            imageUrl={gameImageUrl}
+                            onPlayNow={() => setMobilePlayOpen(true)}
+                            onProviderClick={onProviderNavigate ?? null}
+                        />
+                    </div>
+                ) : null}
+
+                {isDesktop ? (
+                    <div className="mt-6 md:mt-8 lg:mt-9">
+                        <GameDetailPlayer
+                            iframeUrl={iframeUrl}
+                            iframeTitle={iframeTitle ?? gameTitle}
+                            showFallback={showGameFallback}
+                            fallbackMessage={fallbackMessage}
+                            fallbackActions={fallbackActions}
+                        >
+                            {gameContainerChildren}
+                        </GameDetailPlayer>
+                    </div>
+                ) : null}
+
+                {!isDesktop ? (
+                    <GameDetailPlayModal
+                        open={mobilePlayOpen}
+                        onClose={() => setMobilePlayOpen(false)}
+                        gameTitle={gameTitle}
                         iframeUrl={iframeUrl}
-                        iframeTitle={iframeTitle ?? gameTitle}
+                        iframeTitle={iframeTitle}
                         showFallback={showGameFallback}
                         fallbackMessage={fallbackMessage}
                         fallbackActions={fallbackActions}
-                    >
-                        {gameContainerChildren}
-                    </GameDetailPlayer>
-                </div>
+                        gameContainerChildren={gameContainerChildren}
+                    />
+                ) : null}
 
-                <p className="mt-5 text-sm leading-relaxed text-[var(--color-text-muted)] md:mt-6 md:text-base">
+                <p className="mt-5 hidden text-sm leading-relaxed text-[var(--color-text-muted)] md:mt-6 md:block md:text-base">
                     <span className="font-semibold text-[var(--color-text-strong)]">{gameTitle}</span>
                     {' by '}
                     <span className="font-bold text-[var(--color-accent-600)] underline decoration-[var(--color-accent-300)] underline-offset-[3px]">

@@ -4,10 +4,10 @@ import { buildGameDetailPath, buildGameDetailSlug } from '../../utils/gameDetail
 export { default as GameCardFavouriteButton } from './GameCardFavouriteButton';
 
 /**
- * Hover overlay: brand tint + centered gold â€œPlay Nowâ€ (site CTA tokens). No title text.
- * Parent card must use `group`. showOnHover: overlay only from md+ (hidden on mobile â€” use full-card tap to navigate).
+ * Hover overlay: brand tint + centered gold “Play Now” (site CTA tokens). No title text.
+ * Parent card must use `group`. showOnHover: overlay only from md+ (hidden on mobile — use full-card tap to navigate).
  *
- * SPA routing: pass `onNavigate` + `gameName`/`gameProvider` or `gameSlug` â€” primary click calls
+ * SPA routing: pass `onNavigate` + `gameName`/`gameProvider` or `gameSlug` — primary click calls
  * `onNavigate('game-detail', { gameSlug })` while `href` is set for open-in-new-tab / share.
  */
 export function GameCardPlayBar({

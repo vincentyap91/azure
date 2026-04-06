@@ -143,50 +143,53 @@ export default function AccountSidebar({
     return (
         <>
             <aside
-                className="relative flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain border-r border-[var(--color-accent-100)] bg-[var(--color-surface-base)] p-5 text-[var(--color-text-strong)] shadow-[var(--shadow-sidebar)] transition-transform duration-300 lg:sticky lg:top-24 lg:h-auto lg:max-h-none lg:w-[320px] lg:flex-none lg:overflow-visible lg:rounded-[24px] lg:border lg:border-[var(--color-border-default)] lg:p-6 lg:shadow-[var(--shadow-card-raised)] w-full max-w-[88vw] lg:max-w-none"
+                className="relative flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain border-r border-[var(--color-accent-100)] bg-[var(--color-surface-base)] p-3.5 text-[var(--color-text-strong)] shadow-[var(--shadow-sidebar)] transition-transform duration-300 lg:sticky lg:top-24 lg:h-auto lg:max-h-none lg:w-[320px] lg:flex-none lg:overflow-visible lg:rounded-[24px] lg:border lg:border-[var(--color-border-default)] lg:p-6 lg:shadow-[var(--shadow-card-raised)] w-full max-w-[88vw] lg:max-w-none"
             >
                 <div>
-                    <div className="flex items-start gap-4 pt-1">
-                        <div className="relative shrink-0 mt-1 ml-1">
-                            <div className="blue-accent-avatar flex aspect-square h-16 w-16 items-center justify-center overflow-hidden rounded-full">
-                                <UserCircle2 size={40} className="block text-[var(--color-accent-600)]" />
+                    <div className="flex items-start gap-3 pt-0 lg:gap-4 lg:pt-1">
+                        <div className="relative ml-0 mt-0 shrink-0 lg:ml-1 lg:mt-1">
+                            <div className="blue-accent-avatar flex aspect-square h-14 w-14 items-center justify-center overflow-hidden rounded-full lg:h-16 lg:w-16">
+                                <UserCircle2 className="block h-8 w-8 text-[var(--color-accent-600)] lg:h-10 lg:w-10" />
                             </div>
                             <button
                                 type="button"
-                                className="absolute bottom-0 right-0 inline-flex h-7 w-7 items-center justify-center rounded-full border border-[var(--color-accent-100)] bg-[var(--color-surface-base)] text-[var(--color-accent-600)] shadow-sm transition hover:scale-105 hover:bg-[var(--color-accent-50)]"
+                                onClick={() => onNavigate?.('profile')}
+                                className="absolute bottom-0 right-0 inline-flex h-6 w-6 items-center justify-center rounded-full border border-[var(--color-accent-100)] bg-[var(--color-surface-base)] text-[var(--color-accent-600)] shadow-sm transition hover:scale-105 hover:bg-[var(--color-accent-50)] lg:h-7 lg:w-7"
                                 aria-label="Edit profile"
                             >
-                                <PencilLine size={12} />
+                                <PencilLine className="h-3 w-3 lg:h-3.5 lg:w-3.5" />
                             </button>
                         </div>
-                        <div className="min-w-0 flex-1 pt-1">
-                            <p className="text-2xl font-bold leading-tight text-[var(--color-text-strong)]">Hi, {username}</p>
-                            <div className="mt-2 space-y-1 text-sm font-medium text-[var(--color-text-muted)]">
+                        <div className="min-w-0 flex-1 pt-0 lg:pt-1">
+                            <p className="text-xl font-bold leading-tight text-[var(--color-text-strong)] lg:text-2xl">Hi, {username}</p>
+                            <div className="mt-1.5 space-y-0.5 text-xs font-medium text-[var(--color-text-muted)] lg:mt-2 lg:space-y-1 lg:text-sm">
                                 <p>Joined: 08/01/2026</p>
                                 <p>Player ID: 679129</p>
                             </div>
-                            <VipStatusPill level={vipLevel} className="mt-3" />
+                            <VipStatusPill level={vipLevel} className="mt-2 lg:mt-3" />
                         </div>
                     </div>
                 </div>
 
-                <div className="mt-8 space-y-5">
-                    <div className="rounded-[20px] border border-[var(--color-border-default)] bg-[var(--color-surface-muted-soft)] p-4">
+                <div className="mt-5 space-y-3 lg:mt-8 lg:space-y-5">
+                    <div className="rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-surface-muted-soft)] p-3 lg:rounded-[20px] lg:p-4">
                         <button
                             type="button"
                             onClick={() => toggleMenu('cashier')}
-                            className="flex w-full items-center justify-between gap-3 text-left"
+                            className="flex min-h-[44px] w-full items-center justify-between gap-2.5 text-left lg:min-h-0 lg:gap-3"
                         >
-                            <span className="flex items-center gap-3">
-                                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-accent-100)] text-[var(--color-accent-600)]">
-                                    <Wallet size={18} />
+                            <span className="flex min-w-0 items-center gap-2.5 lg:gap-3">
+                                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent-100)] text-[var(--color-accent-600)] lg:h-10 lg:w-10">
+                                    <Wallet className="h-4 w-4 lg:h-[18px] lg:w-[18px]" />
                                 </span>
-                                <span className="text-lg font-bold text-[var(--color-text-strong)]">Cashier</span>
+                                <span className="text-base font-bold text-[var(--color-text-strong)] lg:text-lg">Cashier</span>
                             </span>
-                            <ChevronDown size={18} className={`text-[var(--color-text-soft)] transition-transform ${openMenus.cashier ? 'rotate-180' : ''}`} />
+                            <ChevronDown
+                                className={`h-4 w-4 shrink-0 text-[var(--color-text-soft)] transition-transform lg:h-[18px] lg:w-[18px] ${openMenus.cashier ? 'rotate-180' : ''}`}
+                            />
                         </button>
                         {isMenuOpen('cashier') && (
-                            <div className="mt-4 space-y-1 overflow-hidden rounded-xl bg-[var(--color-surface-base)] p-1">
+                            <div className="mt-2.5 space-y-1 overflow-hidden rounded-xl bg-[var(--color-surface-base)] p-1 lg:mt-4">
                                 {cashierLinks.map(({ id, label, icon: Icon }) => {
                                     const isActive = activePage === id;
                                     return (
@@ -194,14 +197,16 @@ export default function AccountSidebar({
                                             key={id}
                                             type="button"
                                             onClick={() => handleCashierClick(id)}
-                                            className={`group flex min-h-[48px] w-full items-center gap-3 rounded-xl border-l-4 px-4 py-3.5 text-left transition-all ${
+                                            className={`group flex min-h-[44px] w-full items-center gap-2.5 rounded-xl border-l-4 px-3 py-2.5 text-left transition-all lg:min-h-[48px] lg:gap-3 lg:px-4 lg:py-3.5 ${
                                                 isActive
                                                     ? 'border-l-[var(--color-accent-500)] bg-[var(--color-accent-50)] text-[var(--color-accent-700)] shadow-sm'
                                                     : 'border-l-transparent bg-[var(--color-surface-base)] text-[var(--color-text-muted)] hover:scale-[1.02] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-700)]'
                                             }`}
                                         >
-                                            <Icon size={18} className={`${isActive ? 'text-[var(--color-accent-600)]' : 'text-[var(--color-text-soft)] group-hover:text-[var(--color-accent-500)]'}`} />
-                                            <span className="text-base font-normal">{label}</span>
+                                            <Icon
+                                                className={`h-4 w-4 shrink-0 lg:h-[18px] lg:w-[18px] ${isActive ? 'text-[var(--color-accent-600)]' : 'text-[var(--color-text-soft)] group-hover:text-[var(--color-accent-500)]'}`}
+                                            />
+                                            <span className="text-sm font-normal lg:text-base">{label}</span>
                                         </button>
                                     );
                                 })}
@@ -209,22 +214,24 @@ export default function AccountSidebar({
                         )}
                     </div>
 
-                    <div className="rounded-[20px] border border-[var(--color-border-default)] bg-[var(--color-surface-muted-soft)] p-4">
+                    <div className="rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-surface-muted-soft)] p-3 lg:rounded-[20px] lg:p-4">
                         <button
                             type="button"
                             onClick={() => toggleMenu('account')}
-                            className="flex w-full items-center justify-between gap-3 text-left"
+                            className="flex min-h-[44px] w-full items-center justify-between gap-2.5 text-left lg:min-h-0 lg:gap-3"
                         >
-                            <span className="flex items-center gap-3">
-                                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-accent-100)] text-[var(--color-accent-600)]">
-                                    <UserRound size={18} />
+                            <span className="flex min-w-0 items-center gap-2.5 lg:gap-3">
+                                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent-100)] text-[var(--color-accent-600)] lg:h-10 lg:w-10">
+                                    <UserRound className="h-4 w-4 lg:h-[18px] lg:w-[18px]" />
                                 </span>
-                                <span className="text-lg font-bold text-[var(--color-text-strong)]">My Account</span>
+                                <span className="text-base font-bold text-[var(--color-text-strong)] lg:text-lg">My Account</span>
                             </span>
-                            <ChevronDown size={18} className={`text-[var(--color-text-soft)] transition-transform ${isMenuOpen('account') ? 'rotate-180' : ''}`} />
+                            <ChevronDown
+                                className={`h-4 w-4 shrink-0 text-[var(--color-text-soft)] transition-transform lg:h-[18px] lg:w-[18px] ${isMenuOpen('account') ? 'rotate-180' : ''}`}
+                            />
                         </button>
                         {isMenuOpen('account') && (
-                            <div className="mt-4 space-y-1 overflow-hidden rounded-xl bg-[var(--color-surface-base)] p-1">
+                            <div className="mt-2.5 space-y-1 overflow-hidden rounded-xl bg-[var(--color-surface-base)] p-1 lg:mt-4">
                                 {accountLinks.map(({ id, label, icon: Icon }) => {
                                     const isActive = activePage === id;
                                     return (
@@ -232,14 +239,16 @@ export default function AccountSidebar({
                                             key={id}
                                             type="button"
                                             onClick={() => handleNavClick(id)}
-                                            className={`group flex min-h-[48px] w-full items-center gap-3 rounded-xl border-l-4 px-4 py-3.5 text-left transition-all ${
+                                            className={`group flex min-h-[44px] w-full items-center gap-2.5 rounded-xl border-l-4 px-3 py-2.5 text-left transition-all lg:min-h-[48px] lg:gap-3 lg:px-4 lg:py-3.5 ${
                                                 isActive
                                                     ? 'border-l-[var(--color-accent-500)] bg-[var(--color-accent-50)] text-[var(--color-accent-700)] shadow-sm'
                                                     : 'border-l-transparent bg-[var(--color-surface-base)] text-[var(--color-text-muted)] hover:scale-[1.02] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-700)]'
                                             }`}
                                         >
-                                            <Icon size={18} className={`${isActive ? 'text-[var(--color-accent-600)]' : 'text-[var(--color-text-soft)] group-hover:text-[var(--color-accent-500)]'}`} />
-                                            <span className="text-base font-normal">{label}</span>
+                                            <Icon
+                                                className={`h-4 w-4 shrink-0 lg:h-[18px] lg:w-[18px] ${isActive ? 'text-[var(--color-accent-600)]' : 'text-[var(--color-text-soft)] group-hover:text-[var(--color-accent-500)]'}`}
+                                            />
+                                            <span className="text-sm font-normal lg:text-base">{label}</span>
                                         </button>
                                     );
                                 })}
@@ -247,25 +256,24 @@ export default function AccountSidebar({
                         )}
                     </div>
 
-                    <div className="rounded-[20px] border border-[var(--color-border-default)] bg-[var(--color-surface-muted-soft)] p-4">
+                    <div className="rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-surface-muted-soft)] p-3 lg:rounded-[20px] lg:p-4">
                         <button
                             type="button"
                             onClick={() => toggleMenu('loyaltyRewards')}
-                            className="flex w-full items-center justify-between gap-3 text-left"
+                            className="flex min-h-[44px] w-full items-center justify-between gap-2.5 text-left lg:min-h-0 lg:gap-3"
                         >
-                            <span className="flex items-center gap-3">
-                                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-accent-100)] text-[var(--color-accent-600)]">
-                                    <Trophy size={18} />
+                            <span className="flex min-w-0 items-center gap-2.5 lg:gap-3">
+                                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent-100)] text-[var(--color-accent-600)] lg:h-10 lg:w-10">
+                                    <Trophy className="h-4 w-4 lg:h-[18px] lg:w-[18px]" />
                                 </span>
-                                <span className="text-lg font-bold text-[var(--color-text-strong)]">Rewards</span>
+                                <span className="text-base font-bold text-[var(--color-text-strong)] lg:text-lg">Rewards</span>
                             </span>
                             <ChevronDown
-                                size={18}
-                                className={`text-[var(--color-text-soft)] transition-transform ${isMenuOpen('loyaltyRewards') ? 'rotate-180' : ''}`}
+                                className={`h-4 w-4 shrink-0 text-[var(--color-text-soft)] transition-transform lg:h-[18px] lg:w-[18px] ${isMenuOpen('loyaltyRewards') ? 'rotate-180' : ''}`}
                             />
                         </button>
                         {isMenuOpen('loyaltyRewards') && (
-                            <div className="mt-4 space-y-1 overflow-hidden rounded-xl bg-[var(--color-surface-base)] p-1">
+                            <div className="mt-2.5 space-y-1 overflow-hidden rounded-xl bg-[var(--color-surface-base)] p-1 lg:mt-4">
                                 {REWARDS_PROGRAMS.map(({ id, label }) => {
                                     const NavIcon = REWARDS_NAV_ICONS[id] ?? Trophy;
                                     const isActive =
@@ -275,21 +283,20 @@ export default function AccountSidebar({
                                             key={id}
                                             type="button"
                                             onClick={() => onNavigate?.('loyalty-rewards', { rewardsTab: id })}
-                                            className={`group flex min-h-[48px] w-full items-center gap-3 rounded-xl border-l-4 px-4 py-3.5 text-left transition-all ${
+                                            className={`group flex min-h-[44px] w-full items-center gap-2.5 rounded-xl border-l-4 px-3 py-2.5 text-left transition-all lg:min-h-[48px] lg:gap-3 lg:px-4 lg:py-3.5 ${
                                                 isActive
                                                     ? 'border-l-[var(--color-accent-500)] bg-[var(--color-accent-50)] text-[var(--color-accent-700)] shadow-sm'
                                                     : 'border-l-transparent bg-[var(--color-surface-base)] text-[var(--color-text-muted)] hover:scale-[1.02] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-700)]'
                                             }`}
                                         >
                                             <NavIcon
-                                                size={18}
-                                                className={`${
+                                                className={`h-4 w-4 shrink-0 lg:h-[18px] lg:w-[18px] ${
                                                     isActive
                                                         ? 'text-[var(--color-accent-600)]'
                                                         : 'text-[var(--color-text-soft)] group-hover:text-[var(--color-accent-500)]'
                                                 }`}
                                             />
-                                            <span className="text-base font-normal">{label}</span>
+                                            <span className="text-sm font-normal lg:text-base">{label}</span>
                                         </button>
                                     );
                                 })}
@@ -297,22 +304,24 @@ export default function AccountSidebar({
                         )}
                     </div>
 
-                    <div className="rounded-[20px] border border-[var(--color-border-default)] bg-[var(--color-surface-muted-soft)] p-4">
+                    <div className="rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-surface-muted-soft)] p-3 lg:rounded-[20px] lg:p-4">
                         <button
                             type="button"
                             onClick={() => toggleMenu('historyRecord')}
-                            className="flex w-full items-center justify-between gap-3 text-left"
+                            className="flex min-h-[44px] w-full items-center justify-between gap-2.5 text-left lg:min-h-0 lg:gap-3"
                         >
-                            <span className="flex items-center gap-3">
-                                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-accent-100)] text-[var(--color-accent-600)]">
-                                    <History size={18} />
+                            <span className="flex min-w-0 items-center gap-2.5 lg:gap-3">
+                                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent-100)] text-[var(--color-accent-600)] lg:h-10 lg:w-10">
+                                    <History className="h-4 w-4 lg:h-[18px] lg:w-[18px]" />
                                 </span>
-                                <span className="text-lg font-bold text-[var(--color-text-strong)]">History Record</span>
+                                <span className="text-base font-bold text-[var(--color-text-strong)] lg:text-lg">History Record</span>
                             </span>
-                            <ChevronDown size={18} className={`text-[var(--color-text-soft)] transition-transform ${isMenuOpen('historyRecord') ? 'rotate-180' : ''}`} />
+                            <ChevronDown
+                                className={`h-4 w-4 shrink-0 text-[var(--color-text-soft)] transition-transform lg:h-[18px] lg:w-[18px] ${isMenuOpen('historyRecord') ? 'rotate-180' : ''}`}
+                            />
                         </button>
                         {isMenuOpen('historyRecord') && (
-                            <div className="mt-4 space-y-1 overflow-hidden rounded-xl bg-[var(--color-surface-base)] p-1">
+                            <div className="mt-2.5 space-y-1 overflow-hidden rounded-xl bg-[var(--color-surface-base)] p-1 lg:mt-4">
                                 {HISTORY_RECORD_NAV.map(({ id, label, icon: Icon }) => {
                                     const isActive = activePage === id;
                                     return (
@@ -320,14 +329,16 @@ export default function AccountSidebar({
                                             key={id}
                                             type="button"
                                             onClick={() => onNavigate?.(id)}
-                                            className={`group flex min-h-[48px] w-full items-center gap-3 rounded-xl border-l-4 px-4 py-3.5 text-left transition-all hover:scale-[1.02] ${
+                                            className={`group flex min-h-[44px] w-full items-center gap-2.5 rounded-xl border-l-4 px-3 py-2.5 text-left transition-all hover:scale-[1.02] lg:min-h-[48px] lg:gap-3 lg:px-4 lg:py-3.5 ${
                                                 isActive
                                                     ? 'border-l-[var(--color-accent-500)] bg-[var(--color-accent-50)] text-[var(--color-accent-700)]'
                                                     : 'border-l-transparent bg-[var(--color-surface-base)] text-[var(--color-text-muted)] hover:border-l-[var(--color-accent-500)] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-700)]'
                                             }`}
                                         >
-                                            <Icon size={18} className={`${isActive ? 'text-[var(--color-accent-600)]' : 'text-[var(--color-text-soft)] group-hover:text-[var(--color-accent-500)]'}`} />
-                                            <span className="text-base font-normal">{label}</span>
+                                            <Icon
+                                                className={`h-4 w-4 shrink-0 lg:h-[18px] lg:w-[18px] ${isActive ? 'text-[var(--color-accent-600)]' : 'text-[var(--color-text-soft)] group-hover:text-[var(--color-accent-500)]'}`}
+                                            />
+                                            <span className="text-sm font-normal lg:text-base">{label}</span>
                                         </button>
                                     );
                                 })}
@@ -335,22 +346,24 @@ export default function AccountSidebar({
                         )}
                     </div>
 
-                    <div className="rounded-[20px] border border-[var(--color-border-default)] bg-[var(--color-surface-muted-soft)] p-4">
+                    <div className="rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-surface-muted-soft)] p-3 lg:rounded-[20px] lg:p-4">
                         <button
                             type="button"
                             onClick={() => toggleMenu('settings')}
-                            className="flex w-full items-center justify-between gap-3 text-left"
+                            className="flex min-h-[44px] w-full items-center justify-between gap-2.5 text-left lg:min-h-0 lg:gap-3"
                         >
-                            <span className="flex items-center gap-3">
-                                <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--color-accent-100)] text-[var(--color-accent-600)]">
-                                    <Settings size={18} />
+                            <span className="flex min-w-0 items-center gap-2.5 lg:gap-3">
+                                <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--color-accent-100)] text-[var(--color-accent-600)] lg:h-10 lg:w-10">
+                                    <Settings className="h-4 w-4 lg:h-[18px] lg:w-[18px]" />
                                 </span>
-                                <span className="text-lg font-bold text-[var(--color-text-strong)]">Settings</span>
+                                <span className="text-base font-bold text-[var(--color-text-strong)] lg:text-lg">Settings</span>
                             </span>
-                            <ChevronDown size={18} className={`text-[var(--color-text-soft)] transition-transform ${isMenuOpen('settings') ? 'rotate-180' : ''}`} />
+                            <ChevronDown
+                                className={`h-4 w-4 shrink-0 text-[var(--color-text-soft)] transition-transform lg:h-[18px] lg:w-[18px] ${isMenuOpen('settings') ? 'rotate-180' : ''}`}
+                            />
                         </button>
                         {isMenuOpen('settings') && (
-                            <div className="mt-4 space-y-1 overflow-hidden rounded-xl bg-[var(--color-surface-base)] p-1">
+                            <div className="mt-2.5 space-y-1 overflow-hidden rounded-xl bg-[var(--color-surface-base)] p-1 lg:mt-4">
                                 {settingsOptions.map(({ id, label, icon: Icon, action }) => {
                                     const isActive = activePage === id;
                                     const isLiveChat = action === 'liveChat';
@@ -365,14 +378,16 @@ export default function AccountSidebar({
                                                 }
                                                 onNavigate?.(id);
                                             }}
-                                            className={`group flex min-h-[48px] w-full items-center gap-3 rounded-xl border-l-4 px-4 py-3.5 text-left transition-all hover:scale-[1.02] ${
+                                            className={`group flex min-h-[44px] w-full items-center gap-2.5 rounded-xl border-l-4 px-3 py-2.5 text-left transition-all hover:scale-[1.02] lg:min-h-[48px] lg:gap-3 lg:px-4 lg:py-3.5 ${
                                                 isActive && !isLiveChat
                                                     ? 'border-l-[var(--color-accent-500)] bg-[var(--color-accent-50)] text-[var(--color-accent-700)]'
                                                     : 'border-l-transparent bg-[var(--color-surface-base)] text-[var(--color-text-muted)] hover:border-l-[var(--color-accent-500)] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-700)]'
                                             }`}
                                         >
-                                            <Icon size={18} className={`${isActive && !isLiveChat ? 'text-[var(--color-accent-600)]' : 'text-[var(--color-text-soft)] group-hover:text-[var(--color-accent-500)]'}`} />
-                                            <span className="text-base font-normal">{label}</span>
+                                            <Icon
+                                                className={`h-4 w-4 shrink-0 lg:h-[18px] lg:w-[18px] ${isActive && !isLiveChat ? 'text-[var(--color-accent-600)]' : 'text-[var(--color-text-soft)] group-hover:text-[var(--color-accent-500)]'}`}
+                                            />
+                                            <span className="text-sm font-normal lg:text-base">{label}</span>
                                         </button>
                                     );
                                 })}
@@ -383,9 +398,9 @@ export default function AccountSidebar({
                     <button
                         type="button"
                         onClick={onLogout}
-                        className="mt-2 inline-flex min-h-[48px] w-full items-center gap-3 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-base)] px-4 py-3.5 text-left text-sm font-semibold text-[var(--color-text-main)] shadow-[0_4px_12px_rgba(15,23,42,0.04)] transition-all hover:scale-[1.02] hover:border-[var(--color-accent-200)] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-700)]"
+                        className="mt-1.5 inline-flex min-h-[44px] w-full items-center gap-2.5 rounded-xl border border-[var(--color-border-default)] bg-[var(--color-surface-base)] px-3 py-2.5 text-left text-sm font-semibold text-[var(--color-text-main)] shadow-[0_4px_12px_rgba(15,23,42,0.04)] transition-all hover:scale-[1.02] hover:border-[var(--color-accent-200)] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-accent-700)] lg:mt-2 lg:min-h-[48px] lg:gap-3 lg:px-4 lg:py-3.5"
                     >
-                        <LogOut size={18} />
+                        <LogOut className="h-4 w-4 shrink-0 lg:h-[18px] lg:w-[18px]" />
                         Log Out
                     </button>
                 </div>

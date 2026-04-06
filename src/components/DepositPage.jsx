@@ -318,24 +318,28 @@ export default function DepositPage({ onNavigate }) {
                                         key={id}
                                         type="button"
                                         onClick={() => setDepositSpeedTab(id)}
-                                        className={`min-w-0 flex-1 px-4 py-4 text-center transition sm:px-6 ${
+                                        className={`min-w-0 flex-1 px-3 py-2.5 text-center transition sm:px-6 sm:py-4 ${
                                             idx === 0 ? 'rounded-tl-2xl' : 'rounded-tr-2xl'
                                         } ${
                                             isActive
-                                                ? 'bg-gradient-to-b from-[var(--color-accent-400)] to-[var(--color-accent-600)] text-white shadow-sm'
+                                                ? 'bg-gradient-to-b from-[var(--color-accent-400)] to-[var(--color-accent-600)] text-white shadow-none sm:shadow-sm'
                                                 : 'bg-[var(--color-surface-muted)] text-[var(--color-text-strong)] hover:bg-[var(--color-surface-subtle)]'
                                         }`}
                                     >
-                                        <p className="text-base font-bold">{label}</p>
-                                        <p className={`mt-1 flex items-center justify-center gap-1 text-xs ${isActive ? 'text-white/90' : 'text-[var(--color-text-muted)]'}`}>
-                                            <Clock size={12} />
+                                        <p className="text-sm font-bold leading-tight sm:text-base sm:leading-normal">{label}</p>
+                                        <p
+                                            className={`mt-0.5 flex items-center justify-center gap-0.5 text-xs leading-tight sm:mt-1 sm:gap-1 sm:leading-normal ${
+                                                isActive ? 'text-white/90' : 'text-[var(--color-text-muted)]'
+                                            }`}
+                                        >
+                                            <Clock className="h-3 w-3 shrink-0 sm:h-3.5 sm:w-3.5" strokeWidth={2} aria-hidden />
                                             {time}
                                         </p>
                                     </button>
                                 );
                             })}
                         </div>
-                        <div className="space-y-6 p-5 md:p-6">
+                        <div className="space-y-4 p-5 sm:space-y-6 md:p-6">
                         <div className="flex items-center gap-3">
                             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[var(--color-accent-600)] text-sm font-bold text-white">
                                 1
@@ -347,44 +351,44 @@ export default function DepositPage({ onNavigate }) {
                         </div>
 
                         {depositSpeedTab === 'normal' ? (
-                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div className="mx-auto grid max-w-sm grid-cols-1 gap-4">
                                 <button
                                     type="button"
-                                    className="relative flex flex-col items-center gap-3 rounded-xl border-2 border-[var(--color-accent-500)] bg-[var(--color-accent-50)] p-6 transition"
+                                    className="relative flex min-h-[7.25rem] flex-col items-center justify-center gap-2 rounded-xl border-2 border-[var(--color-accent-500)] bg-[var(--color-accent-50)] p-4 text-center transition sm:min-h-0 sm:gap-3 sm:p-6"
                                 >
                                     <img
                                         src={instantDepositImg}
                                         alt="Normal Deposit"
-                                        className="h-14 w-auto object-contain"
+                                        className="h-12 w-auto object-contain sm:h-14"
                                     />
-                                    <p className="text-base font-bold text-[var(--color-text-strong)]">Normal Deposit</p>
+                                    <p className="text-sm font-bold text-[var(--color-text-strong)] sm:text-base">Normal Deposit</p>
                                 </button>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div className="grid grid-cols-2 gap-3 sm:gap-4">
                                 {DEPOSIT_OPTION_TYPES.map(({ id, label, badge, image }) => (
                                     <button
                                         key={id}
                                         type="button"
                                         onClick={() => setDepositOptionType(id)}
-                                        className={`relative flex flex-col items-center gap-3 rounded-xl border-2 p-6 transition ${
+                                        className={`relative flex h-full min-h-[7.25rem] flex-col items-center justify-center gap-2 rounded-xl border-2 p-4 text-center transition sm:min-h-0 sm:gap-3 sm:p-6 ${
                                             depositOptionType === id
                                                 ? 'border-[var(--color-accent-500)] bg-[var(--color-accent-50)]'
                                                 : 'border-[var(--color-border-default)] bg-[var(--color-surface-base)] hover:border-[var(--color-accent-200)]'
                                         }`}
                                     >
                                         {badge && (
-                                            <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded bg-gradient-to-r from-amber-400 to-red-500 px-2 py-0.5 text-xs font-bold text-white">
-                                                <Zap size={12} />
+                                            <span className="absolute left-2 top-2 inline-flex max-w-[calc(100%-1rem)] items-center gap-0.5 truncate rounded bg-gradient-to-r from-amber-400 to-red-500 px-1.5 py-0.5 text-[10px] font-bold text-white sm:left-3 sm:top-3 sm:gap-1 sm:px-2 sm:text-xs">
+                                                <Zap size={12} className="shrink-0" />
                                                 {badge}
                                             </span>
                                         )}
                                         <img
                                             src={image}
                                             alt={label}
-                                            className="h-14 w-auto object-contain"
+                                            className="h-12 w-auto max-w-full object-contain sm:h-14"
                                         />
-                                        <p className="text-base font-bold text-[var(--color-text-strong)]">{label}</p>
+                                        <p className="text-sm font-bold leading-tight text-[var(--color-text-strong)] sm:text-base">{label}</p>
                                     </button>
                                 ))}
                             </div>

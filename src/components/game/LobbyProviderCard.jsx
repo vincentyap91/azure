@@ -3,7 +3,7 @@ import { GameCardFavouriteButton, GameCardPlayBar } from './GameCardActions';
 
 /**
  * Lobby provider tile (Live Casino pattern): banner tap target, mobile bottom Play + md hover Play,
- * favourite heart, optional HOT â€” shared across live casino, sports, e-sports, lottery, poker.
+ * favourite heart, optional HOT — shared across live casino, sports, e-sports, lottery, poker.
  */
 export default function LobbyProviderCard({
     provider,

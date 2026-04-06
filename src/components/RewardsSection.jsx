@@ -12,7 +12,7 @@ import RewardsActivityRecordModal from './RewardsActivityRecordModal';
 import HorizontalScrollTabRow, { scrollTabIntoViewSmooth } from './HorizontalScrollTabRow';
 import { REWARDS_ACTIVITY_RECORD_TYPES, REWARDS_PROGRAM_IDS, REWARDS_PROGRAMS } from '../constants/rewardsPrograms';
 
-/** Demo main wallet balance (Spin / Voucher / Prize rewards area â€” hidden on Daily Bonus) */
+/** Demo main wallet balance (Spin / Voucher / Prize rewards area — hidden on Daily Bonus) */
 const REWARDS_WALLET_BALANCE = '201.00';
 
 const REWARDS_RECORD_COLUMNS = [
@@ -97,7 +97,7 @@ function TermsBlock({ title, subtitle, children }) {
     );
 }
 
-/** Shared â€œscratch voucherâ€ visual: neon gradient hero, scan lines, corner badge, footer CTA */
+/** Shared “scratch voucher” visual: neon gradient hero, scan lines, corner badge, footer CTA */
 function ScratchStyleRewardCard({
     badge,
     heroCenter,
@@ -177,7 +177,7 @@ function DailyBonusPanel() {
     return (
         <div className="space-y-6">
             <div className="overflow-hidden rounded-[var(--radius-panel-lg)] border border-[var(--color-border-brand)] bg-[var(--color-surface-base)] shadow-[var(--shadow-card-soft)]">
-                {/* Light blue header â€” matches screenshot top block */}
+                {/* Light blue header — matches screenshot top block */}
                 <div className="bg-[linear-gradient(180deg,var(--color-accent-50)_0%,rgb(219_234_254)_100%)] px-5 py-5 sm:px-6 sm:py-6">
                     <h3 className="text-lg font-bold text-[rgb(18_63_128)] md:text-xl">Daily Check In</h3>
                     <p className="mt-2 text-sm leading-relaxed text-[var(--color-text-main)]">
@@ -197,7 +197,7 @@ function DailyBonusPanel() {
                         Claim MYR rewards each day. Some days may require minimum valid turnover on your main wallet.
                     </p>
                 </div>
-                {/* Day cards â€” white area inside same card */}
+                {/* Day cards — white area inside same card */}
                 <div className="border-t border-[var(--color-border-default)] bg-[var(--color-surface-base)] p-4 sm:p-5 md:p-6">
                     <div className="overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]">
                         <div className="flex min-w-0 gap-2.5 sm:grid sm:grid-cols-7 sm:gap-3 md:gap-4">
@@ -279,7 +279,7 @@ function SpinWheelPanel() {
             <div>
                 <h3 className="text-base font-bold text-[var(--color-text-strong)]">Spin offers</h3>
                 <p className="mt-1 text-sm text-[var(--color-text-muted)]">
-                    Same scratch-card look â€” spin for random MYR; prizes credit to your wallet after claim.
+                    Same scratch-card look — spin for random MYR; prizes credit to your wallet after claim.
                 </p>
                 <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {SPIN_OFFERS.map((s) => (
@@ -316,7 +316,7 @@ function VoucherScratchPanel() {
             <div>
                 <h3 className="text-base font-bold text-[var(--color-text-strong)]">Scratch &amp; redeem</h3>
                 <p className="mt-1 text-sm text-[var(--color-text-muted)]">
-                    Reveal vouchers â€” MYR credit applies to your main wallet when you complete redemption.
+                    Reveal vouchers — MYR credit applies to your main wallet when you complete redemption.
                 </p>
                 <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {VOUCHERS.map((v) => (
@@ -469,7 +469,7 @@ export default function RewardsSection({ embedInPage = false }) {
                                 Rewards
                             </h2>
                             <p className="mt-1 text-sm font-medium text-[var(--color-text-muted)]">
-                                Check in, spin, scratch, and open prizes â€” claim MYR to your wallet.
+                                Check in, spin, scratch, and open prizes — claim MYR to your wallet.
                             </p>
                         </div>
                     </div>
