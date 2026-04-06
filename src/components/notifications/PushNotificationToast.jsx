@@ -16,8 +16,8 @@ import {
 import { PUSH_VARIANT } from '../../constants/pushNotificationCopy';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 
-const DURATION_MS_DEFAULT = 4000;
-const DURATION_MS_AUTH = 4000;
+const DURATION_MS_DEFAULT = 3000;
+const DURATION_MS_AUTH = 3000;
 
 const EXIT_ANIMATION_NAME = 'push-notification-exit';
 
@@ -115,7 +115,10 @@ export function PushNotificationToast({
     onTimerResume,
 }) {
     const reducedMotion = usePrefersReducedMotion();
-    const [timeLeftMs, setTimeLeftMs] = React.useState(durationMs);
+    const progressBarRef = React.useRef(null);
+    const progressAnimRef = React.useRef({ exiting, timerPaused, dismissAt, durationMs, pauseRemainderMs });
+    progressAnimRef.current = { exiting, timerPaused, dismissAt, durationMs, pauseRemainderMs };
+
     const onExitCompleteRef = React.useRef(onExitComplete);
     onExitCompleteRef.current = onExitComplete;
     const resumeRafRef = React.useRef(0);
@@ -124,25 +127,55 @@ export function PushNotificationToast({
     const vs = variantStyles[resolvedVariant] ?? variantStyles[PUSH_VARIANT.info];
     const Icon = pickIcon({ variant: resolvedVariant, category, showPending, eventId });
     const isAssertive = resolvedVariant === PUSH_VARIANT.error || resolvedVariant === PUSH_VARIANT.warning;
-    const progress = durationMs > 0 ? Math.max(0, Math.min(1, timeLeftMs / durationMs)) : 0;
 
     const animClass = exiting ? 'push-notification-toast-exit' : 'push-notification-toast-enter';
 
+    /**
+     * Smooth countdown bar: drive scaleX via rAF + ref (no 100ms interval re-renders).
+     * Dismiss timing stays in ActionNotificationsProvider (setTimeout from dismissAt).
+     */
     React.useEffect(() => {
         if (exiting) return;
-        if (timerPaused) {
-            setTimeLeftMs(Math.max(0, pauseRemainderMs ?? 0));
-            return;
-        }
-        if (typeof dismissAt !== 'number' || Number.isNaN(dismissAt)) return;
+
+        let rafId = 0;
+
+        const applyProgress = () => {
+            const { timerPaused: paused, dismissAt: endAt, durationMs: totalMs, pauseRemainderMs: pausedLeft } =
+                progressAnimRef.current;
+
+            let p = 0;
+            if (paused) {
+                p = totalMs > 0 ? Math.max(0, Math.min(1, (pausedLeft ?? 0) / totalMs)) : 0;
+            } else if (typeof endAt === 'number' && !Number.isNaN(endAt)) {
+                const left = Math.max(0, endAt - Date.now());
+                p = totalMs > 0 ? Math.max(0, Math.min(1, left / totalMs)) : 0;
+            }
+
+            const el = progressBarRef.current;
+            if (el) {
+                el.style.transform = `scaleX(${p})`;
+            }
+        };
 
         const tick = () => {
-            setTimeLeftMs(Math.max(0, dismissAt - Date.now()));
+            if (progressAnimRef.current.exiting) return;
+
+            applyProgress();
+
+            const { timerPaused: paused, dismissAt: endAt } = progressAnimRef.current;
+            if (paused) return;
+            if (typeof endAt !== 'number' || Number.isNaN(endAt) || endAt <= Date.now()) return;
+
+            rafId = window.requestAnimationFrame(tick);
         };
-        tick();
-        const intervalId = window.setInterval(tick, 100);
-        return () => window.clearInterval(intervalId);
-    }, [exiting, timerPaused, dismissAt, pauseRemainderMs]);
+
+        applyProgress();
+        if (!timerPaused && typeof dismissAt === 'number' && !Number.isNaN(dismissAt) && dismissAt > Date.now()) {
+            rafId = window.requestAnimationFrame(tick);
+        }
+
+        return () => window.cancelAnimationFrame(rafId);
+    }, [exiting, timerPaused, dismissAt, pauseRemainderMs, durationMs]);
 
     function handlePointerEnter(e) {
         if (exiting) return;
@@ -262,11 +295,9 @@ export function PushNotificationToast({
                 className="absolute inset-x-0 bottom-0 h-1.5 overflow-hidden bg-[var(--color-surface-muted)]"
             >
                 <div
-                    className={`h-full transition-[width] duration-100 ease-linear ${vs.accent}`}
-                    style={{
-                        width: `${progress * 100}%`,
-                        transition: reducedMotion || timerPaused ? 'none' : undefined,
-                    }}
+                    ref={progressBarRef}
+                    className={`h-full w-full origin-left will-change-transform motion-reduce:will-change-auto ${vs.accent}`}
+                    style={{ transform: 'scaleX(1)' }}
                 />
             </div>
         </div>
