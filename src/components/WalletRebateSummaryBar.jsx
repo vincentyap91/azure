@@ -20,7 +20,7 @@ function SummaryItem({
                 <p
                     className={`tabular-nums leading-none tracking-[-0.03em] ${valueClassName} ${
                         isPrimary
-                            ? 'text-3xl font-bold sm:text-3xl'
+                            ? 'text-2xl font-bold sm:text-3xl'
                             : 'text-2xl font-bold sm:text-3xl'
                     }`}
                 >
