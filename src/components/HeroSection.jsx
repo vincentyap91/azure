@@ -7,7 +7,7 @@ export default function HeroSection() {
     return (
         <div className="relative w-full overflow-hidden bg-[var(--color-brand-primary)]">
             {/* Main Hero Container — mobile fixed height matches site-wide banners */}
-            <div className="relative flex w-full max-md:h-[150px] max-md:overflow-hidden flex-col justify-end">
+            <div className="relative flex w-full max-md:h-[135px] max-md:overflow-hidden flex-col justify-end">
                 <img
                     src={homeBanner}
                     alt="Hero Banner"

@@ -619,6 +619,9 @@ function AppInner() {
         onLogin={(userOrUsername) => {
           handleLogin(userOrUsername);
           setLoginModalOpen(false);
+          if (page === 'register') {
+            handleNavigate('home');
+          }
         }}
         onRegisterClick={() => {
           setLoginModalOpen(false);

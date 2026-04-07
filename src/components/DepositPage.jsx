@@ -351,17 +351,19 @@ export default function DepositPage({ onNavigate }) {
                         </div>
 
                         {depositSpeedTab === 'normal' ? (
-                            <div className="mx-auto grid max-w-sm grid-cols-1 gap-4">
+                            <div className="grid grid-cols-2 gap-3 sm:gap-4">
                                 <button
                                     type="button"
-                                    className="relative flex min-h-[7.25rem] flex-col items-center justify-center gap-2 rounded-xl border-2 border-[var(--color-accent-500)] bg-[var(--color-accent-50)] p-4 text-center transition sm:min-h-0 sm:gap-3 sm:p-6"
+                                    className="relative col-span-2 flex min-h-[7.25rem] flex-col items-center justify-center gap-2 rounded-xl border-2 border-[var(--color-accent-500)] bg-[var(--color-accent-50)] p-4 text-center transition sm:min-h-0 sm:gap-3 sm:p-6"
                                 >
                                     <img
                                         src={instantDepositImg}
                                         alt="Normal Deposit"
                                         className="h-12 w-auto object-contain sm:h-14"
                                     />
-                                    <p className="text-sm font-bold text-[var(--color-text-strong)] sm:text-base">Normal Deposit</p>
+                                    <p className="text-sm font-bold leading-tight text-[var(--color-text-strong)] sm:text-base">
+                                        Normal Deposit
+                                    </p>
                                 </button>
                             </div>
                         ) : (
@@ -388,7 +390,9 @@ export default function DepositPage({ onNavigate }) {
                                             alt={label}
                                             className="h-12 w-auto max-w-full object-contain sm:h-14"
                                         />
-                                        <p className="text-sm font-bold leading-tight text-[var(--color-text-strong)] sm:text-base">{label}</p>
+                                        <p className="line-clamp-2 text-sm font-bold leading-tight text-[var(--color-text-strong)] sm:text-base">
+                                            {label}
+                                        </p>
                                     </button>
                                 ))}
                             </div>
@@ -659,32 +663,36 @@ export default function DepositPage({ onNavigate }) {
                                             <span className="ml-2 text-xs font-normal text-[var(--color-text-muted)]">(Select a bank first)</span>
                                         )}
                                     </p>
-                                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
                                         {CHANNELS.map(({ id, label, desc }) => (
                                             <button
                                                 key={id}
                                                 type="button"
                                                 disabled={!canSelectChannel}
                                                 onClick={() => canSelectChannel && setSelectedChannel(id)}
-                                                className={`relative flex items-center gap-4 rounded-xl border p-4 transition ${
+                                                className={`relative flex min-h-[8.5rem] flex-col items-center gap-2 rounded-xl border p-3 text-center transition sm:min-h-0 sm:flex-row sm:items-center sm:gap-4 sm:p-4 sm:text-left ${
                                                     selectedChannel === id
                                                         ? 'border-[var(--color-accent-500)] bg-[var(--color-accent-50)]'
                                                         : 'border-[var(--color-border-default)] bg-[var(--color-surface-base)] hover:border-[var(--color-accent-200)]'
                                                 } ${!canSelectChannel ? 'cursor-not-allowed' : ''}`}
                                             >
                                                 {selectedChannel === id && (
-                                                    <div className="absolute right-3 top-3 flex h-6 w-6 items-center justify-center rounded-full bg-[var(--color-accent-600)] text-white">
-                                                        <Check size={14} />
+                                                    <div className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-accent-600)] text-white sm:right-3 sm:top-3 sm:h-6 sm:w-6">
+                                                        <Check size={12} strokeWidth={2.5} />
                                                     </div>
                                                 )}
                                                 <img
                                                     src={fpxLogo}
                                                     alt="FPX"
-                                                    className="h-10 w-auto shrink-0 object-contain"
+                                                    className="h-8 w-auto shrink-0 object-contain sm:h-10"
                                                 />
-                                                <div className="min-w-0 flex-1 text-left">
-                                                    <p className="border-b border-[var(--color-border-default)] pb-1.5 text-sm font-bold text-[var(--color-text-strong)]">{label}</p>
-                                                    <p className="mt-1.5 text-xs text-[var(--color-text-muted)]">{desc}</p>
+                                                <div className="min-w-0 flex-1 sm:text-left">
+                                                    <p className="border-b border-[var(--color-border-default)] pb-1 text-xs font-bold leading-snug text-[var(--color-text-strong)] sm:pb-1.5 sm:text-sm">
+                                                        {label}
+                                                    </p>
+                                                    <p className="mt-1 line-clamp-3 text-[11px] leading-snug text-[var(--color-text-muted)] sm:mt-1.5 sm:line-clamp-none sm:text-xs">
+                                                        {desc}
+                                                    </p>
                                                 </div>
                                             </button>
                                         ))}

@@ -55,7 +55,8 @@ export default function AccountLayout({ activePage, authUser, onNavigate, onLogo
                         />
                     )}
 
-                    <div className="min-w-0 flex-1">{children}</div>
+                    {/* Mobile: shell already uses px-4; neutralize nested .page-container horizontal padding so content aligns with Account Menu. */}
+                    <div className="min-w-0 flex-1 max-md:[&_.page-container]:px-0">{children}</div>
                 </div>
             </div>
         </main>

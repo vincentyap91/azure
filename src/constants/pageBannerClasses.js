@@ -4,7 +4,7 @@
  */
 
 export const PAGE_BANNER_WRAP =
-    'relative overflow-hidden shadow-[var(--shadow-live-banner)] max-md:h-[150px] max-md:overflow-hidden';
+    'relative overflow-hidden shadow-[var(--shadow-live-banner)] max-md:h-[135px] max-md:overflow-hidden';
 
 /** Slots / Fishing: preserve wide aspect ratio on tablet+ */
 export const PAGE_BANNER_WRAP_ASPECT = `${PAGE_BANNER_WRAP} md:aspect-[67/15]`;
