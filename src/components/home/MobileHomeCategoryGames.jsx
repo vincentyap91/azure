@@ -37,24 +37,23 @@ export default function MobileHomeCategoryGames({ onNavigate }) {
                     {CATEGORIES.map(({ id, label, icon: Icon }) => {
                         const active = activeId === id;
                         return (
-                                <button
-                                    key={id}
-                                    type="button"
-                                    onClick={() => setActiveId(id)}
-                                    className={`flex min-h-[44px] flex-col items-center justify-center gap-1 rounded-xl px-1 py-2.5 text-center transition ${
-                                        active
-                                        ? 'bg-[var(--color-accent-600)] text-white shadow-md'
-                                        : 'border border-[var(--color-border-default)] bg-[var(--color-surface-base)] text-[var(--color-text-strong)] shadow-sm'
-                                }`}
+                            <button
+                                key={id}
+                                type="button"
+                                onClick={() => setActiveId(id)}
+                                className={`flex min-h-[44px] flex-col items-center justify-center gap-1 rounded-xl px-1 py-2.5 text-center transition ${active
+                                    ? 'bg-[var(--color-accent-600)] text-white shadow-md'
+                                    : 'border border-[var(--color-border-default)] bg-[var(--color-surface-base)] text-[var(--color-text-strong)] shadow-sm'
+                                    }`}
                             >
-                                    <Icon
-                                        size={20}
-                                        strokeWidth={active ? 2.5 : 2}
-                                        className={active ? 'text-white' : 'text-[var(--color-brand-primary)]'}
-                                        aria-hidden
-                                    />
-                                    <span className="line-clamp-2 w-full text-center text-[11px] font-bold leading-tight">{label}</span>
-                                </button>
+                                <Icon
+                                    size={18}
+                                    strokeWidth={active ? 2.5 : 2}
+                                    className={active ? 'text-white' : 'text-[var(--color-brand-primary)]'}
+                                    aria-hidden
+                                />
+                                <span className="line-clamp-2 w-full text-center text-[11px] font-bold leading-tight">{label}</span>
+                            </button>
                         );
                     })}
                 </nav>

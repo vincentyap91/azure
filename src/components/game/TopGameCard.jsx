@@ -48,7 +48,7 @@ export default function TopGameCard({
                     onNavigate={onNavigate}
                 />
 
-                <div className="pointer-events-none absolute left-0 top-0 z-20 flex max-w-[70%] items-center justify-center rounded-br-lg bg-white px-2.5 py-1 shadow-sm">
+                <div className="pointer-events-none absolute left-0 top-0 z-20 flex max-w-[65%] items-center justify-center rounded-br-lg bg-white px-2 py-0.5 shadow-sm">
                     <span className="truncate text-xs font-bold italic text-[var(--color-brand-secondary)]">{game.provider}</span>
                 </div>
 
@@ -62,8 +62,8 @@ export default function TopGameCard({
                 />
             </div>
 
-            <div className="flex min-h-[40px] w-full shrink-0 items-center justify-center bg-[var(--color-brand-primary)] px-2 py-2">
-                <span className="block truncate text-center text-xs font-bold text-white">{game.name}</span>
+            <div className="flex h-11 w-full shrink-0 items-center justify-center border-t border-white/10 bg-[var(--color-brand-primary)] px-2 py-1">
+                <span className="line-clamp-2 text-center text-[11px] font-bold leading-tight text-white">{game.name}</span>
             </div>
         </div>
     );

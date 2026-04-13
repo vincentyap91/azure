@@ -6,18 +6,18 @@ import { PAGE_BANNER_IMG } from '../constants/pageBannerClasses';
 export default function HeroSection() {
     return (
         <div className="relative w-full overflow-hidden bg-[var(--color-brand-primary)]">
-            <div className="relative flex w-full flex-col justify-end pt-1 md:pt-0">
+            <div className="relative flex w-full flex-col justify-end border-t border-white/5 md:pt-0">
                 <img
                     src={homeBanner}
                     alt="Hero Banner"
-                    className="block w-full h-auto min-h-[170px] object-cover object-center"
+                    className="block w-full h-auto min-h-[140px] object-cover object-center"
                 />
 
                 {/* Carousel indicator bar inside hero */}
-                <div className="absolute bottom-1 left-1/2 z-30 flex -translate-x-1/2 items-center gap-1.5 md:bottom-4">
-                    <div className="h-1.5 w-6 rounded-full bg-white md:h-2 md:w-8"></div>
-                    <div className="h-1.5 w-6 rounded-full bg-white/40 md:h-2 md:w-8"></div>
-                    <div className="h-1.5 w-6 rounded-full bg-white/40 md:h-2 md:w-8"></div>
+                <div className="absolute bottom-1 left-1/2 z-30 flex -translate-x-1/2 items-center gap-1 md:bottom-6">
+                    <div className="h-6 w-7 border-b-[3px] border-white md:h-10 md:w-8 md:border-b-4"></div>
+                    <div className="h-6 w-7 border-b-[3px] border-white/40 md:h-10 md:w-8 md:border-b-4"></div>
+                    <div className="h-6 w-7 border-b-[3px] border-white/40 md:h-10 md:w-8 md:border-b-4"></div>
                 </div>
             </div>
 
