@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { Dices, Fish, Flame, Gamepad2, Spade, Ticket, Trophy } from 'lucide-react';
 import TopGameCard from '../game/TopGameCard';
-import { TOP_GAMES } from '../../constants/topGamesCatalog';
+import { TOP_GAMES, getTopGameFavouriteCategory } from '../../constants/topGamesCatalog';
+import { SPORTS_LOBBIES } from '../../constants/lobbyRegistry';
 
 const CATEGORIES = [
     { id: 'popular', label: 'Popular', page: null, icon: Flame },
@@ -20,6 +21,14 @@ export default function MobileHomeCategoryGames({ onNavigate }) {
     const filteredGames = useMemo(() => {
         if (activeId === 'popular') {
             return TOP_GAMES.slice(0, 12);
+        }
+        if (activeId === 'sports') {
+            // "Refactor to reuse the same provider image system used in the slot category"
+            // Use Lobby providers structured as TopGame items
+            return SPORTS_LOBBIES.map(lobby => ({
+                ...lobby,
+                page: 'sports'
+            }));
         }
         const cat = CATEGORIES.find((c) => c.id === activeId);
         const pageKey = cat?.page;
@@ -66,7 +75,7 @@ export default function MobileHomeCategoryGames({ onNavigate }) {
                                 game={game}
                                 onNavigate={onNavigate}
                                 className="h-full"
-                                imageFit={(activeId === 'e-sports' || activeId === 'lottery' || activeId === 'poker') ? 'contain' : 'cover'}
+                                imageFit={(activeId === 'sports' || activeId === 'e-sports' || activeId === 'lottery' || activeId === 'poker') ? 'contain' : 'cover'}
                             />
                         ))}
                     </div>

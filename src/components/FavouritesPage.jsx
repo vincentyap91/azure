@@ -64,7 +64,7 @@ function FavouriteTile({ item, onNavigate }) {
                 />
             )}
             <div
-                className={`relative h-40 overflow-hidden bg-[var(--color-surface-muted)] sm:h-44 ${
+                className={`pointer-events-none relative z-10 h-40 overflow-hidden bg-[var(--color-surface-muted)] sm:h-44 ${
                     isProviderLogo ? 'flex items-center justify-center px-4 py-5 sm:px-5 sm:py-6' : ''
                 }`}
             >

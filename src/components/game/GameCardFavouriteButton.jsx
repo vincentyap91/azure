@@ -1,7 +1,7 @@
 import React from 'react';
 import { Heart } from 'lucide-react';
 import { useFavourites } from '../../context/FavouritesContext';
-import { buildFavouriteGameId } from '../../utils/favouriteGames';
+import { buildFavouriteGameId, normalizeFavouriteCategory } from '../../utils/favouriteGames';
 
 /** Shared motion — smooth handoff between default and favourited. */
 const TRANSITION =
@@ -23,7 +23,8 @@ export default function GameCardFavouriteButton({
     className = '',
 }) {
     const { toggle, isFavourite } = useFavourites();
-    const id = buildFavouriteGameId(category, name, provider);
+    const normalizedCategory = normalizeFavouriteCategory(category, name);
+    const id = buildFavouriteGameId(normalizedCategory, name, provider);
     const active = isFavourite(id);
     const dim =
         size === 'sm'

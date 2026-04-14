@@ -22,6 +22,8 @@ export const TOP_GAMES = [
     withPage(findEntry(ALL_LOBBY_GAMES, 'Ezugi', 'Live Casino'), 'live-casino', { imgUrl: ezugiMenuTile }),
     withPage(findEntry(EXTRA_GAME_DETAIL_ENTRIES, "Dragon's Luck", 'Pragmatic Play'), 'slots'),
     withPage(findEntry(EXTRA_GAME_DETAIL_ENTRIES, 'Nomikai Fever', 'Pragmatic Play'), 'slots'),
+    withPage(findEntry(ALL_LOBBY_GAMES, 'SABA Sports', 'Sportsbook'), 'sports'),
+    withPage(findEntry(ALL_LOBBY_GAMES, 'SBO Sports', 'Sportsbook'), 'sports'),
     withPage(findEntry(ALL_LOBBY_GAMES, 'Lucky Sports', 'Sportsbook'), 'sports'),
     withPage(findEntry(FISHING_GAMES, 'Ocean King', 'JiLi Fishing'), 'fishing'),
     withPage(findEntry(FISHING_GAMES, 'Mermaid Treasure', 'Funky Games Fishing'), 'fishing'),

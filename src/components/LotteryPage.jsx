@@ -89,7 +89,7 @@ function LotteryGameCard({ game, providerName, providerId, onNavigate }) {
             />
 
             {use93ConnectFill ? (
-            <div className="relative h-44 overflow-hidden rounded-t-2xl bg-[linear-gradient(180deg,rgb(13_33_71)_0%,rgb(10_28_63)_100%)] sm:h-52 xl:h-56">
+            <div className="pointer-events-none relative z-10 h-44 overflow-hidden rounded-t-2xl bg-[linear-gradient(180deg,rgb(13_33_71)_0%,rgb(10_28_63)_100%)] sm:h-52 xl:h-56">
                 <img
                     src={src}
                     alt={game.name}
@@ -112,7 +112,7 @@ function LotteryGameCard({ game, providerName, providerId, onNavigate }) {
                 />
             </div>
             ) : (
-            <div className="relative flex h-44 items-center justify-center overflow-hidden rounded-t-2xl bg-[linear-gradient(180deg,rgb(13_33_71)_0%,rgb(10_28_63)_100%)] p-4 sm:h-52 sm:p-5 xl:h-56">
+            <div className="pointer-events-none relative z-10 flex h-44 items-center justify-center overflow-hidden rounded-t-2xl bg-[linear-gradient(180deg,rgb(13_33_71)_0%,rgb(10_28_63)_100%)] p-4 sm:h-52 sm:p-5 xl:h-56">
                 <img
                     src={src}
                     alt={game.name}

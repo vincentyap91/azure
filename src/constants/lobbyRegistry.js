@@ -59,6 +59,7 @@ export const SPORTS_LOBBIES = [
         categoryLabel: 'Sports',
         categoryPage: 'sports',
         kind: 'lobby',
+        imageFit: 'cover',
     },
 ];
 
