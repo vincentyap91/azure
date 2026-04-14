@@ -284,9 +284,9 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
             <div className="page-container">
                 <h1 className="page-title">Account Details</h1>
 
-                <div className="mt-8 space-y-6">
-                    <div className="surface-card flex items-center justify-between gap-4 rounded-2xl p-4 sm:p-6 md:gap-8 md:p-8">
-                        <div className="flex min-w-0 flex-1 items-center gap-3 sm:gap-6">
+                <div className="mt-5 space-y-5 md:mt-8 md:space-y-6">
+                    <div className="surface-card flex flex-row items-center justify-between gap-3 rounded-2xl p-4 sm:p-6 md:gap-8 md:p-8">
+                        <div className="flex min-w-0 flex-1 flex-row items-center gap-3 sm:gap-5">
                             <div className="relative shrink-0">
                                 <button
                                     type="button"
@@ -298,60 +298,43 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
                                         {profilePhotoUrl ? (
                                             <img src={profilePhotoUrl} alt="" className="h-full w-full object-cover" />
                                         ) : (
-                                            <UserCircle2 size={32} className="text-[var(--color-accent-600)] sm:hidden" />
-                                        )}
-                                        {!profilePhotoUrl && (
-                                            <UserCircle2 size={48} className="hidden text-[var(--color-accent-600)] sm:block md:hidden" />
-                                        )}
-                                        {!profilePhotoUrl && (
-                                            <UserCircle2 size={56} className="hidden text-[var(--color-accent-600)] md:block" />
+                                            <UserCircle2 size={48} className="text-[var(--color-accent-600)]" />
                                         )}
                                     </div>
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => setProfilePhotoModalOpen(true)}
-                                    className="absolute bottom-0 right-0 inline-flex h-6 w-6 items-center justify-center rounded-full border border-[var(--color-accent-100)] bg-[var(--color-surface-base)] text-[var(--color-accent-600)] shadow-sm transition hover:scale-105 hover:bg-[var(--color-accent-50)] sm:h-8 sm:w-8"
+                                    className="absolute bottom-0 right-[-4px] md:right-0 inline-flex h-6 w-6 items-center justify-center rounded-full border border-[var(--color-accent-100)] bg-[var(--color-surface-base)] text-[var(--color-accent-600)] shadow-sm transition hover:scale-105 hover:bg-[var(--color-accent-50)] md:h-8 md:w-8"
                                     aria-label="Edit profile photo"
                                 >
-                                    <PencilLine size={12} className="sm:hidden" />
-                                    <PencilLine size={14} className="hidden sm:block" />
+                                    <PencilLine size={14} className="h-3 w-3 md:h-4 md:w-4" />
                                 </button>
                             </div>
-                            
-                            <div className="flex min-w-0 flex-1 flex-col">
-                                <div className="space-y-0.5">
-                                    <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-[var(--color-accent-600)] md:text-xs">
-                                        Verified Profile
+
+                            <div className="flex min-w-0 flex-1 flex-col gap-1 md:gap-3">
+                                <div className="space-y-0.5 md:space-y-1.5">
+                                    <p className="text-[10px] font-semibold uppercase tracking-widest text-[var(--color-accent-600)] md:text-xs md:tracking-[0.2em]">
+                                        Verified Account
                                     </p>
-                                    <h2 className="truncate text-lg font-bold tracking-tight text-[var(--color-text-strong)] sm:text-2xl md:text-3xl">
+                                    <h2 className="truncate text-lg font-bold tracking-tight text-[var(--color-text-strong)] sm:text-xl md:text-3xl">
                                         {formValues.username}
                                     </h2>
-                                    <p className="truncate text-[11px] font-medium text-[var(--color-text-muted)] sm:text-sm">{formValues.email}</p>
+                                    <p className="truncate text-xs font-medium text-[var(--color-text-muted)] md:text-sm">{formValues.email}</p>
                                 </div>
-                                <div className="mt-1.5 flex flex-wrap gap-1.5">
-                                    <span className="inline-flex rounded-full border border-[var(--color-accent-100)] bg-[var(--color-accent-50)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-accent-700)] sm:px-3 sm:py-1 sm:text-xs">
+                                <div className="mt-1 flex flex-wrap gap-1.5 md:mt-0 md:gap-2">
+                                    <span className="inline-flex w-fit rounded-full border border-[var(--color-accent-100)] bg-[var(--color-accent-50)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-accent-700)] md:px-3 md:py-1.5 md:text-xs">
                                         Joined 08/01/2026
                                     </span>
-                                    <span className="inline-flex rounded-full border border-[var(--color-accent-100)] bg-[var(--color-surface-base)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-accent-700)] sm:px-3 sm:py-1 sm:text-xs">
-                                        ID 679129
+                                    <span className="inline-flex w-fit rounded-full border border-[var(--color-accent-100)] bg-[var(--color-surface-base)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[var(--color-accent-700)] md:px-3 md:py-1.5 md:text-xs">
+                                        Player ID 679129
                                     </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex shrink-0 flex-col items-center justify-center md:items-end">
-                            <p className="mb-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-[var(--color-text-muted)] md:hidden">
-                                Rank
-                            </p>
-                            <div className="flex justify-center md:justify-end">
-                                <div className="md:hidden">
-                                    <VipStatusPill level={vipLevel} size="compact" layout="row" />
-                                </div>
-                                <div className="hidden md:block">
-                                    <VipStatusPill level={vipLevel} size="large" layout="column" />
-                                </div>
-                            </div>
+                        <div className="flex shrink-0 items-center justify-center border-l border-[var(--color-border-default)] pl-3 md:pl-6">
+                            <VipStatusPill level={vipLevel} size="large" layout="column" />
                         </div>
                     </div>
 
