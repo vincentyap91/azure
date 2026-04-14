@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, HelpCircle, Home, MessageCircle, MoreHorizontal, Search, Send, X } from 'lucide-react';
 import liveChatSupportAvatar from '../assets/live-chat-support-avatar.svg';
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
 
 const messageThreads = [
     {
@@ -606,29 +607,44 @@ export default function LiveChatModal({ open, onClose, authUser }) {
         </>
     );
 
+    useBodyScrollLock(open);
+
     return (
-        <section
-            role="dialog"
-            aria-modal="false"
-            aria-label="Live Chat"
-            className={`fixed bottom-24 right-6 z-[190] flex h-[min(82vh,760px)] w-[calc(100vw-2rem)] max-w-[400px] flex-col overflow-hidden rounded-[28px] border border-[var(--color-border-brand)] bg-[linear-gradient(180deg,var(--gradient-register-page-start)_0%,var(--gradient-register-page-mid)_45%,var(--gradient-register-page-end)_100%)] shadow-[var(--shadow-register-card)] transition-all duration-300 ${open
-                    ? 'pointer-events-auto translate-y-0 opacity-100'
-                    : 'pointer-events-none translate-y-4 opacity-0'
-                }`}
+        <div 
+            className={`fixed inset-0 z-[200] flex items-center justify-center transition-opacity duration-300 p-4 sm:p-6 ${
+                open ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
+            }`}
         >
-            <div className="absolute inset-x-0 top-0 h-32 bg-[radial-gradient(ellipse_80%_80%_at_50%_0%,rgb(0_174_239_/_0.12)_0%,transparent_70%)] pointer-events-none" />
-            {activeThread
-                ? activeThread.type === 'article'
-                    ? renderArticleThread(activeThread)
-                    : activeThread.type === 'assistant'
-                        ? renderAssistantThread(activeThread)
-                        : renderSupportThread(activeThread)
-                : activeTab === 'messages'
-                    ? renderMessages()
-                    : activeTab === 'help'
-                        ? renderHelp()
-                        : renderHome()}
-        </section>
+            <div 
+                className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" 
+                onClick={onClose}
+                aria-hidden="true"
+            />
+            
+            <section
+                role="dialog"
+                aria-modal="true"
+                aria-label="Live Chat"
+                className={`relative z-[10] flex h-[min(85vh,760px)] w-full max-w-[420px] flex-col overflow-hidden rounded-[28px] border border-[var(--color-border-brand)] bg-[linear-gradient(180deg,var(--gradient-register-page-start)_0%,var(--gradient-register-page-mid)_45%,var(--gradient-register-page-end)_100%)] shadow-[var(--shadow-modal)] transition-all duration-300 ${
+                    open
+                        ? 'translate-y-0 scale-100 opacity-100'
+                        : 'translate-y-4 scale-95 opacity-0'
+                }`}
+            >
+                <div className="absolute inset-x-0 top-0 h-32 bg-[radial-gradient(ellipse_80%_80%_at_50%_0%,rgb(0_174_239_/_0.12)_0%,transparent_70%)] pointer-events-none" />
+                {activeThread
+                    ? activeThread.type === 'article'
+                        ? renderArticleThread(activeThread)
+                        : activeThread.type === 'assistant'
+                            ? renderAssistantThread(activeThread)
+                            : renderSupportThread(activeThread)
+                    : activeTab === 'messages'
+                        ? renderMessages()
+                        : activeTab === 'help'
+                            ? renderHelp()
+                            : renderHome()}
+            </section>
+        </div>
     );
 }
 
