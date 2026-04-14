@@ -494,7 +494,7 @@ function AppInner() {
         }}
       />
 
-      <div className={page === 'home' ? 'max-md:pt-14 md:pt-[92px]' : 'pt-[113px] md:pt-[92px]'}>
+      <div className={page === 'home' ? 'max-md:pt-14 md:pt-[92px]' : 'pt-14 md:pt-[92px]'}>
       <Suspense fallback={<LoadingPage fullPage="overlay" minDelay={300} />}>
       {page === 'home' ? (
         <>
