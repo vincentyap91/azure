@@ -361,14 +361,6 @@ export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'h
                 onRegisterClick={() => onRegisterClick?.()}
             />
 
-            <button
-                type="button"
-                onClick={() => onDownloadAppClick?.()}
-                className={`fixed right-6 z-[110] hidden md:inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/20 bg-[linear-gradient(90deg,var(--color-brand-secondary)_0%,var(--color-brand-primary)_100%)] text-white shadow-[0_12px_24px_rgba(0,0,0,0.18)] transition hover:brightness-105 bottom-36`}
-                aria-label="Download app"
-            >
-                <Smartphone size={18} className="shrink-0" />
-            </button>
 
             <div className="hidden h-9 w-full items-center border-b border-white/10 bg-[var(--color-nav-top)] px-4 text-xs text-white md:flex md:px-10">
                 <div className="w-full max-w-screen-2xl mx-auto flex items-center justify-between">
@@ -953,15 +945,15 @@ export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'h
                                             handleMobileNavigate(page);
                                         }}
                                         className={`flex min-h-[48px] w-full items-center gap-3 rounded-[18px] border px-3.5 py-2.5 text-left transition ${isActive
-                                                ? 'border-amber-300 bg-[linear-gradient(180deg,rgba(255,212,74,0.98)_0%,rgba(255,181,44,0.96)_100%)] text-[var(--color-cta-text)] shadow-[0_14px_26px_rgba(255,174,39,0.22)]'
-                                                : 'border-[var(--color-border-brand)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(240,249,255,0.9)_100%)] text-[var(--color-text-main)] shadow-[var(--shadow-input)] hover:border-[var(--color-accent-200)] hover:bg-white'
+                                            ? 'border-amber-300 bg-[linear-gradient(180deg,rgba(255,212,74,0.98)_0%,rgba(255,181,44,0.96)_100%)] text-[var(--color-cta-text)] shadow-[0_14px_26px_rgba(255,174,39,0.22)]'
+                                            : 'border-[var(--color-border-brand)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(240,249,255,0.9)_100%)] text-[var(--color-text-main)] shadow-[var(--shadow-input)] hover:border-[var(--color-accent-200)] hover:bg-white'
                                             }`}
                                         aria-expanded={isMoreRow ? mobileMoreOpen : undefined}
                                     >
                                         <span
                                             className={`inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border ${isActive
-                                                    ? 'border-amber-950/10 bg-amber-950/10 text-[var(--color-cta-text)]'
-                                                    : 'border-[var(--color-border-brand)] bg-[var(--color-accent-50)] text-[var(--color-text-brand)]'
+                                                ? 'border-amber-950/10 bg-amber-950/10 text-[var(--color-cta-text)]'
+                                                : 'border-[var(--color-border-brand)] bg-[var(--color-accent-50)] text-[var(--color-text-brand)]'
                                                 }`}
                                         >
                                             <Icon size={16} />
@@ -983,8 +975,8 @@ export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'h
                                                     <div
                                                         key={sectionId}
                                                         className={`overflow-hidden rounded-[16px] border transition ${sectionHasActiveItem
-                                                                ? 'border-[var(--color-accent-200)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(229,246,255,0.96)_100%)] shadow-[var(--shadow-brand-soft)]'
-                                                                : 'border-[var(--color-border-accent)] bg-white/75'
+                                                            ? 'border-[var(--color-accent-200)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(229,246,255,0.96)_100%)] shadow-[var(--shadow-brand-soft)]'
+                                                            : 'border-[var(--color-border-accent)] bg-white/75'
                                                             }`}
                                                     >
                                                         <button
@@ -1017,14 +1009,14 @@ export default function Navbar({ onNavigate, onDownloadAppClick, activePage = 'h
                                                                             type="button"
                                                                             onClick={() => handleMobileMoreItemClick(item)}
                                                                             className={`flex min-h-[42px] w-full items-center gap-2.5 rounded-[14px] px-3 py-2 text-left transition ${itemActive
-                                                                                    ? 'bg-[linear-gradient(180deg,var(--color-brand-soft)_0%,rgba(255,255,255,0.96)_100%)] text-[var(--color-text-brand-soft)] shadow-[var(--shadow-brand-soft)]'
-                                                                                    : 'bg-transparent text-[var(--color-text-main)] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-text-strong)]'
+                                                                                ? 'bg-[linear-gradient(180deg,var(--color-brand-soft)_0%,rgba(255,255,255,0.96)_100%)] text-[var(--color-text-brand-soft)] shadow-[var(--shadow-brand-soft)]'
+                                                                                : 'bg-transparent text-[var(--color-text-main)] hover:bg-[var(--color-accent-50)] hover:text-[var(--color-text-strong)]'
                                                                                 }`}
                                                                         >
                                                                             <span
                                                                                 className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl ${itemActive
-                                                                                        ? 'bg-white text-[var(--color-text-brand)]'
-                                                                                        : 'bg-[var(--color-accent-50)] text-[var(--color-text-brand)]'
+                                                                                    ? 'bg-white text-[var(--color-text-brand)]'
+                                                                                    : 'bg-[var(--color-accent-50)] text-[var(--color-text-brand)]'
                                                                                     }`}
                                                                             >
                                                                                 <ItemIcon size={14} />

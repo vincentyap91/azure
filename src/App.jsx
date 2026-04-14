@@ -471,6 +471,7 @@ function AppInner() {
     }`}>
       <FloatingSocials
         onLiveChatClick={() => setLiveChatOpen((open) => !open)}
+        onDownloadAppClick={handleDownloadAppClick}
       />
 
       <Navbar

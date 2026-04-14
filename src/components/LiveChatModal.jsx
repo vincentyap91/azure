@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, HelpCircle, Home, MessageCircle, MoreHorizontal, Search, Send, X } from 'lucide-react';
 import liveChatSupportAvatar from '../assets/live-chat-support-avatar.svg';
 
@@ -78,9 +78,8 @@ const supportTags = ['Deposit', 'Withdrawal', 'Bonus', 'Verification', 'Technica
 function Avatar({ small = false }) {
     return (
         <span
-            className={`inline-flex shrink-0 overflow-hidden rounded-full border border-[rgb(59_130_246_/_0.22)] bg-[var(--color-surface-base)] shadow-[var(--shadow-brand-soft)] ${
-                small ? 'h-10 w-10' : 'h-12 w-12'
-            }`}
+            className={`inline-flex shrink-0 overflow-hidden rounded-full border border-[rgb(59_130_246_/_0.22)] bg-[var(--color-surface-base)] shadow-[var(--shadow-brand-soft)] ${small ? 'h-10 w-10' : 'h-12 w-12'
+                }`}
         >
             <img
                 src={liveChatSupportAvatar}
@@ -203,97 +202,97 @@ export default function LiveChatModal({ open, onClose, authUser }) {
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-5">
                 <div className="rounded-[24px] border border-[var(--color-border-brand)] bg-[linear-gradient(180deg,var(--gradient-register-page-start)_0%,var(--gradient-register-panel-mid)_52%,var(--gradient-register-panel-end)_100%)] px-5 pb-6 pt-7 shadow-[var(--inset-panel)]">
-                <div className="border-b border-[rgb(171_204_235)] pb-5">
-                    <p className="text-2xl font-bold leading-tight text-[var(--color-text-strong)]">
-                        Hi {username},
-                        <span className="ml-2 inline-block">👋</span>
-                    </p>
-                    <p className="mt-1 text-2xl font-bold leading-tight text-[var(--color-brand-secondary)]">
-                        How can we help you?
-                    </p>
-                </div>
-
-                <div className="mt-5 space-y-3.5">
-                    {recentChat && (() => {
-                        const thread = messageThreads.find((t) => t.id === recentChat.threadId);
-                        if (!thread) return null;
-                        return (
-                            <div className="surface-card rounded-2xl px-4 py-4">
-                                <p className="mb-3 text-sm font-semibold text-[var(--color-text-muted)]">Recent message</p>
-                                <button
-                                    type="button"
-                                    onClick={() => {
-                                        setActiveTab('messages');
-                                        setActiveThreadId(recentChat.threadId);
-                                    }}
-                                    className="flex w-full items-start gap-3 text-left transition hover:opacity-90"
-                                >
-                                    <Avatar small />
-                                    <div className="min-w-0 flex-1">
-                                        <p className="text-base font-semibold text-[var(--color-text-strong)]">{recentChat.title}</p>
-                                        <p className="mt-1 truncate text-base leading-6 text-[var(--color-text-muted)]">{recentChat.preview}</p>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-sm text-[var(--color-text-muted)]">{recentChat.time}</span>
-                                        {recentChat.unread && <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--color-danger-main)]" />}
-                                    </div>
-                                </button>
-                            </div>
-                        );
-                    })()}
-                    <button
-                        type="button"
-                        onClick={() => {
-                            setActiveTab('messages');
-                            setActiveThreadId('nora');
-                            markRecentChat('rory', { title: 'Chat with Rory', preview: 'Nora: Rate your conversation', time: '17m', unread: true });
-                        }}
-                        className="surface-card flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left"
-                    >
-                        <span className="text-base font-semibold text-[var(--color-text-strong)]">Send us a message</span>
-                        <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-brand-soft)] text-[var(--color-brand-primary)]">
-                            <Send size={16} />
-                        </span>
-                    </button>
-
-                    <button
-                        type="button"
-                        className="surface-card block w-full rounded-2xl px-4 py-4 text-left"
-                        onClick={() => {
-                            setActiveTab('messages');
-                            setActiveThreadId('luna-bonus');
-                            markRecentChat('luna-bonus');
-                        }}
-                    >
-                        <h2 className="text-xl font-semibold leading-snug text-[var(--color-text-strong)]">
-                            How Do I Claim The Welcome Bonus MYR?
-                        </h2>
-                        <p className="mt-2 text-base leading-6 text-[var(--color-text-muted)]">
-                            Claiming process The Welcome Bonus can be claimed through...
+                    <div className="border-b border-[rgb(171_204_235)] pb-5">
+                        <p className="text-2xl font-bold leading-tight text-[var(--color-text-strong)]">
+                            Hi {username},
+                            <span className="ml-2 inline-block">👋</span>
                         </p>
-                    </button>
+                        <p className="mt-1 text-2xl font-bold leading-tight text-[var(--color-brand-secondary)]">
+                            How can we help you?
+                        </p>
+                    </div>
 
-                    <div className="surface-card rounded-2xl px-4 py-4">
-                        <label className="flex items-center gap-3 rounded-xl bg-[var(--color-surface-muted)] px-4 py-3">
-                            <span className="text-base font-semibold text-[var(--color-text-strong)]">Search for help</span>
-                            <Search size={18} className="ml-auto text-[var(--color-brand-primary)]" />
-                        </label>
+                    <div className="mt-5 space-y-3.5">
+                        {recentChat && (() => {
+                            const thread = messageThreads.find((t) => t.id === recentChat.threadId);
+                            if (!thread) return null;
+                            return (
+                                <div className="surface-card rounded-2xl px-4 py-4">
+                                    <p className="mb-3 text-sm font-semibold text-[var(--color-text-muted)]">Recent message</p>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setActiveTab('messages');
+                                            setActiveThreadId(recentChat.threadId);
+                                        }}
+                                        className="flex w-full items-start gap-3 text-left transition hover:opacity-90"
+                                    >
+                                        <Avatar small />
+                                        <div className="min-w-0 flex-1">
+                                            <p className="text-base font-semibold text-[var(--color-text-strong)]">{recentChat.title}</p>
+                                            <p className="mt-1 truncate text-base leading-6 text-[var(--color-text-muted)]">{recentChat.preview}</p>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-sm text-[var(--color-text-muted)]">{recentChat.time}</span>
+                                            {recentChat.unread && <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--color-danger-main)]" />}
+                                        </div>
+                                    </button>
+                                </div>
+                            );
+                        })()}
+                        <button
+                            type="button"
+                            onClick={() => {
+                                setActiveTab('messages');
+                                setActiveThreadId('nora');
+                                markRecentChat('rory', { title: 'Chat with Rory', preview: 'Nora: Rate your conversation', time: '17m', unread: true });
+                            }}
+                            className="surface-card flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left"
+                        >
+                            <span className="text-base font-semibold text-[var(--color-text-strong)]">Send us a message</span>
+                            <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-brand-soft)] text-[var(--color-brand-primary)]">
+                                <Send size={16} />
+                            </span>
+                        </button>
 
-                        <div className="mt-3 space-y-1">
-                            {helpTopics.map((topic) => (
-                                <button
-                                    key={topic}
-                                    type="button"
-                                    className="flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left transition hover:bg-[var(--color-surface-muted)]"
-                                >
-                                    <span className="flex-1 text-base leading-6 text-[var(--color-text-muted)]">{topic}</span>
-                                    <ChevronRight size={18} className="mt-1 shrink-0 text-[var(--color-brand-primary)]" />
-                                </button>
-                            ))}
+                        <button
+                            type="button"
+                            className="surface-card block w-full rounded-2xl px-4 py-4 text-left"
+                            onClick={() => {
+                                setActiveTab('messages');
+                                setActiveThreadId('luna-bonus');
+                                markRecentChat('luna-bonus');
+                            }}
+                        >
+                            <h2 className="text-xl font-semibold leading-snug text-[var(--color-text-strong)]">
+                                How Do I Claim The Welcome Bonus MYR?
+                            </h2>
+                            <p className="mt-2 text-base leading-6 text-[var(--color-text-muted)]">
+                                Claiming process The Welcome Bonus can be claimed through...
+                            </p>
+                        </button>
+
+                        <div className="surface-card rounded-2xl px-4 py-4">
+                            <label className="flex items-center gap-3 rounded-xl bg-[var(--color-surface-muted)] px-4 py-3">
+                                <span className="text-base font-semibold text-[var(--color-text-strong)]">Search for help</span>
+                                <Search size={18} className="ml-auto text-[var(--color-brand-primary)]" />
+                            </label>
+
+                            <div className="mt-3 space-y-1">
+                                {helpTopics.map((topic) => (
+                                    <button
+                                        key={topic}
+                                        type="button"
+                                        className="flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left transition hover:bg-[var(--color-surface-muted)]"
+                                    >
+                                        <span className="flex-1 text-base leading-6 text-[var(--color-text-muted)]">{topic}</span>
+                                        <ChevronRight size={18} className="mt-1 shrink-0 text-[var(--color-brand-primary)]" />
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             </div>
             <BottomNav activeTab="home" onChange={handleBottomNav} />
         </>
@@ -509,11 +508,10 @@ export default function LiveChatModal({ open, onClose, authUser }) {
                                     setActiveThreadId('rory');
                                     markRecentChat('rory', { title: 'Chat with Rory', preview: 'Nora: Rate your conversation', time: '17m', unread: true });
                                 }}
-                                className={`rounded-full border border-[var(--color-border-default)] px-4 py-2.5 text-base font-medium shadow-[var(--shadow-card-soft)] transition ${
-                                    isSelected
+                                className={`rounded-full border border-[var(--color-border-default)] px-4 py-2.5 text-base font-medium shadow-[var(--shadow-card-soft)] transition ${isSelected
                                         ? 'bg-[var(--color-brand-primary)] text-white'
                                         : 'bg-[var(--color-surface-base)] text-[var(--color-brand-secondary)]'
-                                }`}
+                                    }`}
                             >
                                 {tag}
                             </button>
@@ -613,11 +611,10 @@ export default function LiveChatModal({ open, onClose, authUser }) {
             role="dialog"
             aria-modal="false"
             aria-label="Live Chat"
-            className={`fixed bottom-24 right-6 z-[190] flex h-[min(82vh,760px)] w-[calc(100vw-2rem)] max-w-[400px] flex-col overflow-hidden rounded-[28px] border border-[var(--color-border-brand)] bg-[linear-gradient(180deg,var(--gradient-register-page-start)_0%,var(--gradient-register-page-mid)_45%,var(--gradient-register-page-end)_100%)] shadow-[var(--shadow-register-card)] transition-all duration-300 ${
-                open
+            className={`fixed bottom-24 right-6 z-[190] flex h-[min(82vh,760px)] w-[calc(100vw-2rem)] max-w-[400px] flex-col overflow-hidden rounded-[28px] border border-[var(--color-border-brand)] bg-[linear-gradient(180deg,var(--gradient-register-page-start)_0%,var(--gradient-register-page-mid)_45%,var(--gradient-register-page-end)_100%)] shadow-[var(--shadow-register-card)] transition-all duration-300 ${open
                     ? 'pointer-events-auto translate-y-0 opacity-100'
                     : 'pointer-events-none translate-y-4 opacity-0'
-            }`}
+                }`}
         >
             <div className="absolute inset-x-0 top-0 h-32 bg-[radial-gradient(ellipse_80%_80%_at_50%_0%,rgb(0_174_239_/_0.12)_0%,transparent_70%)] pointer-events-none" />
             {activeThread
