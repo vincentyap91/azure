@@ -471,7 +471,6 @@ function AppInner() {
     }`}>
       <FloatingSocials
         onLiveChatClick={() => setLiveChatOpen((open) => !open)}
-        className={page === 'home' ? 'max-md:hidden' : ''}
       />
 
       <Navbar

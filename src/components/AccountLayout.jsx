@@ -26,7 +26,7 @@ export default function AccountLayout({ activePage, authUser, onNavigate, onLogo
 
                 <div className="flex items-start gap-6 xl:gap-8">
                     <div
-                        className={`fixed inset-y-0 left-0 z-[70] flex h-dvh max-h-dvh min-h-0 w-[min(320px,88vw)] flex-col lg:relative lg:z-auto lg:h-auto lg:max-h-none lg:w-auto ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
+                        className={`fixed inset-y-0 left-0 z-[100] flex h-dvh max-h-dvh min-h-0 w-[min(320px,88vw)] flex-col lg:relative lg:z-auto lg:h-auto lg:max-h-none lg:w-auto ${mobileSidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}
                     >
                         <AccountSidebar
                             activePage={activePage}
@@ -50,7 +50,7 @@ export default function AccountLayout({ activePage, authUser, onNavigate, onLogo
                         <button
                             type="button"
                             onClick={() => setMobileSidebarOpen(false)}
-                            className="fixed inset-0 z-[60] bg-slate-900/20 backdrop-blur-[2px] lg:hidden"
+                            className="fixed inset-0 z-[90] bg-slate-900/20 backdrop-blur-[2px] lg:hidden"
                             aria-label="Close account menu"
                         />
                     )}

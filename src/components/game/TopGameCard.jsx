@@ -19,7 +19,7 @@ export default function TopGameCard({
 
     const imageClassName =
         resolvedFit === 'contain'
-            ? 'absolute inset-0 h-full w-full rounded-[inherit] object-contain p-4 transition-transform duration-500 ease-out md:group-hover:scale-[1.03]'
+            ? 'absolute inset-0 h-full w-full rounded-[inherit] object-contain p-2 transition-transform duration-500 ease-out md:group-hover:scale-[1.03]'
             : 'absolute inset-0 h-full w-full rounded-[inherit] object-cover object-center transition-transform duration-500 ease-out md:group-hover:scale-[1.05]';
 
     return (

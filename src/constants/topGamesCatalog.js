@@ -32,6 +32,7 @@ export const TOP_GAMES = [
             name: 'GamePlay Lottery',
             provider: 'Lottery',
             imgUrl: gameplayLightmodeLogo,
+            imageFit: 'contain',
         },
         'lottery',
     ),

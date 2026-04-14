@@ -15,7 +15,7 @@ const CDN = 'https://cdn.i8global.com/lb9/master';
 
 /** @type {LobbyGame[]} */
 export const E_SPORTS_LOBBIES = [
-    { name: 'TF Gaming', provider: 'E-Sports', imgUrl: tfGamingLogo, categoryLabel: 'E-Sports', categoryPage: 'e-sports', kind: 'lobby' },
+    { name: 'TF Gaming', provider: 'E-Sports', imgUrl: tfGamingLogo, categoryLabel: 'E-Sports', categoryPage: 'e-sports', kind: 'lobby', imageFit: 'contain' },
 ];
 
 /** @type {LobbyGame[]} */
@@ -71,15 +71,16 @@ export const LOTTERY_LOBBIES = [
         categoryLabel: 'Lottery',
         categoryPage: 'lottery',
         kind: 'lobby',
+        imageFit: 'contain',
     },
 ];
 
 /** @type {LobbyGame[]} */
 export const POKER_LOBBIES = [
-    { name: 'Playtech Poker', provider: 'Poker', imgUrl: playtechLogo, categoryLabel: 'Poker', categoryPage: 'poker', kind: 'lobby' },
-    { name: 'Evolution Poker', provider: 'Poker', imgUrl: evolutionPokerLogo, categoryLabel: 'Poker', categoryPage: 'poker', kind: 'lobby' },
-    { name: 'Pragmatic Poker', provider: 'Poker', imgUrl: pragmaticPokerLogo, categoryLabel: 'Poker', categoryPage: 'poker', kind: 'lobby' },
-    { name: 'MT Poker', provider: 'Poker', imgUrl: mtLogo, categoryLabel: 'Poker', categoryPage: 'poker', kind: 'lobby' },
+    { name: 'Playtech Poker', provider: 'Poker', imgUrl: playtechLogo, categoryLabel: 'Poker', categoryPage: 'poker', kind: 'lobby', imageFit: 'contain' },
+    { name: 'Evolution Poker', provider: 'Poker', imgUrl: evolutionPokerLogo, categoryLabel: 'Poker', categoryPage: 'poker', kind: 'lobby', imageFit: 'contain' },
+    { name: 'Pragmatic Poker', provider: 'Poker', imgUrl: pragmaticPokerLogo, categoryLabel: 'Poker', categoryPage: 'poker', kind: 'lobby', imageFit: 'contain' },
+    { name: 'MT Poker', provider: 'Poker', imgUrl: mtLogo, categoryLabel: 'Poker', categoryPage: 'poker', kind: 'lobby', imageFit: 'contain' },
 ];
 
 /** @type {LobbyGame[]} */

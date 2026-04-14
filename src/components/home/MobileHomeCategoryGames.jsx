@@ -66,6 +66,7 @@ export default function MobileHomeCategoryGames({ onNavigate }) {
                                 game={game}
                                 onNavigate={onNavigate}
                                 className="h-full"
+                                imageFit={(activeId === 'e-sports' || activeId === 'lottery' || activeId === 'poker') ? 'contain' : 'cover'}
                             />
                         ))}
                     </div>
