@@ -9,7 +9,7 @@ export default defineConfig(({ mode }) => {
   const isOffline = mode === 'offline'
 
   return {
-    base: './',
+    base: isOffline ? './' : '/',
     plugins: [react()],
     build: isOffline
       ? {
