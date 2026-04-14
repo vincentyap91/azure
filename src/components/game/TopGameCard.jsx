@@ -32,7 +32,7 @@ export default function TopGameCard({
                 className="absolute inset-0 z-[5] md:hidden"
                 aria-label={`Open ${game.name}`}
             />
-            <div className={`relative isolate aspect-square w-full overflow-hidden rounded-t-xl bg-[var(--color-surface-muted)] ${imageStageClassName}`.trim()}>
+            <div className={`pointer-events-none relative z-10 isolate aspect-square w-full overflow-hidden rounded-t-xl bg-[var(--color-surface-muted)] ${imageStageClassName}`.trim()}>
                 <img
                     src={game.imgUrl}
                     alt={game.name}

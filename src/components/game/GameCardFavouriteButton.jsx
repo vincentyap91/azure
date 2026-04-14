@@ -43,7 +43,7 @@ export default function GameCardFavouriteButton({
                 toggle({ id, category, name, provider, imgUrl, navigatePage });
                 e.currentTarget.blur();
             }}
-            className={`absolute right-2 top-2 z-30 flex ${dim} items-center justify-center rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgb(117_207_255)] ${active ? activeClasses : inactiveClasses} ${className}`}
+            className={`absolute right-2 top-2 z-30 flex ${dim} items-center justify-center rounded-xl pointer-events-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[rgb(117_207_255)] ${active ? activeClasses : inactiveClasses} ${className}`}
             aria-pressed={active}
             aria-label={active ? 'Remove from favourites' : 'Add to favourites'}
         >
