@@ -6,7 +6,7 @@ import { PAGE_BANNER_IMG } from '../constants/pageBannerClasses';
 export default function HeroSection() {
     return (
         <div className="relative w-full overflow-hidden bg-[var(--color-brand-primary)]">
-            <div className="relative flex w-full flex-col justify-end border-t border-white/5 md:pt-0">
+            <div className="relative flex w-full flex-col justify-end md:pt-0">
                 <img
                     src={homeBanner}
                     alt="Hero Banner"

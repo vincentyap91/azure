@@ -13,6 +13,8 @@ import AccountLayout from './AccountLayout';
 import ProfilePhotoModal from './ProfilePhotoModal';
 import VipStatusPill from './VipStatusPill';
 import { BANKS } from '../constants/banks';
+import { getVipStatus } from '../constants/vipStatus';
+import { PROFILE_NEXT_VIP_TIER, PROFILE_VIP_PROGRESS_PERCENT, PROFILE_VIP_TIER } from '../constants/profileVipTier';
 
 const PROFILE_PHOTO_STORAGE_KEY = 'riocity_profile_photo';
 
@@ -146,8 +148,44 @@ function SectionCard({ title, description, editing, onToggleEdit, children, acti
     );
 }
 
+function ProfileVipProgressSection({ targetTier, progressPercent, tier, showTierHeader = false, variant = 'inline', className = '' }) {
+    const vip = showTierHeader ? getVipStatus(tier || 'Platinum') : null;
+    const wrapClass =
+        variant === 'card'
+            ? `rounded-2xl border border-[var(--color-border-default)] bg-[var(--color-surface-base)] px-5 py-4 shadow-[var(--shadow-card-soft)] ${className}`
+            : className;
+
+    return (
+        <div className={wrapClass}>
+            {showTierHeader && vip ? (
+                <div className="mb-3 flex items-center">
+                    <p className="text-sm font-extrabold uppercase tracking-[0.03em] text-[var(--color-brand-primary)]">{vip.tier}</p>
+                </div>
+            ) : null}
+
+            <div className="flex items-center justify-between gap-2">
+                <span className="rounded-full bg-[var(--color-brand-primary)] px-3.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.02em] text-[var(--color-surface-base)] shadow-[var(--shadow-subtle)]">
+                    TARGET: {String(targetTier || '').toUpperCase()}
+                </span>
+                <span className="text-sm font-bold text-[var(--color-text-strong)]">{progressPercent}%</span>
+            </div>
+            <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-[var(--color-accent-100)]">
+                <div
+                    className="h-full rounded-full bg-[image:var(--gradient-cta)]"
+                    style={{ width: `${progressPercent}%` }}
+                    aria-hidden="true"
+                />
+            </div>
+            <p className="mt-3 text-center text-sm font-medium text-[var(--color-text-main)]">
+                Progress to next tier: {progressPercent}%
+            </p>
+        </div>
+    );
+}
+
 export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChatClick }) {
-    const vipLevel = authUser?.vipLevel || 'Diamond';
+    const vipLevel = PROFILE_VIP_TIER;
+    const vipProgressPercent = Math.max(0, Math.min(100, Number(PROFILE_VIP_PROGRESS_PERCENT) || 0));
     const [editing, setEditing] = useState({
         contact: false,
     });
@@ -333,10 +371,23 @@ export default function ProfilePage({ authUser, onLogout, onNavigate, onLiveChat
                             </div>
                         </div>
 
-                        <div className="flex shrink-0 items-center justify-center border-l border-[var(--color-border-default)] pl-3 md:pl-6">
+                        <div className="flex shrink-0 items-center justify-center pl-3 md:pl-6">
                             <VipStatusPill level={vipLevel} size="large" layout="column" />
+                            <div className="ml-4 hidden h-[108px] w-px bg-[var(--color-border-default)] md:block" />
+                            <ProfileVipProgressSection
+                                targetTier={PROFILE_NEXT_VIP_TIER}
+                                progressPercent={vipProgressPercent}
+                                className="ml-4 hidden w-[210px] md:block"
+                            />
                         </div>
                     </div>
+                    <ProfileVipProgressSection
+                        targetTier={PROFILE_NEXT_VIP_TIER}
+                        progressPercent={vipProgressPercent}
+                        className="mt-3 md:hidden"
+                        tier={vipLevel}
+                        variant="card"
+                    />
 
                     <div className="space-y-6">
                         <SectionCard

@@ -20,6 +20,12 @@ const slotProviders = [
     { name: 'JiLi', src: `${CDN}/jili/jili-min-202506200742098986-202508110205447696-202508212322163049.png`, featured: true },
     { name: 'JDB', src: `${CDN}/jdb/jdbslot-min-202506200911451833-202506250030508552.png`, featured: true },
     { name: 'Mega888 H5', src: `${CDN}/mega888h5/mega888@2x-min-202510091328133268-202601132337530680.png`, featured: true },
+    {
+        name: 'Pussy888',
+        src: 'https://pksoftcdn.azureedge.net/media/pussy888-202511050844023196.png',
+        featured: true,
+        new: true,
+    },
     { name: 'Fat Panda', src: `${CDN}/fatpanda/fatpanda_wh-min-202507210010021076-202507210043526492.png`, featured: true },
     { name: 'AFB Slot', src: `${CDN}/afbslot/afb777-202505140445032607-202506242319591057.svg`, featured: true },
     { name: 'Fastspin', src: `${CDN}/fastspin/fastspin_wh-min-202507170648206305-202507180026049374.png`, featured: true },
@@ -193,9 +199,12 @@ export default function SlotsPage({ selectedProviderIdFromMenu, onNavigate }) {
                                 </span>
                             )}
                             <div className="pointer-events-none relative z-10 h-44 overflow-hidden rounded-t-2xl sm:h-52 xl:h-56">
-                                <div
-                                    className="absolute inset-0 rounded-[inherit] bg-cover bg-center transition-transform duration-500 md:group-hover:scale-110"
-                                    style={{ backgroundImage: `url("${game.imgUrl}")` }}
+                                <img
+                                    src={game.imgUrl}
+                                    alt=""
+                                    className="absolute inset-0 h-full w-full rounded-[inherit] object-cover object-center transition-transform duration-500 md:group-hover:scale-110"
+                                    loading={idx < 12 ? 'eager' : 'lazy'}
+                                    decoding="async"
                                 />
                                 <GameCardFavouriteButton
                                     category="slots"

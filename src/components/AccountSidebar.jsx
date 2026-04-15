@@ -19,7 +19,8 @@ import {
 import { HISTORY_RECORD_NAV } from '../constants/historyRecordPages';
 import { settingsOptions } from '../constants/settingsOptions';
 import { REWARDS_NAV_ICONS, REWARDS_PROGRAMS } from '../constants/rewardsPrograms';
-import VipStatusPill from './VipStatusPill';
+import { PROFILE_NEXT_VIP_TIER, PROFILE_VIP_PROGRESS_PERCENT, PROFILE_VIP_TIER } from '../constants/profileVipTier';
+import VipTierProgressCard from './VipTierProgressCard';
 
 const accountLinks = [
     { id: 'profile', label: 'Account Details', icon: UserRound },
@@ -65,7 +66,6 @@ export default function AccountSidebar({
     onLogout,
     onLiveChatClick,
 }) {
-    const vipLevel = authUser?.vipLevel || 'Diamond';
     const [openMenus, setOpenMenus] = useState({
         cashier: false,
         account: false,
@@ -166,9 +166,14 @@ export default function AccountSidebar({
                                 <p>Joined: 08/01/2026</p>
                                 <p>Player ID: 679129</p>
                             </div>
-                            <VipStatusPill level={vipLevel} className="mt-2 lg:mt-3" />
                         </div>
                     </div>
+                    <VipTierProgressCard
+                        currentTier={PROFILE_VIP_TIER.toUpperCase()}
+                        targetTier={PROFILE_NEXT_VIP_TIER}
+                        progressPercent={PROFILE_VIP_PROGRESS_PERCENT}
+                        className="mt-3 lg:hidden"
+                    />
                 </div>
 
                 <div className="mt-5 space-y-3 lg:mt-8 lg:space-y-5">

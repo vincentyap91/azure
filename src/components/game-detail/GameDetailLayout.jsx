@@ -5,6 +5,7 @@ import GameDetailDataTable from './GameDetailDataTable';
 import GameDetailRecommendedCarousel from './GameDetailRecommendedCarousel';
 import GameDetailMobileInfoCard from './GameDetailMobileInfoCard';
 import GameDetailPlayModal from './GameDetailPlayModal';
+import Pussy888PreLaunchPanel from './Pussy888PreLaunchPanel';
 
 /**
  * Full game detail template: breadcrumb, title bar, player, provider line, ranking, recommended, latest bets.
@@ -57,10 +58,17 @@ export default function GameDetailLayout({
     recommendedTitle = 'Recommended Games',
     children = null,
 }) {
+    const isPussy888 = providerName?.trim().toLowerCase() === 'pussy888';
     const [mobilePlayOpen, setMobilePlayOpen] = useState(false);
+    const [pussy888Ready, setPussy888Ready] = useState(false);
     const [isDesktop, setIsDesktop] = useState(() =>
         typeof window !== 'undefined' ? window.matchMedia('(min-width:768px)').matches : false,
     );
+
+    useEffect(() => {
+        setPussy888Ready(false);
+        setMobilePlayOpen(false);
+    }, [gameTitle, providerName]);
 
     useEffect(() => {
         const mq = window.matchMedia('(min-width:768px)');
@@ -72,6 +80,11 @@ export default function GameDetailLayout({
         mq.addEventListener('change', onChange);
         return () => mq.removeEventListener('change', onChange);
     }, []);
+
+    const handlePussy888LaunchWebsite = () => {
+        setPussy888Ready(true);
+        if (!isDesktop) setMobilePlayOpen(true);
+    };
 
     return (
         <main className="w-full bg-gradient-to-b from-[var(--gradient-live-page-start)] via-[var(--gradient-live-page-mid)] to-[var(--gradient-live-page-end)] pb-14 font-sans md:pb-20 lg:pb-24">
@@ -96,31 +109,47 @@ export default function GameDetailLayout({
                 {/* Mobile: compact info card; embedded player not mounted so iframe never loads until Play */}
                 {!isDesktop ? (
                     <div className="mt-5">
-                        <GameDetailMobileInfoCard
-                            gameTitle={gameTitle}
-                            providerName={providerName}
-                            imageUrl={gameImageUrl}
-                            onPlayNow={() => setMobilePlayOpen(true)}
-                            onProviderClick={onProviderNavigate ?? null}
-                        />
+                        {isPussy888 && !pussy888Ready ? (
+                            <div className="space-y-4">
+                                <div className="border-b border-[var(--color-border-default)] pb-4">
+                                    <h1 className="text-xl font-bold tracking-tight text-[var(--color-text-strong)]">{gameTitle}</h1>
+                                    {gameSubtitle ? (
+                                        <p className="mt-1.5 text-sm leading-relaxed text-[var(--color-text-muted)]">{gameSubtitle}</p>
+                                    ) : null}
+                                </div>
+                                <Pussy888PreLaunchPanel onLaunchWebsite={handlePussy888LaunchWebsite} />
+                            </div>
+                        ) : (
+                            <GameDetailMobileInfoCard
+                                gameTitle={gameTitle}
+                                providerName={providerName}
+                                imageUrl={gameImageUrl}
+                                onPlayNow={() => setMobilePlayOpen(true)}
+                                onProviderClick={onProviderNavigate ?? null}
+                            />
+                        )}
                     </div>
                 ) : null}
 
                 {isDesktop ? (
                     <div className="mt-6 md:mt-8 lg:mt-9">
-                        <GameDetailPlayer
-                            iframeUrl={iframeUrl}
-                            iframeTitle={iframeTitle ?? gameTitle}
-                            showFallback={showGameFallback}
-                            fallbackMessage={fallbackMessage}
-                            fallbackActions={fallbackActions}
-                        >
-                            {gameContainerChildren}
-                        </GameDetailPlayer>
+                        {isPussy888 && !pussy888Ready ? (
+                            <Pussy888PreLaunchPanel onLaunchWebsite={handlePussy888LaunchWebsite} />
+                        ) : (
+                            <GameDetailPlayer
+                                iframeUrl={iframeUrl}
+                                iframeTitle={iframeTitle ?? gameTitle}
+                                showFallback={showGameFallback}
+                                fallbackMessage={fallbackMessage}
+                                fallbackActions={fallbackActions}
+                            >
+                                {gameContainerChildren}
+                            </GameDetailPlayer>
+                        )}
                     </div>
                 ) : null}
 
-                {!isDesktop ? (
+                {!isDesktop && (!isPussy888 || pussy888Ready) ? (
                     <GameDetailPlayModal
                         open={mobilePlayOpen}
                         onClose={() => setMobilePlayOpen(false)}

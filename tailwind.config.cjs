@@ -11,15 +11,15 @@ module.exports = {
           '0%': { transform: 'translate3d(0, 0, 0)' },
           '100%': { transform: 'translate3d(0, -50%, 0)' },
         },
-        /** Hero announcement strip: text moves right → left (must not live only under `@theme` in theme.css — browsers ignore it). */
+        /** Hero announcement strip: starts in view, scrolls left (config is source of truth for Tailwind). */
         marquee: {
-          '0%': { transform: 'translateX(100%)' },
+          '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-100%)' },
         },
       },
       animation: {
         'home-marquee-vertical-y': 'home-marquee-vertical-y 40s linear infinite',
-        marquee: 'marquee 20s linear infinite',
+        marquee: 'marquee 11s linear infinite',
       },
     },
   },

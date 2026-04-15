@@ -14,7 +14,6 @@ import TopGames from './components/TopGames';
 import VipTier from './components/VipTier';
 import AppDownload from './components/AppDownload';
 import Promos from './components/Promos';
-import MobileHomeQuickShortcuts from './components/home/MobileHomeQuickShortcuts';
 import MobileHomeCategoryGames from './components/home/MobileHomeCategoryGames';
 import MobileHomeBottomNav from './components/home/MobileHomeBottomNav';
 import LoadingPage from './components/LoadingPage';
@@ -519,10 +518,6 @@ function AppInner() {
         <>
           <HeroSection />
 
-          <MobileHomeQuickShortcuts
-            onNavigate={handleNavigate}
-            onLiveChatClick={() => setLiveChatOpen(true)}
-          />
           <MobileHomeCategoryGames onNavigate={handleNavigate} />
 
           <div className="mx-auto hidden w-full max-w-screen-2xl flex-col gap-8 px-4 pb-10 md:flex md:px-8">

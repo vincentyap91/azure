@@ -157,7 +157,8 @@
 
   --animate-scan: scan 1.5s linear infinite;
   --animate-float: float 5s ease-in-out infinite;
-  --animate-marquee: marquee 20s linear infinite;
+  /* Hero announcement bar: faster scroll + start in view (no long off-screen lead-in). */
+  --animate-marquee: marquee 11s linear infinite;
 
   @keyframes scan {
     0% {
@@ -189,7 +190,7 @@
 
   @keyframes marquee {
     0% {
-      transform: translateX(100%);
+      transform: translateX(0);
     }
 
     100% {

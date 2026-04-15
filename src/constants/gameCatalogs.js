@@ -51,6 +51,13 @@ export const SLOT_GAMES = [
     { name: 'Gold Trio: Santa Surprise', provider: 'PlayTech Slots', rtp: 91.83, imgUrl: 'https://lb9.azureedge.net/media/playtech/slots/en/gpas_gtsanta_pop.png' },
     { name: 'Clover Flip', provider: 'PlayTech Slots', rtp: 92.03, imgUrl: 'https://lb9.azureedge.net/media/playtech/slots/en/gpas_cflip_pop.png' },
     { name: 'Baa, Baa, Baa', provider: 'PlayTech Slots', rtp: 91.72, imgUrl: 'https://lb9.azureedge.net/media/playtech/slots/en/gpas_baba_pop.png' },
+    // Pussy888
+    {
+        name: 'Pussy888',
+        provider: 'Pussy888',
+        rtp: 90.84,
+        imgUrl: 'https://pksoftcdn.azureedge.net/media/516bf741-86db-668a-1b27-7fd2c150e41f-202408291606256321-202410040758117373-202510311406514416.jpg',
+    },
 ];
 
 export const FISHING_GAMES = [

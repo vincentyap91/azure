@@ -40,6 +40,13 @@ export const MATCHED_SLOT_PROVIDERS = [
         hot: false,
     },
     {
+        id: 'pussy888',
+        label: 'Pussy888',
+        gameProvider: 'Pussy888',
+        image: 'https://pksoftcdn.azureedge.net/media/pussy888-202511050844023196.png',
+        hot: true,
+    },
+    {
         id: 'joker-slot',
         label: 'Joker Slot',
         gameProvider: 'Joker',
