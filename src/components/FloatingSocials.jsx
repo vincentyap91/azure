@@ -4,28 +4,30 @@ import rewardButtonImage from '../assets/reward.png';
 // Keep this label as a plain string for easier future multilingual updates.
 const CLAIM_REWARDS_LABEL = 'Rewards';
 
-export default function FloatingSocials({ onLiveChatClick, onClaimRewardsClick, className = '' }) {
+export default function FloatingSocials({ authUser, onLiveChatClick, onClaimRewardsClick, className = '' }) {
     const unreadCount = 2;
+    const showRewardsButton = Boolean(authUser);
 
     return (
-        <div className={`fixed bottom-20 md:bottom-6 right-2 z-[130] hidden md:flex flex-col gap-3 items-center ${className}`.trim()}>
-            {/* Claim Rewards - Top */}
-            <button
-                type="button"
-                onClick={onClaimRewardsClick}
-                className="relative inline-flex h-[82px] w-[82px] items-center justify-center hover:brightness-105 transition-all hover:scale-105 active:scale-95"
-                aria-label={CLAIM_REWARDS_LABEL}
-                title={CLAIM_REWARDS_LABEL}
-            >
-                <img
-                    src={rewardButtonImage}
-                    alt={CLAIM_REWARDS_LABEL}
-                    className="h-full w-full object-contain drop-shadow-[0_8px_14px_rgba(0,0,0,0.2)]"
-                />
-                <span className="pointer-events-none absolute bottom-[13px] left-1/2 -translate-x-1/2 whitespace-nowrap text-[12px] font-bold leading-none text-[rgb(133_72_20)]">
-                    {CLAIM_REWARDS_LABEL}
-                </span>
-            </button>
+        <div className={`fixed bottom-20 md:bottom-6 right-5 z-[130] hidden md:flex flex-col gap-3 items-center ${className}`.trim()}>
+            {showRewardsButton && (
+                <button
+                    type="button"
+                    onClick={onClaimRewardsClick}
+                    className="relative inline-flex h-[82px] w-[82px] items-center justify-center hover:brightness-105 transition-all hover:scale-105 active:scale-95"
+                    aria-label={CLAIM_REWARDS_LABEL}
+                    title={CLAIM_REWARDS_LABEL}
+                >
+                    <img
+                        src={rewardButtonImage}
+                        alt={CLAIM_REWARDS_LABEL}
+                        className="h-full w-full object-contain drop-shadow-[0_8px_14px_rgba(0,0,0,0.2)]"
+                    />
+                    <span className="pointer-events-none absolute bottom-[13px] left-1/2 -translate-x-1/2 whitespace-nowrap text-[12px] font-bold leading-none text-[rgb(133_72_20)]">
+                        {CLAIM_REWARDS_LABEL}
+                    </span>
+                </button>
+            )}
 
             {/* Live Chat - Bottom */}
             <button

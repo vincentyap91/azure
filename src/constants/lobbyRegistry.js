@@ -27,6 +27,7 @@ export const SPORTS_LOBBIES = [
         categoryLabel: 'Sports',
         categoryPage: 'sports',
         kind: 'lobby',
+        imageFit: 'contain',
     },
     {
         name: 'SBO Sports',
@@ -35,6 +36,7 @@ export const SPORTS_LOBBIES = [
         categoryLabel: 'Sports',
         categoryPage: 'sports',
         kind: 'lobby',
+        imageFit: 'contain',
     },
     {
         name: 'Pragmatic Play Virtual Sports',
@@ -43,6 +45,7 @@ export const SPORTS_LOBBIES = [
         categoryLabel: 'Sports',
         categoryPage: 'sports',
         kind: 'lobby',
+        imageFit: 'contain',
     },
     {
         name: 'SBO Virtual Sports',
@@ -51,6 +54,7 @@ export const SPORTS_LOBBIES = [
         categoryLabel: 'Sports',
         categoryPage: 'sports',
         kind: 'lobby',
+        imageFit: 'contain',
     },
     {
         name: 'Lucky Sports',

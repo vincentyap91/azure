@@ -485,8 +485,9 @@ function AppInner() {
               ? 'bg-[var(--color-page-account)]'
               : 'bg-[var(--color-page-default)]'
     }`}>
-      <ScrollToTop />
+      <ScrollToTop authUser={authUser} />
       <FloatingSocials
+        authUser={authUser}
         onLiveChatClick={() => setLiveChatOpen((open) => !open)}
         onClaimRewardsClick={() => handleNavigate('loyalty-rewards')}
       />
