@@ -65,7 +65,7 @@ export default function VipTier({ onNavigate }) {
                 Join the 12WIN VIP member group, you will receive many special privileges such as promotion bonus, monthly red envelope bonus, birthday bonus. All of these are special privileges for 12WIN VIP customers only.
             </p>
 
-            <div className="flex flex-col gap-4 items-center mt-4 md:flex-row">
+            <div className="flex flex-col gap-4 items-center md:flex-row">
 
                 {/* Left Side VIP Visual */}
                 <div className="relative flex min-h-[250px] w-full items-center justify-center md:w-1/3 lg:justify-start">

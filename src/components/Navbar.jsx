@@ -5,6 +5,7 @@ import {
     ChevronDown,
     ChevronRight,
     CircleDollarSign,
+    RefreshCw,
     Dices,
     Fish,
     Gamepad2,
@@ -399,9 +400,29 @@ export default function Navbar({
                                 ref={profileMenuRef}
                                 className="relative flex h-full items-center gap-1 rounded-[12px] px-1 py-0.5 shadow-[var(--shadow-nav-top)]"
                             >
-                                <div className="flex h-7 items-center gap-1.5 rounded-[9px] border border-white/10 bg-[rgb(14_99_187)] px-3 text-white">
-                                    <span className="font-bold tracking-[0.01em]">{authUser.balance}</span>
-                                    <CircleDollarSign size={14} className="text-[var(--color-nav-gold)]" />
+                                <div className="flex h-7 min-w-0 max-w-[13rem] items-stretch overflow-hidden rounded-[9px] border border-white/10 bg-[rgb(14_99_187)] text-white">
+                                    <div className="flex min-w-0 flex-1 items-center px-2.5 text-xs font-bold tracking-[0.01em]">
+                                        <span className="min-w-0 truncate tabular-nums">{authUser.balance}</span>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={(event) => {
+                                            event.preventDefault();
+                                            event.stopPropagation();
+                                            onRefreshBalance?.();
+                                        }}
+                                        disabled={!onRefreshBalance || balanceRefreshing}
+                                        className="inline-flex h-full w-7 min-w-7 shrink-0 touch-manipulation items-center justify-center border-l border-white/15 text-white/90 transition hover:bg-white/[0.08] hover:text-white disabled:pointer-events-none disabled:opacity-40"
+                                        aria-label="Refresh balance"
+                                        title="Refresh balance"
+                                    >
+                                        <RefreshCw
+                                            size={13}
+                                            strokeWidth={2.25}
+                                            className={`shrink-0 ${balanceRefreshing ? 'animate-spin' : ''}`}
+                                            aria-hidden
+                                        />
+                                    </button>
                                 </div>
                                 <div className="flex h-7 shrink-0 items-stretch overflow-hidden rounded-[9px] border border-white/15 bg-[linear-gradient(180deg,#16508f_0%,#0d3562_100%)] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
                                     <button

@@ -65,29 +65,29 @@ export default function MobileSiteHeader({
             <div className="flex shrink-0 items-center justify-end gap-1.5">
                 {authUser ? (
                     <>
-                        <div className="inline-flex min-h-11 min-w-0 max-w-[min(13.75rem,calc(100vw-9.25rem))] shrink items-stretch overflow-hidden rounded-xl border border-white/10 bg-[var(--color-brand-primary)] shadow-sm">
+                        <div className="inline-flex h-10 min-w-0 max-w-[min(13.75rem,calc(100vw-9.25rem))] shrink items-stretch overflow-hidden rounded-xl border border-white/10 bg-[var(--color-brand-primary)] shadow-sm">
                             <button
                                 type="button"
                                 onClick={onProfileClick}
                                 className={`flex min-w-0 flex-1 touch-manipulation text-left transition hover:bg-white/[0.06] focus-visible:z-10 focus-visible:outline focus-visible:ring-2 focus-visible:ring-slate-300/70 focus-visible:ring-offset-0 ${
                                     balanceLayout?.variant === 'split'
-                                        ? 'items-start justify-center py-1.5 pl-2.5 pr-1'
-                                        : 'h-11 items-center py-0 pl-2.5 pr-2.5'
+                                        ? 'items-center justify-center py-0.5 pl-2.5 pr-2.5'
+                                        : 'h-full items-center py-0 pl-2.5 pr-2.5'
                                 }`}
                                 aria-label={`Open profile — ${authUser.balance} (${authUser.name})`}
                                 title={authUser.name}
                             >
                                 {balanceLayout?.variant === 'split' ? (
-                                    <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-                                        <span className="text-[10px] font-semibold leading-none tracking-wide text-white/90">
+                                    <span className="flex min-w-0 flex-1 flex-col justify-center gap-px leading-none">
+                                        <span className="text-[9px] font-semibold leading-none tracking-wide text-white/90">
                                             {balanceLayout.currency}
                                         </span>
-                                        <span className="min-w-0 w-full truncate whitespace-nowrap text-[clamp(11px,3vw,13.5px)] font-extrabold tabular-nums leading-tight tracking-tight text-white">
+                                        <span className="min-w-0 w-full truncate whitespace-nowrap text-[clamp(10px,2.9vw,12px)] font-extrabold tabular-nums leading-none tracking-tight text-white">
                                             {balanceLayout.amount}
                                         </span>
                                     </span>
                                 ) : (
-                                    <span className="min-w-0 flex-1 truncate whitespace-nowrap text-[clamp(11.5px,3.15vw,14.5px)] font-extrabold tabular-nums leading-none tracking-tight text-white">
+                                    <span className="min-w-0 flex-1 truncate whitespace-nowrap text-[clamp(11px,3.15vw,14px)] font-extrabold tabular-nums leading-none tracking-tight text-white">
                                         {balanceLayout?.text ?? authUser.balance}
                                     </span>
                                 )}
@@ -100,12 +100,12 @@ export default function MobileSiteHeader({
                                     onRefreshBalance?.();
                                 }}
                                 disabled={!onRefreshBalance || balanceRefreshing}
-                                className="inline-flex min-h-[44px] w-11 min-w-[44px] shrink-0 touch-manipulation items-center justify-center self-stretch border-l border-white/15 bg-transparent pl-1 pr-0.5 text-white/90 transition hover:bg-white/[0.08] hover:text-white disabled:pointer-events-none disabled:opacity-40"
+                                className="inline-flex h-full w-10 min-w-10 shrink-0 touch-manipulation items-center justify-center self-stretch border-l border-white/15 bg-transparent px-0.5 text-white/90 transition hover:bg-white/[0.08] hover:text-white disabled:pointer-events-none disabled:opacity-40"
                                 aria-label="Refresh balance"
                                 title="Refresh balance"
                             >
                                 <RefreshCw
-                                    size={15}
+                                    size={14}
                                     strokeWidth={2.25}
                                     className={`shrink-0 ${balanceRefreshing ? 'animate-spin' : ''}`}
                                     aria-hidden
