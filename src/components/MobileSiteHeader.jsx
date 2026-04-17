@@ -56,9 +56,14 @@ export default function MobileSiteHeader({
                                 className="h-7 w-7 shrink-0 rounded-full border border-white/20 bg-white/10 object-contain"
                             />
                             <div className="min-w-0 flex-1 text-left leading-[1.05]">
-                                <p className="truncate text-[11px] font-bold text-white">{authUser.name}</p>
-                                <p className="mt-0.5 flex items-center gap-0.5 truncate text-[11px] font-bold tabular-nums text-white/90">
-                                    <span className="truncate">{authUser.balance}</span>
+                                <p
+                                    className="min-w-0 truncate text-[11px] font-bold text-white"
+                                    title={authUser.name}
+                                >
+                                    {authUser.name}
+                                </p>
+                                <p className="mt-0.5 flex min-w-0 items-center gap-0.5 text-[11px] font-bold tabular-nums text-white/90">
+                                    <span className="min-w-0 flex-1 truncate">{authUser.balance}</span>
                                     <CircleDollarSign size={11} className="shrink-0 text-white/90" />
                                 </p>
                             </div>
