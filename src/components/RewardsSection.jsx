@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import {
+    Check,
     ChevronDown,
     Clock,
     Coins,
@@ -11,6 +13,7 @@ import {
 import RewardsActivityRecordModal from './RewardsActivityRecordModal';
 import HorizontalScrollTabRow, { scrollTabIntoViewSmooth } from './HorizontalScrollTabRow';
 import { REWARDS_ACTIVITY_RECORD_TYPES, REWARDS_PROGRAM_IDS, REWARDS_PROGRAMS } from '../constants/rewardsPrograms';
+import useBodyScrollLock from '../hooks/useBodyScrollLock';
 
 /** Demo main wallet balance (Spin / Voucher / Prize rewards area — hidden on Daily Bonus) */
 const REWARDS_WALLET_BALANCE = '201.00';
@@ -24,13 +27,13 @@ const REWARDS_RECORD_COLUMNS = [
 const ACTIVITY_PROGRAM_IDS = new Set(REWARDS_ACTIVITY_RECORD_TYPES.map((p) => p.id));
 
 const DAILY_CHECKIN_DAYS = [
-    { id: 'mon', label: 'Mon', reward: 'MYR 5', status: 'locked' },
-    { id: 'tue', label: 'Tue', reward: 'MYR 5', status: 'claimable' },
-    { id: 'wed', label: 'Wed', reward: 'MYR 10', status: 'locked' },
-    { id: 'thu', label: 'Thu', reward: 'MYR 15', status: 'locked' },
-    { id: 'fri', label: 'Fri', reward: 'MYR 5', status: 'locked' },
-    { id: 'sat', label: 'Sat', reward: 'MYR 20', status: 'locked' },
-    { id: 'sun', label: 'Sun', reward: 'MYR 25', status: 'locked' },
+    { id: 'd1', label: 'Day 1', reward: 'MYR 5', status: 'claimed' },
+    { id: 'd2', label: 'Day 2', reward: 'MYR 5', status: 'claimable' },
+    { id: 'd3', label: 'Day 3', reward: 'MYR 10', status: 'locked' },
+    { id: 'd4', label: 'Day 4', reward: 'MYR 15', status: 'locked' },
+    { id: 'd5', label: 'Day 5', reward: 'MYR 5', status: 'locked' },
+    { id: 'd6', label: 'Day 6', reward: 'MYR 20', status: 'locked' },
+    { id: 'd7', label: 'Day 7', reward: 'MYR 25', status: 'locked' },
 ];
 
 const VOUCHERS = [
@@ -164,14 +167,183 @@ function RewardsWalletBar({ balance, onRecordClick }) {
     );
 }
 
+function CongratsClaimModal({ open, amount, onClose, autoCloseMs = 3000 }) {
+    useBodyScrollLock(open);
+
+    useEffect(() => {
+        if (!open) return undefined;
+        const timer = setTimeout(() => onClose?.(), autoCloseMs);
+        const onKey = (e) => {
+            if (e.key === 'Escape') onClose?.();
+        };
+        window.addEventListener('keydown', onKey);
+        return () => {
+            clearTimeout(timer);
+            window.removeEventListener('keydown', onKey);
+        };
+    }, [open, onClose, autoCloseMs]);
+
+    if (!open) return null;
+    if (typeof document === 'undefined') return null;
+
+    const coinCount = 14;
+
+    const viewportStyle = {
+        position: 'fixed',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+        width: '100vw',
+        height: '100dvh',
+        minHeight: '100vh',
+        margin: 0,
+    };
+
+    return createPortal(
+        <div
+            className="z-[240] flex items-center justify-center p-4 sm:p-6"
+            style={viewportStyle}
+        >
+            <button
+                type="button"
+                aria-label="Close congratulations"
+                onClick={onClose}
+                className="bg-[var(--color-nav-overlay)] backdrop-blur-[2px]"
+                style={{ ...viewportStyle, zIndex: 0 }}
+            />
+
+            <section
+                role="dialog"
+                aria-modal="true"
+                aria-label="Reward claimed"
+                className="claim-congrats-pop relative z-[1] flex w-full max-w-[420px] flex-col items-center overflow-hidden rounded-[22px] border border-[var(--color-border-default)] bg-[var(--color-surface-base)] px-6 py-7 text-center shadow-[var(--shadow-modal)] sm:px-8 sm:py-9"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+                    {Array.from({ length: coinCount }).map((_, i) => (
+                        <span
+                            key={i}
+                            className="claim-coin-fall absolute text-[var(--color-cta-strong-end)]"
+                            style={{
+                                left: `${(i * (100 / coinCount)).toFixed(2)}%`,
+                                animationDelay: `${(i % 5) * 0.18}s`,
+                                animationDuration: `${1.6 + (i % 4) * 0.25}s`,
+                                opacity: 0.85,
+                            }}
+                        >
+                            <Coins size={i % 3 === 0 ? 20 : 16} strokeWidth={2.25} />
+                        </span>
+                    ))}
+                </div>
+
+                <span
+                    className="claim-coin-burst relative z-[1] flex h-20 w-20 items-center justify-center rounded-full bg-[linear-gradient(180deg,var(--color-cta-start)_0%,var(--color-cta-end)_100%)] text-[rgb(15_23_42)] shadow-[0_18px_36px_rgba(255,178,45,0.4)] ring-2 ring-[var(--color-nav-gold)] sm:h-24 sm:w-24"
+                    aria-hidden
+                >
+                    <Coins className="h-10 w-10 sm:h-12 sm:w-12" strokeWidth={2.25} />
+                </span>
+
+                <h2 className="relative z-[1] mt-5 text-lg font-bold tracking-tight text-[var(--color-text-strong)] sm:text-xl">
+                    Congratulations!
+                </h2>
+                <p className="relative z-[1] mt-2 text-2xl font-bold text-[var(--color-cta-strong-end)] sm:text-3xl">
+                    You got {amount}
+                </p>
+                <p className="relative z-[1] mt-2 text-sm leading-relaxed text-[var(--color-text-muted)] sm:text-[15px]">
+                    Come back tomorrow to keep your streak going and unlock a bigger reward.
+                </p>
+
+                <button
+                    type="button"
+                    onClick={onClose}
+                    className="btn-theme-primary relative z-[1] mt-5 inline-flex h-11 w-full items-center justify-center rounded-xl px-6 text-sm font-bold text-white shadow-sm transition hover:brightness-105"
+                >
+                    Awesome
+                </button>
+
+                <p className="relative z-[1] mt-2.5 text-[11px] font-medium text-[var(--color-text-soft)]">
+                    Auto-closing in {Math.round(autoCloseMs / 1000)} seconds
+                </p>
+            </section>
+        </div>,
+        document.body
+    );
+}
+
+function DailyStreakNode({ day, position }) {
+    const isClaimed = day.status === 'claimed';
+    const isToday = day.status === 'claimable';
+
+    const circleClass = isClaimed
+        ? 'bg-[linear-gradient(180deg,var(--color-accent-500)_0%,var(--color-accent-700)_100%)] text-white ring-2 ring-[var(--color-accent-200)] shadow-[var(--shadow-subtle)]'
+        : isToday
+          ? 'bg-[linear-gradient(180deg,var(--color-cta-start)_0%,var(--color-cta-end)_100%)] text-[rgb(15_23_42)] ring-2 ring-[var(--color-nav-gold)] shadow-[var(--shadow-cta-soft)]'
+          : 'bg-[var(--color-surface-muted)] text-[var(--color-text-soft)] ring-1 ring-[var(--color-border-default)]';
+
+    const labelClass = isToday
+        ? 'text-[var(--color-cta-strong-end)]'
+        : isClaimed
+          ? 'text-[var(--color-accent-700)]'
+          : 'text-[var(--color-text-soft)]';
+
+    const rewardClass = isToday || isClaimed
+        ? 'text-[rgb(18_63_128)]'
+        : 'text-[var(--color-text-soft)]';
+
+    return (
+        <div
+            className="relative flex shrink-0 flex-col items-center gap-1.5"
+            aria-current={isToday ? 'step' : undefined}
+        >
+            <span
+                className={`relative flex h-11 w-11 items-center justify-center rounded-full text-xs font-bold transition sm:h-14 sm:w-14 ${circleClass}`}
+                aria-hidden
+            >
+                {isClaimed ? (
+                    <Check className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={3} />
+                ) : isToday ? (
+                    <Coins className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.5} />
+                ) : (
+                    <Lock className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={2.25} />
+                )}
+                {isToday && (
+                    <span className="pointer-events-none absolute -inset-1 animate-ping rounded-full ring-2 ring-[var(--color-nav-gold)]/50" />
+                )}
+            </span>
+            <p
+                className={`text-center text-[10px] font-bold uppercase tracking-wide sm:text-xs ${labelClass}`}
+            >
+                {day.label}
+            </p>
+            <p
+                className={`text-center text-[10px] font-bold leading-tight sm:text-xs ${rewardClass}`}
+            >
+                {day.reward}
+            </p>
+            <span className="sr-only">
+                {day.label} · {day.reward} ·{' '}
+                {isClaimed ? 'completed' : isToday ? 'available today' : 'upcoming'}
+            </span>
+            <span className="sr-only">{position}</span>
+        </div>
+    );
+}
+
 function DailyBonusPanel() {
     const [days, setDays] = useState(DAILY_CHECKIN_DAYS);
-    const streakDays = 0;
+    const [congratsAmount, setCongratsAmount] = useState(null);
+    const streakDays = days.filter((d) => d.status === 'claimed').length;
+    const todayIdx = days.findIndex((d) => d.status === 'claimable');
+    const todayDay = todayIdx >= 0 ? days[todayIdx] : null;
 
-    const handleClaimDay = (id) => {
+    const handleClaimToday = () => {
+        if (todayIdx < 0) return;
+        const reward = days[todayIdx].reward;
         setDays((prev) =>
-            prev.map((d) => (d.id === id && d.status === 'claimable' ? { ...d, status: 'claimed' } : d))
+            prev.map((d, i) => (i === todayIdx ? { ...d, status: 'claimed' } : d))
         );
+        setCongratsAmount(reward);
     };
 
     return (
@@ -197,66 +369,63 @@ function DailyBonusPanel() {
                         Claim MYR rewards each day. Some days may require minimum valid turnover on your main wallet.
                     </p>
                 </div>
-                {/* Day cards — white area inside same card */}
-                <div className="border-t border-[var(--color-border-default)] bg-[var(--color-surface-base)] p-4 sm:p-5 md:p-6">
-                    <div className="overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]">
-                        <div className="flex min-w-0 gap-2.5 sm:grid sm:grid-cols-7 sm:gap-3 md:gap-4">
-                            {days.map((d) => {
-                                const isClaimable = d.status === 'claimable';
-                                const isClaimed = d.status === 'claimed';
-                                return (
-                                    <div
-                                        key={d.id}
-                                        className={`flex w-[108px] shrink-0 snap-start flex-col rounded-[var(--radius-control)] border bg-[var(--color-surface-base)] p-3 shadow-[var(--shadow-subtle)] transition-[border-color,box-shadow] duration-200 sm:w-auto sm:min-w-0 sm:p-3.5 ${
-                                            isClaimable
-                                                ? 'border-2 border-[var(--color-nav-gold)] shadow-[var(--shadow-cta-soft)]'
-                                                : isClaimed
-                                                  ? 'border border-[var(--color-accent-200)]'
-                                                  : 'border border-[var(--color-border-default)]'
+                {/* 7-day horizontal streak */}
+                <div className="border-t border-[var(--color-border-default)] bg-[var(--color-surface-base)] px-3 py-5 sm:px-6 sm:py-6">
+                    <ol
+                        role="list"
+                        aria-label="7-day check-in streak"
+                        className="flex items-start justify-between gap-1 sm:gap-2"
+                    >
+                        {days.map((d, idx) => (
+                            <React.Fragment key={d.id}>
+                                <li className="flex min-w-0 shrink-0">
+                                    <DailyStreakNode day={d} position={`Step ${idx + 1} of ${days.length}`} />
+                                </li>
+                                {idx < days.length - 1 && (
+                                    <span
+                                        aria-hidden
+                                        className={`mt-5 h-1 flex-1 rounded-full sm:mt-7 ${
+                                            d.status === 'claimed'
+                                                ? 'bg-[var(--color-accent-400)]'
+                                                : 'bg-[var(--color-border-default)]'
                                         }`}
-                                    >
-                                        <p className="text-center text-xs font-bold uppercase tracking-wide text-[rgb(18_63_128)] sm:text-xs">
-                                            {d.label}
-                                        </p>
-                                        <div className="mt-2 flex flex-1 flex-col items-center justify-center gap-1.5">
-                                            <Coins
-                                                className="h-6 w-6 text-[var(--color-cta-strong-end)] sm:h-7 sm:w-7"
-                                                strokeWidth={2}
-                                                aria-hidden
-                                            />
-                                            <p className="text-center text-xs font-bold leading-tight text-[rgb(18_63_128)] sm:text-xs">
-                                                {d.reward}
-                                            </p>
-                                        </div>
-                                        <div className="mt-3">
-                                            {d.status === 'claimable' && (
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleClaimDay(d.id)}
-                                                    className="btn-theme-primary w-full rounded-[var(--radius-control-xs)] py-2.5 text-xs font-bold text-white shadow-sm transition hover:brightness-105 active:brightness-95"
-                                                >
-                                                    Claim
-                                                </button>
-                                            )}
-                                            {d.status === 'locked' && (
-                                                <div className="flex items-center justify-center gap-1 rounded-[var(--radius-control-xs)] bg-[var(--color-surface-muted)] py-2 text-[var(--color-text-soft)]">
-                                                    <Lock size={13} strokeWidth={2.25} aria-hidden />
-                                                    <span className="text-xs font-bold uppercase tracking-wide">
-                                                        Locked
-                                                    </span>
-                                                </div>
-                                            )}
-                                            {d.status === 'claimed' && (
-                                                <p className="rounded-[var(--radius-control-xs)] bg-[var(--color-accent-50)] py-2 text-center text-xs font-bold text-[var(--color-accent-700)]">
-                                                    Claimed
-                                                </p>
-                                            )}
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                                    />
+                                )}
+                            </React.Fragment>
+                        ))}
+                    </ol>
+
+                    {todayDay ? (
+                        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-[var(--radius-control)] border-2 border-[var(--color-nav-gold)] bg-[linear-gradient(180deg,var(--color-accent-50)_0%,var(--color-surface-base)_100%)] px-4 py-3 shadow-[var(--shadow-subtle)] sm:px-5">
+                            <div className="flex min-w-0 items-center gap-3">
+                                <span
+                                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(180deg,var(--color-cta-start)_0%,var(--color-cta-end)_100%)] shadow-[var(--shadow-subtle)] ring-1 ring-[var(--color-cta-border)]/60"
+                                    aria-hidden
+                                >
+                                    <Coins className="h-5 w-5 text-[rgb(15_23_42)]" strokeWidth={2.5} />
+                                </span>
+                                <div className="min-w-0">
+                                    <p className="text-[11px] font-semibold uppercase tracking-wide text-[var(--color-text-soft)]">
+                                        Today&rsquo;s reward
+                                    </p>
+                                    <p className="truncate text-base font-bold text-[var(--color-text-strong)]">
+                                        {todayDay.label} &middot; {todayDay.reward}
+                                    </p>
+                                </div>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={handleClaimToday}
+                                className="btn-theme-primary inline-flex h-11 shrink-0 items-center justify-center rounded-[var(--radius-control-xs)] px-6 text-sm font-bold text-white shadow-sm transition hover:brightness-105 active:brightness-95"
+                            >
+                                Claim now
+                            </button>
                         </div>
-                    </div>
+                    ) : (
+                        <div className="mt-6 rounded-[var(--radius-control)] border border-[var(--color-accent-200)] bg-[var(--color-accent-50)] px-4 py-3 text-center text-sm font-semibold text-[var(--color-accent-700)]">
+                            All caught up &mdash; see you tomorrow for the next streak day.
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -269,6 +438,12 @@ function DailyBonusPanel() {
                     <li>Claimed amounts may carry a one-time rollover before withdrawal.</li>
                 </ol>
             </TermsBlock>
+
+            <CongratsClaimModal
+                open={Boolean(congratsAmount)}
+                amount={congratsAmount}
+                onClose={() => setCongratsAmount(null)}
+            />
         </div>
     );
 }
