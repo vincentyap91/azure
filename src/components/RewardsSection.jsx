@@ -26,15 +26,37 @@ const REWARDS_RECORD_COLUMNS = [
 
 const ACTIVITY_PROGRAM_IDS = new Set(REWARDS_ACTIVITY_RECORD_TYPES.map((p) => p.id));
 
-const DAILY_CHECKIN_DAYS = [
-    { id: 'd1', label: 'Day 1', reward: 'MYR 5', status: 'claimed' },
-    { id: 'd2', label: 'Day 2', reward: 'MYR 5', status: 'claimable' },
-    { id: 'd3', label: 'Day 3', reward: 'MYR 10', status: 'locked' },
-    { id: 'd4', label: 'Day 4', reward: 'MYR 15', status: 'locked' },
-    { id: 'd5', label: 'Day 5', reward: 'MYR 5', status: 'locked' },
-    { id: 'd6', label: 'Day 6', reward: 'MYR 20', status: 'locked' },
-    { id: 'd7', label: 'Day 7', reward: 'MYR 25', status: 'locked' },
-];
+const DAILY_CHECKIN_TOTAL_DAYS = 31;
+const DAILY_CHECKIN_CURRENT_DAY = 8;
+
+function rewardForDay(day) {
+    if (day === 31) return 'MYR 150';
+    if (day === 28) return 'MYR 80';
+    if (day === 21) return 'MYR 50';
+    if (day === 14) return 'MYR 30';
+    if (day === 7) return 'MYR 25';
+    if (day % 7 === 0) return 'MYR 20';
+    if (day % 5 === 0) return 'MYR 10';
+    return 'MYR 5';
+}
+
+function buildDailyCheckinDays(total = DAILY_CHECKIN_TOTAL_DAYS, currentDay = DAILY_CHECKIN_CURRENT_DAY) {
+    return Array.from({ length: total }, (_, i) => {
+        const day = i + 1;
+        let status = 'locked';
+        if (day < currentDay) status = 'claimed';
+        else if (day === currentDay) status = 'claimable';
+        return {
+            id: `d${day}`,
+            day,
+            label: `Day ${day}`,
+            reward: rewardForDay(day),
+            status,
+        };
+    });
+}
+
+const DAILY_CHECKIN_DAYS = buildDailyCheckinDays();
 
 const VOUCHERS = [
     { id: 'v1', title: 'Scratch RM 5', value: '5' },
@@ -271,7 +293,7 @@ function CongratsClaimModal({ open, amount, onClose, autoCloseMs = 3000 }) {
     );
 }
 
-function DailyStreakNode({ day, position }) {
+const DailyStreakNode = React.forwardRef(function DailyStreakNode({ day, position }, ref) {
     const isClaimed = day.status === 'claimed';
     const isToday = day.status === 'claimable';
 
@@ -293,6 +315,7 @@ function DailyStreakNode({ day, position }) {
 
     return (
         <div
+            ref={ref}
             className="relative flex shrink-0 flex-col items-center gap-1.5"
             aria-current={isToday ? 'step' : undefined}
         >
@@ -308,13 +331,16 @@ function DailyStreakNode({ day, position }) {
                     <Lock className="h-4 w-4 sm:h-5 sm:w-5" strokeWidth={2.25} />
                 )}
                 {isToday && (
-                    <span className="pointer-events-none absolute -inset-1 animate-ping rounded-full ring-2 ring-[var(--color-nav-gold)]/50" />
+                    <span
+                        className="pointer-events-none absolute -inset-1 animate-ping rounded-full ring-2 ring-[var(--color-nav-gold)]/50"
+                        aria-hidden
+                    />
                 )}
             </span>
             <p
                 className={`text-center text-[10px] font-bold uppercase tracking-wide sm:text-xs ${labelClass}`}
             >
-                {day.label}
+                {isToday ? 'Today' : day.label}
             </p>
             <p
                 className={`text-center text-[10px] font-bold leading-tight sm:text-xs ${rewardClass}`}
@@ -328,14 +354,26 @@ function DailyStreakNode({ day, position }) {
             <span className="sr-only">{position}</span>
         </div>
     );
-}
+});
 
 function DailyBonusPanel() {
     const [days, setDays] = useState(DAILY_CHECKIN_DAYS);
     const [congratsAmount, setCongratsAmount] = useState(null);
+    const scrollerRef = useRef(null);
+    const todayRef = useRef(null);
     const streakDays = days.filter((d) => d.status === 'claimed').length;
     const todayIdx = days.findIndex((d) => d.status === 'claimable');
     const todayDay = todayIdx >= 0 ? days[todayIdx] : null;
+
+    useEffect(() => {
+        const scroller = scrollerRef.current;
+        const node = todayRef.current;
+        if (!scroller || !node) return;
+        const parentRect = scroller.getBoundingClientRect();
+        const nodeRect = node.getBoundingClientRect();
+        const delta = nodeRect.left - parentRect.left - parentRect.width / 2 + nodeRect.width / 2;
+        scroller.scrollTo({ left: scroller.scrollLeft + delta, behavior: 'auto' });
+    }, []);
 
     const handleClaimToday = () => {
         if (todayIdx < 0) return;
@@ -369,31 +407,53 @@ function DailyBonusPanel() {
                         Claim MYR rewards each day. Some days may require minimum valid turnover on your main wallet.
                     </p>
                 </div>
-                {/* 7-day horizontal streak */}
-                <div className="border-t border-[var(--color-border-default)] bg-[var(--color-surface-base)] px-3 py-5 sm:px-6 sm:py-6">
-                    <ol
-                        role="list"
-                        aria-label="7-day check-in streak"
-                        className="flex items-start justify-between gap-1 sm:gap-2"
+                {/* 31-day horizontal streak */}
+                <div className="border-t border-[var(--color-border-default)] bg-[var(--color-surface-base)] pb-4 sm:pb-5">
+                    <div
+                        ref={scrollerRef}
+                        className="overflow-x-auto scroll-smooth px-3 py-1 [-webkit-overflow-scrolling:touch] sm:px-6 sm:py-2"
                     >
-                        {days.map((d, idx) => (
-                            <React.Fragment key={d.id}>
-                                <li className="flex min-w-0 shrink-0">
-                                    <DailyStreakNode day={d} position={`Step ${idx + 1} of ${days.length}`} />
-                                </li>
-                                {idx < days.length - 1 && (
-                                    <span
-                                        aria-hidden
-                                        className={`mt-5 h-1 flex-1 rounded-full sm:mt-7 ${
-                                            d.status === 'claimed'
-                                                ? 'bg-[var(--color-accent-400)]'
-                                                : 'bg-[var(--color-border-default)]'
-                                        }`}
-                                    />
-                                )}
-                            </React.Fragment>
-                        ))}
-                    </ol>
+                        <ol
+                            role="list"
+                            aria-label={`${days.length}-day check-in streak`}
+                            className="flex flex-nowrap items-start gap-2 pb-3 pt-7 sm:gap-3 sm:pb-4 sm:pt-8"
+                        >
+                            {days.map((d, idx) => {
+                                const isTodayNode = d.status === 'claimable';
+                                return (
+                                    <React.Fragment key={d.id}>
+                                        <li className="flex shrink-0">
+                                            <div className="w-14 sm:w-16">
+                                                <DailyStreakNode
+                                                    ref={isTodayNode ? todayRef : undefined}
+                                                    day={d}
+                                                    position={`Step ${idx + 1} of ${days.length}`}
+                                                />
+                                            </div>
+                                        </li>
+                                        {idx < days.length - 1 && (
+                                            <span
+                                                aria-hidden
+                                                className={`mt-5 h-1 w-6 shrink-0 rounded-full sm:mt-7 sm:w-8 ${
+                                                    d.status === 'claimed'
+                                                        ? 'bg-[var(--color-accent-400)]'
+                                                        : 'bg-[var(--color-border-default)]'
+                                                }`}
+                                            />
+                                        )}
+                                    </React.Fragment>
+                                );
+                            })}
+                        </ol>
+                    </div>
+
+                    <div className="mt-2 px-3 sm:px-6">
+                        <p className="text-center text-[11px] font-medium text-[var(--color-text-soft)]">
+                            Scroll to see all {days.length} days &middot; {streakDays}/{days.length} claimed
+                        </p>
+                    </div>
+
+                    <div className="px-3 sm:px-6">
 
                     {todayDay ? (
                         <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-[var(--radius-control)] border-2 border-[var(--color-nav-gold)] bg-[linear-gradient(180deg,var(--color-accent-50)_0%,var(--color-surface-base)_100%)] px-4 py-3 shadow-[var(--shadow-subtle)] sm:px-5">
@@ -426,6 +486,7 @@ function DailyBonusPanel() {
                             All caught up &mdash; see you tomorrow for the next streak day.
                         </div>
                     )}
+                    </div>
                 </div>
             </div>
 
