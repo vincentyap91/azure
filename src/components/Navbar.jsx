@@ -798,7 +798,8 @@ export default function Navbar({
                                     }}
                                     onFocus={() => {
                                         if (link === 'Casino') setNavProviderDropdown('casino');
-                                        if (link === 'Slots') setNavProviderDropdown('slots');
+                                        else if (link === 'Slots') setNavProviderDropdown('slots');
+                                        else setNavProviderDropdown(null);
                                     }}
                                     onClick={(event) => {
                                         const target = NAV_TARGETS[link];
