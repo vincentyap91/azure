@@ -801,10 +801,18 @@ export default function Navbar({
                                         else if (link === 'Slots') setNavProviderDropdown('slots');
                                         else setNavProviderDropdown(null);
                                     }}
+                                    onBlur={() => {
+                                        if (link !== 'Casino' && link !== 'Slots') {
+                                            setNavProviderDropdown(null);
+                                        }
+                                    }}
                                     onClick={(event) => {
                                         const target = NAV_TARGETS[link];
                                         if (target) {
                                             event.preventDefault();
+                                            if (link !== 'Casino' && link !== 'Slots') {
+                                                setNavProviderDropdown(null);
+                                            }
                                             onNavigate?.(target);
                                         }
                                     }}
