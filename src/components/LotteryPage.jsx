@@ -249,6 +249,7 @@ export default function LotteryPage({ onNavigate }) {
 
             <section className={pageContainerClass}>
                 <ProductBrowseControlPanel
+                    category="lottery"
                     query={query}
                     onQueryChange={setQuery}
                     searchScope={searchScope}

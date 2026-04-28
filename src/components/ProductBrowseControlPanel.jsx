@@ -1,8 +1,11 @@
 import React from 'react';
-import { Search, SlidersHorizontal } from 'lucide-react';
+import { SlidersHorizontal } from 'lucide-react';
 import WalletRebateSummaryBar from './WalletRebateSummaryBar';
+import SearchProvider from './SearchProvider';
 
 export default function ProductBrowseControlPanel({
+    category,
+    searchPlaceholder = 'Search games or providers',
     query,
     onQueryChange,
     searchScope,
@@ -19,17 +22,16 @@ export default function ProductBrowseControlPanel({
 
                 <div className="mt-2 border-t border-[rgb(229_235_244)] pt-2 md:mt-3.5 md:pt-3.5">
                     <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-3">
-                        <label className="hidden h-10 min-h-10 w-full items-center gap-2 rounded-xl border border-slate-200/90 bg-white/90 px-3 shadow-[0_2px_10px_rgba(15,23,42,0.04)] md:flex md:flex-1">
-                            <Search size={16} className="shrink-0 text-slate-500" />
-                            <input
+                        <div className="hidden min-h-10 min-w-0 w-full md:flex md:flex-1">
+                            <SearchProvider
                                 value={query}
-                                onChange={(event) => onQueryChange(event.target.value)}
-                                placeholder="Search games or providers"
-                                aria-label={`Search ${searchScope === 'all' ? 'games or providers' : searchScope}`}
-                                title={`Search ${searchScope === 'all' ? 'games or providers' : searchScope}`}
-                                className="w-full bg-transparent text-sm font-semibold text-slate-700 outline-none placeholder:text-slate-400"
+                                onChange={onQueryChange}
+                                category={category}
+                                placeholder={searchPlaceholder}
+                                ariaLabel={`Search ${searchScope === 'all' ? 'games or providers' : searchScope}`}
+                                widthClassName="w-full"
                             />
-                        </label>
+                        </div>
                         <div className="flex w-full flex-col gap-1.5 md:flex-row md:w-auto md:items-center md:gap-3">
                             <button
                                 type="button"

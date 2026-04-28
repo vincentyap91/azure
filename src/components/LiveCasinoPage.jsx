@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Search } from 'lucide-react';
 import PromotionStyleTabs from './PromotionStyleTabs';
 import ProviderLaunchModal from './ProviderLaunchModal';
 import PromotionWarningModal from './PromotionWarningModal';
 import LobbyHeroBanner from './lobby/LobbyHeroBanner';
 import LobbyProviderCard from './game/LobbyProviderCard';
+import SearchProvider from './SearchProvider';
 import { navigateToGameDetail } from '../utils/gameDetailRoutes';
 import liveCasinoBanner from '../assets/live-casino.jpg';
 import {
@@ -131,15 +131,14 @@ export default function LiveCasinoPage({ selectedProviderIdFromMenu, onNavigate 
                                 Choose from top brands with real-time action and studio-grade stream quality.
                             </p>
                         </div>
-                        <label className="flex h-11 w-full items-center gap-2 rounded-xl border border-[var(--color-border-live)] bg-[var(--color-surface-base)] px-3 shadow-[inset_0_1px_2px_rgba(9,30,66,0.06)] lg:w-[330px]">
-                            <Search size={16} className="text-[rgb(95_110_139)]" />
-                            <input
-                                value={query}
-                                onChange={(event) => setQuery(event.target.value)}
-                                placeholder="Search provider"
-                                className="w-full bg-transparent text-sm font-semibold text-[rgb(42_58_88)] outline-none placeholder:text-[rgb(139_151_174)]"
-                            />
-                        </label>
+                        <SearchProvider
+                            value={query}
+                            onChange={setQuery}
+                            category="live-casino"
+                            placeholder="Search provider"
+                            ariaLabel="Search live casino providers"
+                            widthClassName="w-full lg:w-[330px]"
+                        />
                     </div>
 
                     <div className="mt-4">

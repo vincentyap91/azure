@@ -138,6 +138,7 @@ export default function FishingPage({ onNavigate }) {
 
             <section className={pageContainerClass}>
                 <ProductBrowseControlPanel
+                    category="fishing"
                     query={query}
                     onQueryChange={setQuery}
                     searchScope={searchScope}

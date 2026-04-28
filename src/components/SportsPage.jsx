@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Search } from 'lucide-react';
 import LobbyProviderCard from './game/LobbyProviderCard';
 import { navigateToGameDetail } from '../utils/gameDetailRoutes';
 import sportsBanner from '../assets/sports-banner.jpg';
 import { NAV_STICKY_QUICK_PLAY_BAR_CLASS } from '../constants/navStickyOffsets';
 import { PAGE_BANNER_IMG, PAGE_BANNER_WRAP_SPORTS } from '../constants/pageBannerClasses';
 import { normalizeFavouriteCategory } from '../utils/favouriteGames';
+import SearchProvider from './SearchProvider';
 
 const CDN = 'https://cdn.i8global.com/lb9/master';
 
@@ -156,15 +156,14 @@ export default function SportsPage({ onNavigate }) {
                                 Pick your preferred sportsbook or virtual sports provider with a consistent premium experience.
                             </p>
                         </div>
-                        <label className="flex h-11 w-full items-center gap-2 rounded-xl border border-[var(--color-border-live)] bg-[var(--color-surface-base)] px-3 shadow-[inset_0_1px_2px_rgba(9,30,66,0.06)] lg:w-[330px]">
-                            <Search size={16} className="text-[rgb(95_110_139)]" />
-                            <input
-                                value={query}
-                                onChange={(event) => setQuery(event.target.value)}
-                                placeholder="Search provider"
-                                className="w-full bg-transparent text-sm font-semibold text-[rgb(42_58_88)] outline-none placeholder:text-[rgb(139_151_174)]"
-                            />
-                        </label>
+                        <SearchProvider
+                            value={query}
+                            onChange={setQuery}
+                            category="sports"
+                            placeholder="Search provider"
+                            ariaLabel="Search sports providers"
+                            widthClassName="w-full lg:w-[330px]"
+                        />
                     </div>
 
                     <p className="mt-4 text-xs font-bold uppercase tracking-[0.08em] text-[rgb(106_117_144)] md:text-xs">

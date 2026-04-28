@@ -164,6 +164,7 @@ export default function SlotsPage({ selectedProviderIdFromMenu, onNavigate }) {
 
             <section className={pageContainerClass}>
                 <ProductBrowseControlPanel
+                    category="slots"
                     query={query}
                     onQueryChange={setQuery}
                     searchScope={searchScope}

@@ -83,10 +83,10 @@ function resolvePageFromPath() {
     if (pathname === '/e-sports' || pathname === '/esports') {
       return 'e-sports';
     }
-    if (pathname === '/lottery') {
+    if (pathname === '/lottery' || pathname === '/rng') {
       return 'lottery';
     }
-    if (pathname === '/fishing') {
+    if (pathname === '/fishing' || pathname === '/fish-hunt') {
       return 'fishing';
     }
     if (pathname === '/poker') {
