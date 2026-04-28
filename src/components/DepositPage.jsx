@@ -324,17 +324,17 @@ export default function DepositPage({ onNavigate }) {
                         </div>
 
                         {depositSpeedTab === 'normal' ? (
-                            <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                            <div className="flex justify-center md:justify-start">
                                 <button
                                     type="button"
-                                    className="relative col-span-2 flex min-h-[7.25rem] flex-col items-center justify-center gap-2 rounded-xl border-2 border-[var(--color-accent-500)] bg-[var(--color-accent-50)] p-4 text-center transition sm:min-h-0 sm:gap-3 sm:p-6"
+                                    className="relative flex h-full min-h-[7.25rem] w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-[var(--color-accent-500)] bg-[var(--color-accent-50)] p-4 text-center transition sm:min-h-0 sm:gap-3 sm:p-6 md:w-1/2"
                                 >
                                     <img
                                         src={instantDepositImg}
                                         alt="Normal Deposit"
-                                        className="h-12 w-auto object-contain sm:h-14"
+                                        className="h-12 w-auto max-w-full object-contain sm:h-14"
                                     />
-                                    <p className="text-sm font-bold leading-tight text-[var(--color-text-strong)] sm:text-base">
+                                    <p className="line-clamp-2 text-sm font-bold leading-tight text-[var(--color-text-strong)] sm:text-base">
                                         Normal Deposit
                                     </p>
                                 </button>
